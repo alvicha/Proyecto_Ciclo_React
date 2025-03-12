@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import 'summernote/dist/lang/summernote-en-US';
-import SummernoteEditor from './screens/screens/Summernote';
+import SummernoteEditor from './screens/Summernote';
 
 window.$ = window.jQuery = $;
 
