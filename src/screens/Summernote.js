@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
@@ -5,7 +6,8 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import 'summernote/dist/lang/summernote-en-US';
-import { useEffect, useState } from "react";
+
+window.$ = window.jQuery = $;
 
 const SummernoteEditor = () => {
     const [textName, setTextName] = useState('');
