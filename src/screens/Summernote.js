@@ -95,6 +95,7 @@ const SummernoteEditor = () => {
                                     setSelectedContextDropdown(selectedContext.code);
                                     setTest(true);
                                     handleInfoContext(selectedContext); //Funcion para despues realizar acciones
+                                    getPlaceholdersApi(selectedContext);
                                 });
                             }
                         })
@@ -123,7 +124,6 @@ const SummernoteEditor = () => {
                                 callback: function ($dropdown) {
                                     $dropdown.find('a').on('click', function (e) {
                                         e.preventDefault();
-                                        const codeContext = $(this).data('id');
                                         setTest(true);
                                     });
                                 }
@@ -158,15 +158,14 @@ const SummernoteEditor = () => {
         try {
             const response = await getDataContexts();
             setContexts(response);
-            console.log(response);
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
     };
 
-    const getPlaceholdersApi = async () => {
+    const getPlaceholdersApi = async (infoContext) => {
         try {
-            const response = await getPlaceholdersContexts();
+            const response = await getPlaceholdersContexts(infoContext);
             setPlaceholdersList(response);
         } catch (error) {
             console.error("Error fetching languages:", error);
@@ -176,7 +175,6 @@ const SummernoteEditor = () => {
     useEffect(() => {
         languagesApi();
         contextsApi();
-        getPlaceholdersApi();
     }, []); // Se ejecuta solo una vez al montar el componente
 
     useEffect(() => {
