@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -6,16 +6,20 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
+import { getDataContexts, getDataApi, getPlaceholdersContexts } from '../services/services';
 
 const SummernoteEditor = () => {
     const [textName, setTextName] = useState('');
-    const [language, setLanguage] = useState("es-ES");
+    const [code, setCode] = useState("es");
     const editorRef = useRef(null);
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Español");
+    const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
+    const [listLanguages, setListLanguages] = useState([]);
+    const [contexts, setContexts] = useState([]);
+    const [test, setTest] = useState(false);
+    const [placeholdersList, setPlaceholdersList] = useState([]);
 
     const changeSummernoteLanguage = useCallback((lang) => {
-        let textCode = lang === "es-ES" ? "Bienvenidos a mi mundo" : "Welcome to my world";
-
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
             placeholder: "Introduce una descripción",
@@ -28,10 +32,10 @@ const SummernoteEditor = () => {
                 ["color", ["color"]],
                 ["para", ["ul", "ol", "paragraph"]],
                 ['language', ['languageDropdown']],
-                ['edit', ['edit']]
+                ['context', ['listContexts']],
+                ['variables', ['listPlaceholders']]
             ],
             buttons: {
-                edit: editText,
                 languageDropdown: () => {
                     var ui = $.summernote.ui;
 
@@ -45,50 +49,139 @@ const SummernoteEditor = () => {
                             }
                         }),
                         ui.dropdown({
-                            contents: '<li><a href="#" data-lang="es-ES">Español</a></li>' +
-                                '<li><a href="#" data-lang="en-US">Inglés</a></li>',
+                            contents: function () {
+                                return listLanguages.map(language =>
+                                    `<li><a href="#" data-lang="${language.code}">${language.value}</a></li>`
+                                ).join('');
+                            },
                             callback: function ($dropdown) {
                                 $dropdown.find('a').on('click', function (e) {
                                     e.preventDefault();
                                     const newLang = $(this).data('lang');
-                                    setLanguage(newLang)
-                                    if (newLang === "es-ES") {
-                                        setSelectedLanguageDropdown("Español");
-                                    } else if (newLang === "en-US") {
-                                        setSelectedLanguageDropdown("Inglés");
-                                    }
-                                });
+                                    setCode(newLang);
+                                    let selectedLanguage = listLanguages.find(lang => lang.code === newLang);
+                                    setSelectedLanguageDropdown(selectedLanguage.value);
 
-                                $('.note-status-output').html(
-                                    '<div class="alert alert-danger">' +
-                                    'This is an error using a Bootstrap alert that has been restyled to fit here.' +
-                                    '</div>'
-                                );
+                                    handleInfoLanguage(selectedLanguage); //Funcion para despues realizar acciones
+                                });
                             }
                         })
                     ]);
                     return button.render();
                 },
+                listContexts: () => {
+                    var ui = $.summernote.ui;
+
+                    var button = ui.buttonGroup([
+                        ui.button({
+                            className: 'dropdown-toggle',
+                            contents: selectedContextDropdown + '<span class="caret" style="margin-left: 8px;"></span>',
+                            tooltip: 'Contextos para plantillas',
+                            data: {
+                                toggle: 'dropdown'
+                            }
+                        }),
+                        ui.dropdown({
+                            contents: function () {
+                                return contexts.map(context =>
+                                    `<li><a href="#" data-id="${context.code}">${context.code}</a></li>`
+                                ).join('');
+                            },
+                            callback: function ($dropdown) {
+                                $dropdown.find('a').on('click', function (e) {
+                                    e.preventDefault();
+                                    const codeContext = $(this).data('id');
+                                    let selectedContext = contexts.find(context => context.code === codeContext);
+                                    setSelectedContextDropdown(selectedContext.code);
+                                    setTest(true);
+                                    handleInfoContext(selectedContext); //Funcion para despues realizar acciones
+                                });
+                            }
+                        })
+                    ]);
+                    return button.render();
+                },
+                listPlaceholders: () => {
+                    if (test) {
+                        var ui = $.summernote.ui;
+
+                        var button = ui.buttonGroup([
+                            ui.button({
+                                className: 'dropdown-toggle',
+                                contents: 'Acciones <span class="caret" style="margin-left: 8px;"></span>',
+                                tooltip: 'Acciones de contextos',
+                                data: {
+                                    toggle: 'dropdown'
+                                }
+                            }),
+                            ui.dropdown({
+                                contents: function () {
+                                    return placeholdersList.map(context =>
+                                        `<li><a href="#" data-id="${context.code}">${context.code}</a></li>`
+                                    ).join('');
+                                },
+                                callback: function ($dropdown) {
+                                    $dropdown.find('a').on('click', function (e) {
+                                        e.preventDefault();
+                                        const codeContext = $(this).data('id');
+                                        setTest(true);
+                                    });
+                                }
+                            })
+                        ]);
+                        return button.render();
+                    }
+                },
             },
-        }).summernote("code", textCode);
-    }, [selectedLanguageDropdown]);
+        }).summernote("code", selectedLanguageDropdown);
+    }, [selectedLanguageDropdown, selectedContextDropdown, listLanguages, contexts, test, placeholdersList]);
 
-    const editText = (context) => {
-        var ui = $.summernote.ui;
-        var button = ui.button({
-            contents: '<i class="fa fa-pencil"></i> Editar',
-            tooltip: 'Boton para editar',
-            click: function () {
-                context.invoke('editor.insertText', 'hello');
-            }
-        });
 
-        return button.render();
+    const handleInfoLanguage = (infoLanguage) => {
+        console.log("Codigo: ", infoLanguage.code);
     }
 
+    const handleInfoContext = (infoContext) => {
+        console.log("Codigo: ", infoContext.code);
+    }
+
+    const languagesApi = async () => {
+        try {
+            const response = await getDataApi();
+            setListLanguages(response);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+        }
+    };
+
+    const contextsApi = async () => {
+        try {
+            const response = await getDataContexts();
+            setContexts(response);
+            console.log(response);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+        }
+    };
+
+    const getPlaceholdersApi = async () => {
+        try {
+            const response = await getPlaceholdersContexts();
+            setPlaceholdersList(response);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+        }
+    };
+
     useEffect(() => {
-        changeSummernoteLanguage(language);
-    }, [language, changeSummernoteLanguage]);
+        languagesApi();
+        contextsApi();
+        getPlaceholdersApi();
+    }, []); // Se ejecuta solo una vez al montar el componente
+
+    useEffect(() => {
+        changeSummernoteLanguage(code);
+    }, [code, listLanguages, changeSummernoteLanguage]);
 
     return (
         <div className="container">
@@ -98,8 +191,7 @@ const SummernoteEditor = () => {
                     <label className="m-2">
                         Nombre:
                     </label>
-                    <input type="text" value={textName} onChange={(e) => setTextName(e.target.value)}
-                        placeholder="Introduce un nombre" />
+                    <input type="text" value={textName} placeholder="Introduce un nombre" />
                 </div>
                 <div className="form-group mt-4 mb-3">
                     <label className="mb-3">Descripcion</label>
