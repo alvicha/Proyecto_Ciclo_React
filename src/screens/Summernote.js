@@ -90,17 +90,10 @@ const SummernoteEditor = () => {
         changeSummernoteLanguage(language);
     }, [language, changeSummernoteLanguage]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const description = $(editorRef.current).summernote("code");
-        console.log("Nombre:", textName);
-        console.log("Descripción:", description);
-    };
-
     return (
         <div className="container">
             <h2 className="mb-4">Editor de Texto con Summernote</h2>
-            <form onSubmit={handleSubmit} method="post">
+            <form method="post">
                 <div>
                     <label className="m-2">
                         Nombre:
