@@ -79,64 +79,86 @@ export const getDataContexts = async () => {
 
 export const getPlaceholdersContexts = async (searchPlaceholder) => {
   try {
+    //const url = '';
     let response = "";
-
     switch (searchPlaceholder.code) {
       case 'USER_MANAGEMENT':
         response = [
-          { "id": 28, "code": "DEPARTMENT_ID" },
-          { "id": 29, "code": "SHOP_RESERVATION_MEMBER_HOLDER" }
-        ];
+          {
+            "id": 28,
+            "code": "DEPARTMENT_ID"
+          },
+          {
+            "id": 29,
+            "code": "SHOP_RESERVATION_MEMBER_HOLDER"
+          }
+        ]
         break;
-
       case 'CASE_MANAGEMENT':
         response = [
-          { "id": 55, "code": "ROOM_CODE" },
-          { "id": 56, "code": "GUEST_NAME" }
-        ];
+          {
+            "id": 55,
+            "code": "ROOM_CODE"
+          },
+          {
+            "id": 56,
+            "code": "GUEST_NAME"
+          }
+        ]
         break;
       case 'CSV_MANAGEMENT':
         response = [
-          { "id": 57, "code": "WALLET_DAYS_FOR_SAVED_BALANCE_EXPIRATION" }
-        ];
+          {
+            "id": 59,
+            "code": "WALLET_DAYS_FOR_SAVED_BALANCE_EXPINATION"
+          }
+        ]
         break;
       case 'SHOP_RESERVATION_MANAGEMENT':
         response = [
-          { "id": 58, "code": "HOTEL_NAME" }
-        ];
+          {
+            "id": 57,
+            "code": "HOTEL_NAME"
+          }
+        ]
         break;
-
       case 'SECURITY_MANAGEMENT':
         response = [
-          { "id": 59, "code": "WALLET_TOKEN" }
-        ];
+          {
+            "id": 60,
+            "code": "WALLET_TOKEN"
+          }
+        ]
         break;
-
       case 'HOUSEKEEPING_MANAGEMENT':
         response = [
-          { "id": 60, "code": "WALLET_BALANCE" }
-        ];
+          {
+            "id": 61,
+            "code": "WALLET_BALANCE"
+          }
+        ]
         break;
-
       case 'MINIBAR_MANAGEMENT':
         response = [
-          { "id": 61, "code": "SHOP_MAP_URL" }
-        ];
+          {
+            "id": 62,
+            "code": "SHOP_MAP_URL"
+          }
+        ]
         break;
-
       case 'WALLET_MANAGEMENT':
         response = [
-          { "id": 62, "code": "PANIC_LOCATION" }
-        ];
+          {
+            "id": 62,
+            "code": "PANIC_LOCATION"
+          }
+        ]
         break;
-
       default:
         response = [];
     }
-
     return response;
   } catch (error) {
-    console.error("Error:", error);
-    return [];
+    return console.log(error);
   }
 };
