@@ -118,13 +118,14 @@ const SummernoteEditor = () => {
                             ui.dropdown({
                                 contents: function () {
                                     return placeholdersList.map(context =>
-                                        `<li><a href="#" data-id="${context.code}">${context.code}</a></li>`
+                                        `<li><a href="#" data-code="${context.code}">${context.code}</a></li>`
                                     ).join('');
                                 },
                                 callback: function ($dropdown) {
                                     $dropdown.find('a').on('click', function (e) {
                                         e.preventDefault();
-                                        setTest(true);
+                                        const codeVariable = $(this).data('code');
+                                        console.log(codeVariable);
                                     });
                                 }
                             })
