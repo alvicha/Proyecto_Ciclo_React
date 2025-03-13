@@ -1,0 +1,14 @@
+.note-toolbar {
+    background-color: #007bff !important;
+    color: white !important;
+    border-radius: 5px;
+}
+
+.note-toolbar button {
+    color: white !important;
+    background-color: rgba(25, 78, 168, 0.903);
+    border-radius: 5px;
+    margin: 4px;
+    border-radius: 5px;
+    border: 1px solid white
+}
