@@ -154,8 +154,6 @@ export const getPlaceholdersContexts = async (searchPlaceholder) => {
           }
         ]
         break; // Es importante agregar el break para evitar que se ejecuten los otros casos
-
-
       default:
         response = []; // Caso por defecto si no coincide con ningún valor
     }
