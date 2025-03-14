@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, getTemplatesContexts } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, getTemplatesContexts, updateTemplateApi, postDataTemplate } from '../services/services';
 
 const SummernoteEditor = () => {
     const [textName, setTextName] = useState('');
@@ -20,6 +20,7 @@ const SummernoteEditor = () => {
     const [placeholdersList, setPlaceholdersList] = useState([]);
     const [templates, setTemplates] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [selectedTemplateContent, setSelectedTemplateContent] = useState(null);
     const [codeTemplate, setCodeTemplate] = useState("");
 
     const handleInfoLanguage = (languageCode) => {
@@ -27,7 +28,7 @@ const SummernoteEditor = () => {
             let selectedTemplate = templates.find(template => template.code === codeTemplate);
 
             if (selectedTemplate.data[languageCode]) {
-                setSelectedTemplate(selectedTemplate.data[languageCode].content)
+                setSelectedTemplateContent(selectedTemplate.data[languageCode].content)
             }
         }
     }
@@ -80,7 +81,7 @@ const SummernoteEditor = () => {
                                     let selectedLanguage = listLanguages.find(lang => lang.code === newLang);
                                     setSelectedLanguageDropdown(selectedLanguage.value);
 
-                                    if (selectedTemplate) {
+                                    if (selectedTemplateContent) {
                                         handleInfoLanguage(newLang); //Funcion para despues realizar acciones
                                     }
                                 });
@@ -119,7 +120,7 @@ const SummernoteEditor = () => {
                                     getTemplatesApi(selectedContext.code);
 
                                     if (selectedContextDropdown !== selectedContext.code) {
-                                        setSelectedTemplate(null);
+                                        setSelectedTemplateContent(null);
                                     }
                                 });
                             }
@@ -158,8 +159,6 @@ const SummernoteEditor = () => {
                         return button.render();
                     }
                 },
-
-                
                 templates: () => {
                     if (test) {
                         var ui = $.summernote.ui;
@@ -190,7 +189,8 @@ const SummernoteEditor = () => {
                                         let selectedTemplate = templates.find(template => template.code === codeTemplate);
 
                                         if (selectedTemplate.data[codeLanguage]) {
-                                            setSelectedTemplate(selectedTemplate.data[codeLanguage].content)
+                                            setSelectedTemplate(selectedTemplate);
+                                            setSelectedTemplateContent(selectedTemplate.data[codeLanguage].content)
                                         }
                                     });
                                 }
@@ -200,8 +200,8 @@ const SummernoteEditor = () => {
                     }
                 },
             },
-        }).summernote("code", selectedTemplate);
-    }, [selectedContextDropdown, listLanguages, contexts, test, templates, placeholdersList, codeLanguage, selectedTemplate, selectedLanguageDropdown]);
+        }).summernote("code", selectedTemplateContent)
+    }, [selectedContextDropdown, listLanguages, contexts, test, templates, placeholdersList, codeLanguage, selectedTemplateContent, selectedLanguageDropdown]);
 
     const getTemplatesApi = async (context) => {
         try {
@@ -239,10 +239,43 @@ const SummernoteEditor = () => {
         }
     };
 
-    const onClickData = async (infoContext) => {
+    const onClickData = async (event) => {
         try {
-            const response = await getPlaceholdersContexts(infoContext);
-            setPlaceholdersList(response);
+            event.preventDefault();
+            let contentTemplate = $(editorRef.current).summernote('code');
+            setSelectedTemplate(contentTemplate);
+
+            let body = {
+                code: codeLanguage,
+                data: {
+                    content: contentTemplate,
+                    subject: selectedTemplate.data[codeLanguage].subject
+                }
+            };
+            const response = await postDataTemplate(body);
+            console.log(response);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+        }
+    };
+
+    const onUpdateTemplate = async (event) => {
+        try {
+            event.preventDefault();
+            let contentTemplate = $(editorRef.current).summernote('code');
+            setSelectedTemplateContent(contentTemplate);
+
+            let body = {
+                idTemplate: selectedTemplate.id,
+                codeLanguage: codeLanguage,
+                data: {
+                    content: contentTemplate,
+                    subject: selectedTemplate.data[codeLanguage].subject
+                }
+            };
+            console.log("Mi cuerpo es: ", body);
+            const response = await updateTemplateApi(body);
+            console.log(response);
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
@@ -268,10 +301,15 @@ const SummernoteEditor = () => {
                     <input type="text" value={textName} placeholder="Introduce un nombre" />
                 </div>
                 <div className="form-group mt-4 mb-3">
-                    <label className="mb-3">Descripcion</label>
+                    <label className="m-2">Título de la plantilla:</label>
+                    <input type="text" placeholder="Título de la plantilla" readOnly />
+
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
-                <input type="submit" value="Enviar" className="btn btn-primary" />
+                <div className="mb-2">
+                    <input type="submit" value="Enviar" className="btn btn-primary" />
+                </div>
+                <button className="btn btn-primary" onClick={onUpdateTemplate}>Actualizar Plantilla</button>
             </form>
         </div>
     );
