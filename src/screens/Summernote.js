@@ -6,11 +6,11 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, getTemplatesContexts } from '../services/services';
 
 const SummernoteEditor = () => {
     const [textName, setTextName] = useState('');
-    const [code, setCode] = useState("es");
+    const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Español");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
@@ -18,6 +18,23 @@ const SummernoteEditor = () => {
     const [contexts, setContexts] = useState([]);
     const [test, setTest] = useState(false);
     const [placeholdersList, setPlaceholdersList] = useState([]);
+    const [templates, setTemplates] = useState([]);
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [codeTemplate, setCodeTemplate] = useState("");
+
+    const handleInfoLanguage = (languageCode) => {
+        if (templates && templates.length > 0) {
+            let selectedTemplate = templates.find(template => template.code === codeTemplate);
+
+            if (selectedTemplate.data[languageCode]) {
+                setSelectedTemplate(selectedTemplate.data[languageCode].content)
+            }
+        }
+    }
+
+    const handleInfoContext = (infoContext) => {
+        console.log("Codigo: ", infoContext.code);
+    }
 
     const changeSummernoteLanguage = useCallback((lang) => {
         $(editorRef.current).summernote("destroy");
@@ -33,7 +50,8 @@ const SummernoteEditor = () => {
                 ["para", ["ul", "ol", "paragraph"]],
                 ['language', ['languageDropdown']],
                 ['context', ['listContexts']],
-                ['variables', ['listPlaceholders']]
+                ['variables', ['listPlaceholders']],
+                ['template', ['templates']]
             ],
             buttons: {
                 languageDropdown: () => {
@@ -58,11 +76,13 @@ const SummernoteEditor = () => {
                                 $dropdown.find('a').on('click', function (e) {
                                     e.preventDefault();
                                     const newLang = $(this).data('lang');
-                                    setCode(newLang);
+                                    setCodeLanguage(newLang);
                                     let selectedLanguage = listLanguages.find(lang => lang.code === newLang);
                                     setSelectedLanguageDropdown(selectedLanguage.value);
 
-                                    handleInfoLanguage(selectedLanguage); //Funcion para despues realizar acciones
+                                    if (selectedTemplate) {
+                                        handleInfoLanguage(newLang); //Funcion para despues realizar acciones
+                                    }
                                 });
                             }
                         })
@@ -96,14 +116,19 @@ const SummernoteEditor = () => {
                                     setTest(true);
                                     handleInfoContext(selectedContext); //Funcion para despues realizar acciones
                                     getPlaceholdersApi(selectedContext);
+                                    getTemplatesApi(selectedContext.code);
+
+                                    if (selectedContextDropdown !== selectedContext.code) {
+                                        setSelectedTemplate(null);
+                                    }
                                 });
                             }
                         })
                     ]);
                     return button.render();
                 },
-                listPlaceholders: () => {
-                    if (test) {
+                listPlaceholders: (context) => {
+                    if (test && placeholdersList.length > 0) {
                         var ui = $.summernote.ui;
 
                         var button = ui.buttonGroup([
@@ -125,7 +150,48 @@ const SummernoteEditor = () => {
                                     $dropdown.find('a').on('click', function (e) {
                                         e.preventDefault();
                                         const codeVariable = $(this).data('code');
-                                        console.log(codeVariable);
+                                        context.invoke('editor.insertText', `{{${codeVariable}}}`);
+                                    });
+                                }
+                            })
+                        ]);
+                        return button.render();
+                    }
+                },
+
+                
+                templates: () => {
+                    if (test) {
+                        var ui = $.summernote.ui;
+
+                        var button = ui.buttonGroup([
+                            ui.button({
+                                className: 'dropdown-toggle',
+                                contents: 'Plantillas <span class="caret" style="margin-left: 8px;"></span>',
+                                tooltip: 'Plantillas de contextos',
+                                data: {
+                                    toggle: 'dropdown'
+                                }
+                            }),
+                            ui.dropdown({
+                                contents: function () {
+                                    if (templates.length > 0) {
+                                        return templates.map(context =>
+                                            `<li><a href="#" data-code="${context.code}">${context.code}</a></li>`
+                                        ).join('');
+                                    }
+                                    return "No hay datos";
+                                },
+                                callback: function ($dropdown) {
+                                    $dropdown.find('a').on('click', function (e) {
+                                        e.preventDefault();
+                                        const codeTemplate = $(this).data('code');
+                                        setCodeTemplate(codeTemplate);
+                                        let selectedTemplate = templates.find(template => template.code === codeTemplate);
+
+                                        if (selectedTemplate.data[codeLanguage]) {
+                                            setSelectedTemplate(selectedTemplate.data[codeLanguage].content)
+                                        }
                                     });
                                 }
                             })
@@ -134,17 +200,17 @@ const SummernoteEditor = () => {
                     }
                 },
             },
-        }).summernote("code", selectedLanguageDropdown);
-    }, [selectedLanguageDropdown, selectedContextDropdown, listLanguages, contexts, test, placeholdersList]);
+        }).summernote("code", selectedTemplate);
+    }, [selectedContextDropdown, listLanguages, contexts, test, templates, placeholdersList, codeLanguage, selectedTemplate, selectedLanguageDropdown]);
 
-
-    const handleInfoLanguage = (infoLanguage) => {
-        console.log("Codigo: ", infoLanguage.code);
-    }
-
-    const handleInfoContext = (infoContext) => {
-        console.log("Codigo: ", infoContext.code);
-    }
+    const getTemplatesApi = async (context) => {
+        try {
+            const response = await getTemplatesContexts(context);
+            setTemplates(response);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+        }
+    };
 
     const languagesApi = async () => {
         try {
@@ -173,19 +239,28 @@ const SummernoteEditor = () => {
         }
     };
 
+    const onClickData = async (infoContext) => {
+        try {
+            const response = await getPlaceholdersContexts(infoContext);
+            setPlaceholdersList(response);
+        } catch (error) {
+            console.error("Error fetching languages:", error);
+        }
+    };
+
     useEffect(() => {
         languagesApi();
         contextsApi();
     }, []); // Se ejecuta solo una vez al montar el componente
 
     useEffect(() => {
-        changeSummernoteLanguage(code);
-    }, [code, listLanguages, changeSummernoteLanguage]);
+        changeSummernoteLanguage(codeLanguage);
+    }, [codeLanguage, listLanguages, changeSummernoteLanguage]);
 
     return (
         <div className="container">
             <h2 className="mb-4">Editor de Texto con Summernote</h2>
-            <form method="post">
+            <form onSubmit={onClickData}>
                 <div>
                     <label className="m-2">
                         Nombre:
