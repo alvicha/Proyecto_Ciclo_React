@@ -43,6 +43,7 @@ const SummernoteEditor = () => {
             placeholder: "Introduce una descripción",
             height: 300,
             lang: lang,
+            styleWithSpan: false,
             toolbar: [
                 ["style", ["bold", "italic", "underline", "clear"]],
                 ["font", ["strikethrough", "superscript", "subscript"]],
@@ -52,7 +53,8 @@ const SummernoteEditor = () => {
                 ['language', ['languageDropdown']],
                 ['context', ['listContexts']],
                 ['variables', ['listPlaceholders']],
-                ['template', ['templates']]
+                ['template', ['templates']],
+                ['trashTemplate', ['trash']]
             ],
             buttons: {
                 languageDropdown: () => {
@@ -199,6 +201,18 @@ const SummernoteEditor = () => {
                         return button.render();
                     }
                 },
+                trash: () => {
+                    var ui = $.summernote.ui;
+                    var button = ui.button({
+                        contents: '<i class="fa fa-trash"/>',
+                        tooltip: 'Eliminar texto de plantilla',
+                        click: function () {
+                            $(editorRef.current).summernote("code", null)
+                        }
+                    });
+
+                    return button.render(); // return button as jquery object
+                }
             },
         }).summernote("code", selectedTemplateContent)
     }, [selectedContextDropdown, listLanguages, contexts, test, templates, placeholdersList, codeLanguage, selectedTemplateContent, selectedLanguageDropdown]);
@@ -302,7 +316,7 @@ const SummernoteEditor = () => {
                 </div>
                 <div className="form-group mt-4 mb-3">
                     <label className="m-2">Título de la plantilla:</label>
-                    <input type="text" placeholder="Título de la plantilla" readOnly />
+                    <input type="text" value={selectedContextDropdown} className="w-25" placeholder="Título de la plantilla" readOnly />
 
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
