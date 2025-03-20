@@ -38,21 +38,7 @@ const SummernoteEditorv2 = () => {
                 ["fontsize", ["fontsize"]],
                 ["color", ["color"]],
                 ["para", ["ul", "ol", "paragraph"]],
-                ['trashTemplate', ['trash']]
             ],
-            buttons: {
-                trash: () => {
-                    var ui = $.summernote.ui;
-                    var button = ui.button({
-                        contents: '<i class="fa fa-trash"/>',
-                        tooltip: 'Eliminar texto de plantilla',
-                        click: function () {
-                            $(editorRef.current).summernote("code", "")
-                        }
-                    });
-                    return button.render();
-                }
-            }
         }).summernote("code", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
 

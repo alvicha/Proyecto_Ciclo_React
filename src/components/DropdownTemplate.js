@@ -112,7 +112,7 @@ const DropdownTemplate = ({
         console.log('contexto seleccionado:', contextDropDown);
         console.log('Accion o variable seleccionado:', selectedAction);
         console.log('Lenguaje cambiado: ', codeLanguage);
-    }, [contextDropDown, selectedAction, codeLanguage, selectedLanguageDropdown, selectedTemplateCode]);
+    }, [contextDropDown, selectedAction, codeLanguage, selectedLanguageDropdown, selectedTemplateCode, visible]);
 
     return (
         <div className='row m-3 p-2 gap-3'>
@@ -177,11 +177,15 @@ const DropdownTemplate = ({
                 </div>
             )}
 
-            <button type="button" class="btn btn-primary m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
+            <button type="button" className="btn btn-primary m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
                 <i class="fa fa-trash" />
             </button>
-            
-            {visible && (<ModalComponent />)}
+
+            {visible && (
+                <ModalComponent
+                    setVisible={setVisible}
+                />
+            )}
         </div>
     );
 };
