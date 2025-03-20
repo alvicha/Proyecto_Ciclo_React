@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
@@ -6,10 +6,11 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, getTemplatesContexts, updateTemplateApi, postDataTemplate } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, postDataTemplate } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
+import ScreensContext from './ScreensContext';
 
-const SummernoteEditorv2 = (props) => {
+const SummernoteEditorv2 = () => {
     const [textName, setTextName] = useState('');
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
@@ -19,23 +20,13 @@ const SummernoteEditorv2 = (props) => {
     const [templates, setTemplates] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [selectedTemplateContent, setSelectedTemplateContent] = useState(null);
+    const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
+    const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
-
-    const handleInfoLanguage = (languageCode) => {
-        if (templates && templates.length > 0) {
-            let selectedTemplate = templates.find(template => template.code === codeTemplate);
-
-            if (selectedTemplate.data[languageCode]) {
-                setSelectedTemplateContent(selectedTemplate.data[languageCode].content)
-            }
-        }
-    }
-
-    const handleInfoContext = (infoContext) => {
-        console.log("Codigo: ", infoContext.code);
-    }
+    const { setContext } = useContext(ScreensContext);
 
     const changeSummernoteLanguage = useCallback((lang) => {
+        setContext(editorRef);
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
             placeholder: "Introduce una descripción",
@@ -47,10 +38,23 @@ const SummernoteEditorv2 = (props) => {
                 ["fontsize", ["fontsize"]],
                 ["color", ["color"]],
                 ["para", ["ul", "ol", "paragraph"]],
+                ['trashTemplate', ['trash']]
             ],
-        }).summernote("code", selectedTemplateContent)
-    }, [selectedTemplateContent]);
-
+            buttons: {
+                trash: () => {
+                    var ui = $.summernote.ui;
+                    var button = ui.button({
+                        contents: '<i class="fa fa-trash"/>',
+                        tooltip: 'Eliminar texto de plantilla',
+                        click: function () {
+                            $(editorRef.current).summernote("code", "")
+                        }
+                    });
+                    return button.render();
+                }
+            }
+        }).summernote("code", selectedTemplateContent);
+    }, [selectedTemplateContent, setContext]);
 
 
     const languagesApi = async () => {
@@ -67,7 +71,7 @@ const SummernoteEditorv2 = (props) => {
             const response = await getDataContexts();
             setContexts(response);
         } catch (error) {
-            console.error("Error fetching languages:", error);
+            console.error("Error fetching contexts API:", error);
         }
     };
 
@@ -85,6 +89,7 @@ const SummernoteEditorv2 = (props) => {
             event.preventDefault();
             let contentTemplate = $(editorRef.current).summernote('code');
             setSelectedTemplate(contentTemplate);
+            console.log("Template: ", selectedTemplate);
 
             let body = {
                 code: codeLanguage,
@@ -114,7 +119,6 @@ const SummernoteEditorv2 = (props) => {
                     subject: selectedTemplate.data[codeLanguage].subject
                 }
             };
-            console.log("Mi cuerpo es: ", body);
             const response = await updateTemplateApi(body);
             console.log(response);
         } catch (error) {
@@ -141,16 +145,26 @@ const SummernoteEditorv2 = (props) => {
                     </label>
                     <input type="text" value={textName} placeholder="Introduce un nombre" />
                 </div>
-                <div className="w-100 bg-success mt-4 p-1 rounded">
+                <div className="w-100 bg-info mt-4 p-1 rounded">
                     <DropDownTemplate
                         listLanguages={listLanguages}
+                        setListLanguages={setListLanguages}
                         contexts={contexts}
                         templates={templates}
+                        setTemplates={setTemplates}
                         setSelectedTemplate={setSelectedTemplate}
-                        setSelectedTemplateContent={setSelectedTemplateContent}
-                        setCodeLanguage={setCodeLanguage}
                         selectedTemplateContent={selectedTemplateContent}
-                        handleInfoLanguage={handleInfoLanguage}
+                        setSelectedTemplateContent={setSelectedTemplateContent}
+                        contextDropDown={selectedContextDropdown}
+                        setContextDropDown={setSelectedContextDropdown}
+                        codeLanguage={codeLanguage}
+                        setCodeLanguage={setCodeLanguage}
+                        selectedLanguageDropdown={selectedLanguageDropdown}
+                        setSelectedLanguageDropdown={setSelectedLanguageDropdown}
+                        placeholdersList={placeholdersList}
+                        getPlaceholdersApi={getPlaceholdersApi}
+                        codeTemplate={codeTemplate}
+                        setCodeTemplate={setCodeTemplate}
                     />
                 </div>
 

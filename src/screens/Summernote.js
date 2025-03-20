@@ -12,7 +12,7 @@ const SummernoteEditor = () => {
     const [textName, setTextName] = useState('');
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
-    const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Español");
+    const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
     const [listLanguages, setListLanguages] = useState([]);
     const [contexts, setContexts] = useState([]);
@@ -57,7 +57,7 @@ const SummernoteEditor = () => {
                 ['trashTemplate', ['trash']]
             ],
             buttons: {
-                languageDropdown: () => {
+                languageDropdown: (context) => {
                     var ui = $.summernote.ui;
 
                     var button = ui.buttonGroup([
@@ -117,6 +117,7 @@ const SummernoteEditor = () => {
                                     let selectedContext = contexts.find(context => context.code === codeContext);
                                     setSelectedContextDropdown(selectedContext.code);
                                     setTest(true);
+                                    console.log(test);
                                     handleInfoContext(selectedContext); //Funcion para despues realizar acciones
                                     getPlaceholdersApi(selectedContext);
                                     getTemplatesApi(selectedContext.code);
@@ -131,6 +132,7 @@ const SummernoteEditor = () => {
                     return button.render();
                 },
                 listPlaceholders: (context) => {
+                    console.log("Contexto de informacion plugin: ", context);
                     if (test && placeholdersList.length > 0) {
                         var ui = $.summernote.ui;
 
