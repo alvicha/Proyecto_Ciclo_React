@@ -211,3 +211,6 @@ const DropdownTemplate = ({
 };
 
 export default DropdownTemplate;
+
+
+<button className="btn btn-primary" onClick={onUpdateTemplate}>Actualizar Plantilla</button>
