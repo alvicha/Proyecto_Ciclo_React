@@ -11,7 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from './ScreensContext';
 
 const SummernoteEditorv2 = () => {
-    const [textName, setTextName] = useState('');
+    const [nameTemplate, setNameTemplate] = useState("");
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
     const [listLanguages, setListLanguages] = useState([]);
@@ -22,7 +22,7 @@ const SummernoteEditorv2 = () => {
     const [selectedTemplateContent, setSelectedTemplateContent] = useState(null);
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
-    const [codeTemplate, setCodeTemplate] = useState("");
+    const [codeTemplate, setCodeTemplate] = useState(null);
     const { setContext } = useContext(ScreensContext);
 
     const changeSummernoteLanguage = useCallback((lang) => {
@@ -40,6 +40,7 @@ const SummernoteEditorv2 = () => {
                 ["para", ["ul", "ol", "paragraph"]],
             ],
         }).summernote("code", selectedTemplateContent);
+        console.log("Contenido: ", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
 
 
@@ -73,9 +74,9 @@ const SummernoteEditorv2 = () => {
     const onClickData = async (event) => {
         try {
             event.preventDefault();
-            let contentTemplate = $(editorRef.current).summernote('code');
-            console.log("Funcion de envio");
+            
 
+            /*
             let body = {
                 code: codeLanguage,
                 data: {
@@ -85,7 +86,7 @@ const SummernoteEditorv2 = () => {
             };
             const response = await postDataTemplate(body);
             console.log(response);
-            
+*/
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
@@ -113,6 +114,10 @@ const SummernoteEditorv2 = () => {
         }
     };
 
+    const handleNameTemplateChange = (event) => {
+        setNameTemplate(event.target.value);
+    };
+
     useEffect(() => {
         languagesApi();
         contextsApi();
@@ -120,18 +125,16 @@ const SummernoteEditorv2 = () => {
 
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-    }, [codeLanguage, changeSummernoteLanguage]);
+
+        if (codeTemplate !== null) {
+            setNameTemplate(codeTemplate);
+        }
+    }, [codeLanguage, changeSummernoteLanguage, codeTemplate]);
 
     return (
         <div className="container mt-5">
-            <h2 className="mb-4">Editor de Texto con Summernote</h2>
+            <h2 className="mb-5">Editor de Texto con Summernote</h2>
             <form onSubmit={onClickData}>
-                <div>
-                    <label className="m-2">
-                        Nombre:
-                    </label>
-                    <input type="text" value={textName} placeholder="Introduce un nombre" />
-                </div>
                 <div className="w-100 bg-info mt-4 p-1 rounded">
                     <DropDownTemplate
                         listLanguages={listLanguages}
@@ -156,13 +159,17 @@ const SummernoteEditorv2 = () => {
                     />
                 </div>
 
+                <div className="form-group d-flex justify-content-center border border-success mt-2 p-2 mb-2 p-4 rounded">
+                    <label for="nameTemplate" className="fw-bold m-2">Nombre Plantilla:</label>
+                    <input type="text" value={nameTemplate} onChange={handleNameTemplateChange} class="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
+                </div>
+
                 <div className="form-group mb-3">
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
                 <div className="mb-2">
-                    <input type="submit" value="Enviar" className="btn btn-primary" />
+                    <input type="submit" value="Guardar Plantilla" className="btn btn-primary" />
                 </div>
-                <button className="btn btn-primary" onClick={onUpdateTemplate}>Actualizar Plantilla</button>
             </form>
         </div>
     );

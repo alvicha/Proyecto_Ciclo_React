@@ -9,6 +9,7 @@ const DropdownTemplate = ({
     contexts,
     templates,
     setTemplates,
+    selectedTemplate,
     setSelectedTemplate,
     selectedTemplateContent,
     setSelectedTemplateContent,
@@ -24,10 +25,10 @@ const DropdownTemplate = ({
     codeTemplate,
     setCodeTemplate }) => {
 
-    const [selectedAction, setSelectedAction] = useState('Acciones');
+    const [selectedVariable, setSelectedVariable] = useState('Variables');
     const [selectedTemplateCode, setSelectedTemplateCode] = useState('Plantillas');
     const [visible, setVisible] = useState(false);
-    const [showActions, setShowActions] = useState(false);
+    const [showVariables, setShowVariables] = useState(false);
     const { context } = useContext(ScreensContext);
 
     const handleContextChange = (selectedCodeContext) => {
@@ -64,7 +65,7 @@ const DropdownTemplate = ({
     };
 
     const handleActionChange = (action) => {
-        setSelectedAction(action);
+        setSelectedVariable(action);
         const isEmpty = $(context.current).summernote('isEmpty');
 
         if (isEmpty) {
@@ -99,9 +100,14 @@ const DropdownTemplate = ({
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
+        setCodeTemplate(null);
+        setSelectedTemplate(null);
+        setSelectedTemplateContent(null);
+        setSelectedTemplateCode("");
+
         const codeTemplate = selectedCodeTemplate;
         setCodeTemplate(codeTemplate);
-        setShowActions(true);
+        setShowVariables(true);
         let templateSelected = templates.find(template => template.code === codeTemplate);
 
         if (templateSelected.data[codeLanguage]) {
@@ -121,8 +127,9 @@ const DropdownTemplate = ({
 
     useEffect(() => {
         console.log('contexto seleccionado:', contextDropDown);
-        console.log('Accion o variable seleccionado:', selectedAction);
-    }, [contextDropDown, selectedAction, codeLanguage, selectedLanguageDropdown, selectedTemplateContent, selectedTemplateCode, visible]);
+        console.log('Accion o variable seleccionado:', selectedVariable);
+        console.log('Contenido:', selectedTemplateContent);
+    }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, selectedTemplate, selectedTemplateContent, selectedTemplateCode, visible]);
 
     return (
         <div className='row m-3 p-2 align-items-center'>
@@ -158,7 +165,7 @@ const DropdownTemplate = ({
             {placeholdersList.length > 0 && templates.length > 0 && (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
                     <button a class="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {selectedTemplateCode}
+                        Plantillas
                     </button>
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -171,10 +178,10 @@ const DropdownTemplate = ({
                 </div>
             )}
 
-            {placeholdersList.length > 0 && showActions && (
+            {placeholdersList.length > 0 && showVariables && (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
                     <button class="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {selectedAction}
+                        Variables
                     </button>
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
