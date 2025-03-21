@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
-import ModalComponent from '../components/ModalComponent'
+import ModalComponent from '../components/ModalComponent';
+import "../screens/summernote.css";
 
 const DropdownTemplate = ({
     contexts,
@@ -26,6 +27,7 @@ const DropdownTemplate = ({
     const [selectedAction, setSelectedAction] = useState('Acciones');
     const [selectedTemplateCode, setSelectedTemplateCode] = useState('Plantillas');
     const [visible, setVisible] = useState(false);
+    const [showActions, setShowActions] = useState(false);
     const { context } = useContext(ScreensContext);
 
     const handleContextChange = (selectedCodeContext) => {
@@ -48,6 +50,7 @@ const DropdownTemplate = ({
     const handleInfoLanguage = (languageCode) => {
         if (templates && templates.length > 0) {
             let selectedTemplate = templates.find(template => template.code === codeTemplate);
+            setSelectedTemplate(selectedTemplate);
 
             if (selectedTemplate.data[languageCode]) {
                 setSelectedTemplateContent(selectedTemplate.data[languageCode].content)
@@ -55,14 +58,21 @@ const DropdownTemplate = ({
         }
     }
 
+    const insertVariablesText = (action) => {
+        const placeholderText = `{{${action}}}`;
+        $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
+    };
+
     const handleActionChange = (action) => {
-        const codeVariable = action;
-        setSelectedAction(codeVariable);
+        setSelectedAction(action);
+        const isEmpty = $(context.current).summernote('isEmpty');
 
-        if (!context.current) return;
-
-        $(context.current).summernote('invoke', 'editor.restoreRange');
-        $(context.current).summernote('invoke', 'editor.insertText', `{{${codeVariable}}}`);
+        if (isEmpty) {
+            insertVariablesText(action);
+        } else {
+            $(context.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
+            insertVariablesText(action);
+        }
     };
 
     const getTemplatesApi = async (context) => {
@@ -91,12 +101,13 @@ const DropdownTemplate = ({
     const handleTemplateChange = (selectedCodeTemplate) => {
         const codeTemplate = selectedCodeTemplate;
         setCodeTemplate(codeTemplate);
-        let selectedTemplate = templates.find(template => template.code === codeTemplate);
+        setShowActions(true);
+        let templateSelected = templates.find(template => template.code === codeTemplate);
 
-        if (selectedTemplate.data[codeLanguage]) {
-            setSelectedTemplate(selectedTemplate);
-            setSelectedTemplateCode(selectedTemplate.code)
-            setSelectedTemplateContent(selectedTemplate.data[codeLanguage].content)
+        if (templateSelected.data[codeLanguage]) {
+            setSelectedTemplate(templateSelected);
+            setSelectedTemplateCode(templateSelected.code);
+            setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
         }
     };
 
@@ -105,85 +116,87 @@ const DropdownTemplate = ({
     }
 
     const onShowModal = () => {
-        setVisible(true)
+        setVisible(true);
     }
 
     useEffect(() => {
         console.log('contexto seleccionado:', contextDropDown);
         console.log('Accion o variable seleccionado:', selectedAction);
-        console.log('Lenguaje cambiado: ', codeLanguage);
-    }, [contextDropDown, selectedAction, codeLanguage, selectedLanguageDropdown, selectedTemplateCode, visible]);
+    }, [contextDropDown, selectedAction, codeLanguage, selectedLanguageDropdown, selectedTemplateContent, selectedTemplateCode, visible]);
 
     return (
-        <div className='row m-3 p-2 gap-3'>
-            <div className="dropdown col-6 col-md-6 mb-3">
-                <a class="btn btn-secondary dropdown-toggle px-3 mb-3" href="#" role="button" id="dropdownMenuLink"
+        <div className='row m-3 p-2 align-items-center'>
+            <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
+                <a class="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {selectedLanguageDropdown}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {listLanguages.map((language) => (
-                        <a className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
+                        <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
                             {language.value}
-                        </a>
+                        </button >
                     ))
                     }
                 </div>
             </div>
 
-            <div className="dropdown col-6 mb-3">
-                <a class="btn btn-secondary dropdown-toggle px-3 mb-3" href="#" role="button" id="dropdownMenuLink"
+            <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                <a class="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {contextDropDown}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {contexts.map((context) => (
-                        <a className='dropdown-item' key={context.code} onClick={() => handleContextChange(context.code)}>
+                        <button className='dropdown-item' key={context.code} onClick={() => handleContextChange(context.code)}>
                             {context.code}
-                        </a>
+                        </button>
                     ))}
                 </div>
             </div>
 
-            {placeholdersList.length > 0 && (
-                <div className="dropdown d-flex justify-content-center align-items-center col-6 mb-3">
-                    <a class="btn btn-secondary dropdown-toggle px-3 mb-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {selectedAction}
-                    </a>
-
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {placeholdersList.map((context) => (
-                            <a className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
-                                {context.code}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            )}
-
             {placeholdersList.length > 0 && templates.length > 0 && (
-                <div className="dropdown d-flex justify-content-center align-items-center col-6 mb-3">
-                    <a class="btn btn-secondary dropdown-toggle px-3 mb-3" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                    <button a class="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {selectedTemplateCode}
-                    </a>
+                    </button>
 
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {templates.map((template) => (
-                            <a className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
+                            <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
                                 {template.code}
-                            </a>
+                            </button>
                         ))}
                     </div>
                 </div>
             )}
 
-            <button type="button" className="btn btn-primary m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
-                <i class="fa fa-trash" />
-            </button>
+            {placeholdersList.length > 0 && showActions && (
+                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                    <button class="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {selectedAction}
+                    </button>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {placeholdersList.map((context) => (
+                            <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
+                                {context.code}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <div className="col-12 col-lg-1 col-md-2 mb-3">
+                <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
+                    <i class="fa fa-trash" />
+                </button>
+            </div>
 
             {visible && (
                 <ModalComponent
                     setVisible={setVisible}
+                    setSelectedTemplateContent={setSelectedTemplateContent}
                 />
             )}
         </div>

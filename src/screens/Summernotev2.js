@@ -74,8 +74,7 @@ const SummernoteEditorv2 = () => {
         try {
             event.preventDefault();
             let contentTemplate = $(editorRef.current).summernote('code');
-            setSelectedTemplate(contentTemplate);
-            console.log("Template: ", selectedTemplate);
+            console.log("Funcion de envio");
 
             let body = {
                 code: codeLanguage,
@@ -86,6 +85,7 @@ const SummernoteEditorv2 = () => {
             };
             const response = await postDataTemplate(body);
             console.log(response);
+            
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
@@ -105,6 +105,7 @@ const SummernoteEditorv2 = () => {
                     subject: selectedTemplate.data[codeLanguage].subject
                 }
             };
+            console.log("Mi cuerpo es: ", body)
             const response = await updateTemplateApi(body);
             console.log(response);
         } catch (error) {
@@ -138,6 +139,7 @@ const SummernoteEditorv2 = () => {
                         contexts={contexts}
                         templates={templates}
                         setTemplates={setTemplates}
+                        selectedTemplate={selectedTemplate}
                         setSelectedTemplate={setSelectedTemplate}
                         selectedTemplateContent={selectedTemplateContent}
                         setSelectedTemplateContent={setSelectedTemplateContent}

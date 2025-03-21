@@ -2,13 +2,14 @@ import $ from 'jquery';
 import { useContext } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 
-const ModalComponent = ({ setVisible }) => {
+const ModalComponent = ({ setVisible, setSelectedTemplateContent }) => {
 
     const { context } = useContext(ScreensContext);
 
     const handleConfirmDelete = () => {
-        $(context.current).summernote("code", "");
+        $(context.current).summernote("code", null);
         setVisible(false);
+        setSelectedTemplateContent(null);
     };
 
     return (
