@@ -66,7 +66,6 @@ const DropdownTemplate = ({
             setConfirmAction(() => () => {
                 resetData();
                 onClickContextTemplate(selectedContext);
-                setNameTemplate("");
             });
         } else {
             onClickContextTemplate(selectedContext);
@@ -135,7 +134,7 @@ const DropdownTemplate = ({
             setShowVariables(true);
 
             if (selectedTemplateContent) {
-                if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
+                if (selectedTemplateContent && selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
                     setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
                     setVisibleModalWarning(true);
 
