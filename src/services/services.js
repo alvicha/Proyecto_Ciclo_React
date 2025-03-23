@@ -81,7 +81,7 @@ export const getPlaceholdersContexts = async (searchPlaceholder) => {
   try {
     //const url = '';
     let response = "";
-    switch (searchPlaceholder.code) {
+    switch (searchPlaceholder) {
       case 'USER_MANAGEMENT':
         response = [
           {
@@ -170,11 +170,11 @@ export const getTemplatesContexts = async (context) => {
             "code": "USER_RESET_PASSWORD",
             "data": {
               "es": {
-                "content": "<!DOCTYPE html><html><head></head><body><div><h1>Restablecimiento de contraseña</h1><p>Hola.</p><p>Ha recibido este mensaje porque se ha realizado una petici&oacute;n de restablecimiento de contrase&ntilde;a para el usuario {{USER_NAME}} {{USER_SURNAME}}.</p><p>Para restablecer la contraseña haga click<a href='{{USER_RECOVER_URL}}'> aqu&iacute;</a>.</p><p> Recuerde que solo el último email recibido es válido. </p><p>Saludos,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div></body></html>",
-                "subject": "GUEXT 1080: Restablecimiento de contraseña."
+                "content": '<div><h1>Restablecimiento de contraseña</h1><p>Hola.</p><p>Ha recibido este mensaje porque se ha realizado una petición de restablecimiento de contraseña para el usuario {{USER_NAME}} {{USER_SURNAME}}.</p><p>Para restablecer la contraseña haga click<a href="{{USER_RECOVER_URL}}"> aquí</a>.</p><p> Recuerde que solo el último email recibido es válido. </p><p>Saludos,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
+                "subject": 'GUEXT 1080: Restablecimiento de contraseña.'
               },
               "en": {
-                "content": "<!DOCTYPE html><html><head></head><body><div><h1>Password reset</h1><p>Hello.</p><p>You have received this message because it has been asked a password reset for the user {{USER_NAME}} {{USER_SURNAME}}.</p><p>In order to reset the password click<a href='{{USER_RECOVER_URL}}'>here</a>.</p><p>Greetings,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div></body></html>",
+                "content": '<div><h1>Password reset</h1><p>Hello.</p><p>You have received this message because it has been asked a password reset for the user {{USER_NAME}} {{USER_SURNAME}}.</p><p>In order to reset the password click<a href="{{USER_RECOVER_URL}}">here</a>.</p><p>Greetings,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
                 "subject": "GUEXT1080: Password reset."
               }
             }
@@ -208,11 +208,11 @@ export const getTemplatesContexts = async (context) => {
             "code": "CASE_ALERT",
             "data": {
               "es": {
-                "content": "<!DOCTYPE html><html><head></head><body><div><p>Hola.</p><p>La tarea {{CASE_ID}} lleva m&aacute;s de {{CASE_ALERT_TIME}} en el estado {{CASE_STATUS}}.</p><p style='text-decoration:underline'><strong>RESUMEN DE LA TAREA</strong></p><table><tr><td style='text-align:left'><strong>Descripci&oacute;n:</strong></td><td style='text-align:left'>{{CASE_DESCRIPTION}}</td></tr><tr><td style='text-align:left'><strong>Tipo:</strong></td><td style='text-align:left'>{{CASE_TYPE_3}}</td></tr><tr><td style='text-align:left'><strong>Ubicaci&oacute;n:</strong></td><td style='text-align:left'>{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style='text-align:left'><strong>Asignada a:</strong></td><td style='text-align:left'>{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style='text-align:left'><strong>Motivo:</strong></td><td style='text-align:left'>{{CASE_SCHEDULED_REASON}}</td></tr></table><p>Saludos,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div></body>",
+                "content": '<div><p>Hola.</p><p>La tarea {{CASE_ID}} lleva más de {{CASE_ALERT_TIME}} en el estado {{CASE_STATUS}}.</p><p style="text-decoration:underline"><strong>RESUMEN DE LA TAREA</strong></p><table><tbody><tr><td style="text-align:left"><strong>Descripción:</strong></td><td style="text-align:left">{{CASE_DESCRIPTION}}</td></tr><tr><td style="text-align:left"><strong>Tipo:</strong></td><td style="text-align:left">{{CASE_TYPE_3}}</td></tr><tr><td style="text-align:left"><strong>Ubicación:</strong></td><td style="text-align:left">{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style="text-align:left"><strong>Asignada a:</strong></td><td style="text-align:left">{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style="text-align:left"><strong>Motivo:</strong></td><td style="text-align:left">{{CASE_SCHEDULED_REASON}}</td></tr></tbody></table><p>Saludos,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
                 "subject": "GUEXT 1080: Alerta sobre tarea."
               },
               "en": {
-                "content": "<!DOCTYPE html><html><head></head><body><div><p>Hello.</p><p>The task {{CASE_ID}} remains more than {{CASE_ALERT_TIME}} with the {{CASE_STATUS}} status.</p><p style='text-decoration:underline'><strong>TASK SUMMARY</strong></p><table><tr><td style='text-align:left'><strong>Description:</strong></td><td style='text-align:left'>{{CASE_DESCRIPTION}}</td></tr><tr><td style='text-align:left'><strong>Type:</strong></td><td style='text-align:left'>{{CASE_TYPE_3}}</td></tr><tr><td style='text-align:left'><strong>Location:</strong></td><td style='text-align:left'>{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style='text-align:left'><strong>Assigned to:<strong></td><td style='text-align:left'>{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style='text-align:left'><strong>Reason:</strong></td><td style='text-align:left'>{{CASE_SCHEDULED_REASON}}</td></tr></table><p>Greetings,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div></body>",
+                "content": '<div><p>Hello.</p><p>The task {{CASE_ID}} remains more than {{CASE_ALERT_TIME}} with the {{CASE_STATUS}} status.</p><p style="text-decoration:underline"><strong>TASK SUMMARYd</strong></p><table><tbody><tr><td style="text-align:left"><strong>Description:</strong></td><td style="text-align:left">{{CASE_DESCRIPTION}}</td></tr><tr><td style="text-align:left"><strong>Type:</strong></td><td style="text-align:left">{{CASE_TYPE_3}}</td></tr><tr><td style="text-align:left"><strong>Location:</strong></td><td style="text-align:left">{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style="text-align:left"><strong>Assigned to:<strong></strong></strong></td><td style="text-align:left">{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style="text-align:left"><strong>Reason:</strong></td><td style="text-align:left">{{CASE_SCHEDULED_REASON}}</td></tr></tbody></table><p>Greetings,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
                 "subject": "GUEXT1080: Case alert."
               }
             }
@@ -246,7 +246,7 @@ export const getTemplatesContexts = async (context) => {
 };
 
 
-export const postDataTemplate= async (body) => {
+export const postDataTemplate = async (body) => {
   try {
     let url = '';
     const response = await fetch(url, {

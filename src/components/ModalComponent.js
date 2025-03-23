@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { useContext } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 
-const ModalComponent = ({ setVisible, setSelectedTemplateContent }) => {
+const ModalComponent = ({ setVisible, setSelectedTemplateContent, setActionButtonUpdate }) => {
 
     const { context } = useContext(ScreensContext);
 
@@ -10,6 +10,7 @@ const ModalComponent = ({ setVisible, setSelectedTemplateContent }) => {
         $(context.current).summernote("code", null);
         setVisible(false);
         setSelectedTemplateContent(null);
+        setActionButtonUpdate(false);
     };
 
     return (

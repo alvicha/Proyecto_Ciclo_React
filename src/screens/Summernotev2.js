@@ -23,6 +23,7 @@ const SummernoteEditorv2 = () => {
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState(null);
+    const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
     const { setContext } = useContext(ScreensContext);
 
     const changeSummernoteLanguage = useCallback((lang) => {
@@ -40,7 +41,6 @@ const SummernoteEditorv2 = () => {
                 ["para", ["ul", "ol", "paragraph"]],
             ],
         }).summernote("code", selectedTemplateContent);
-        console.log("Contenido: ", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
 
 
@@ -74,8 +74,6 @@ const SummernoteEditorv2 = () => {
     const onClickData = async (event) => {
         try {
             event.preventDefault();
-            
-
             /*
             let body = {
                 code: codeLanguage,
@@ -95,7 +93,7 @@ const SummernoteEditorv2 = () => {
     const onUpdateTemplate = async (event) => {
         try {
             event.preventDefault();
-            let contentTemplate = $(editorRef.current).summernote('code');
+            let contentTemplate = selectedTemplateContent;
             setSelectedTemplateContent(contentTemplate);
 
             let body = {
@@ -125,11 +123,11 @@ const SummernoteEditorv2 = () => {
 
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-
         if (codeTemplate !== null) {
             setNameTemplate(codeTemplate);
         }
-    }, [codeLanguage, changeSummernoteLanguage, codeTemplate]);
+        console.log("Codigo: ", actionButtonUpdate);
+    }, [codeLanguage, changeSummernoteLanguage, codeTemplate, actionButtonUpdate, selectedTemplateContent]);
 
     return (
         <div className="container mt-5">
@@ -154,21 +152,28 @@ const SummernoteEditorv2 = () => {
                         setSelectedLanguageDropdown={setSelectedLanguageDropdown}
                         placeholdersList={placeholdersList}
                         getPlaceholdersApi={getPlaceholdersApi}
-                        codeTemplate={codeTemplate}
+                        nameTemplate={nameTemplate}
+                        setNameTemplate={setNameTemplate}
                         setCodeTemplate={setCodeTemplate}
+                        setActionButtonUpdate={setActionButtonUpdate}
                     />
                 </div>
 
                 <div className="form-group d-flex justify-content-center border border-success mt-2 p-2 mb-2 p-4 rounded">
                     <label for="nameTemplate" className="fw-bold m-2">Nombre Plantilla:</label>
-                    <input type="text" value={nameTemplate} onChange={handleNameTemplateChange} class="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
+                    <input type="text" value={nameTemplate} onChange={handleNameTemplateChange} className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
                 </div>
 
                 <div className="form-group mb-3">
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
                 <div className="mb-2">
-                    <input type="submit" value="Guardar Plantilla" className="btn btn-primary" />
+                    <button
+                        className="btn btn-primary"
+                        onClick={actionButtonUpdate ? onUpdateTemplate : onClickData}
+                    >
+                        {actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"}
+                    </button>
                 </div>
             </form>
         </div>

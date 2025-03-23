@@ -4,6 +4,7 @@ import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
 import ModalComponent from '../components/ModalComponent';
 import "../screens/summernote.css";
+import ModalWarning from './ModalWarning';
 
 const DropdownTemplate = ({
     contexts,
@@ -22,42 +23,55 @@ const DropdownTemplate = ({
     setSelectedLanguageDropdown,
     placeholdersList,
     getPlaceholdersApi,
-    codeTemplate,
-    setCodeTemplate }) => {
+    nameTemplate,
+    setNameTemplate,
+    setCodeTemplate,
+    setActionButtonUpdate }) => {
 
     const [selectedVariable, setSelectedVariable] = useState('Variables');
-    const [selectedTemplateCode, setSelectedTemplateCode] = useState('Plantillas');
+    const [selectedTemplateDropwdown, setSelectedTemplateDropdown] = useState('Plantillas');
     const [visible, setVisible] = useState(false);
+    const [visibleModalWarning, setVisibleModalWarning] = useState(false);
     const [showVariables, setShowVariables] = useState(false);
+    const [warningMessage, setWarningMessage] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
     const { context } = useContext(ScreensContext);
 
-    const handleContextChange = (selectedCodeContext) => {
-        let codeContext = selectedCodeContext;
-        let selectedContext = contexts.find(context => context.code === codeContext);
-
-        if (selectedContext) {
-            setContextDropDown(selectedContext.code);
-            getPlaceholdersApi(selectedContext);
-
-            handleInfoContext(selectedContext);
-            getTemplatesApi(selectedContext.code);
-
-            if (contextDropDown !== selectedContext.code) {
-                setSelectedTemplateContent(null);
-            }
-        }
+    const resetData = () => {
+        setSelectedTemplate(null);
+        setSelectedTemplateContent(null);
+        setCodeTemplate(null);
+        setNameTemplate("");
     };
 
-    const handleInfoLanguage = (languageCode) => {
-        if (templates && templates.length > 0) {
-            let selectedTemplate = templates.find(template => template.code === codeTemplate);
-            setSelectedTemplate(selectedTemplate);
+    const onClickContextTemplate = (selectedContext) => {
+        setContextDropDown(selectedContext.code);
+        getTemplatesApi(selectedContext.code);
+        getPlaceholdersApi(selectedContext.code);
+    };
 
-            if (selectedTemplate.data[languageCode]) {
-                setSelectedTemplateContent(selectedTemplate.data[languageCode].content)
-            }
+    const onClickContentTemplate = (templateSelected) => {
+        setSelectedTemplate(templateSelected);
+        setSelectedTemplateDropdown(templateSelected.code);
+        setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
+    };
+
+    const handleContextChange = (selectedCodeContext) => {
+        let selectedContext = contexts.find(context => context.code === selectedCodeContext);
+
+        if (selectedTemplateContent) {
+            setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
+            setVisibleModalWarning(true);
+
+            setConfirmAction(() => () => {
+                resetData();
+                onClickContextTemplate(selectedContext);
+                setNameTemplate("");
+            });
+        } else {
+            onClickContextTemplate(selectedContext);
         }
-    }
+    };
 
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
@@ -86,50 +100,69 @@ const DropdownTemplate = ({
     };
 
     const handleLanguageChange = (selectedCodeLanguage) => {
-        const newLang = selectedCodeLanguage;
-        const selectedLanguage = listLanguages.find(lang => lang.code === newLang);
+        const selectedLanguage = listLanguages.find(lang => lang.code === selectedCodeLanguage);
+        const currentContentSummernote = $(context.current).summernote('code');
+
+        setSelectedTemplateContent(currentContentSummernote);
+        setCodeLanguage(selectedCodeLanguage);
         setSelectedLanguageDropdown(selectedLanguage.value);
 
         if (selectedTemplateContent) {
-            handleInfoLanguage(newLang);
-        }
+            setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
+            setVisibleModalWarning(true);
 
-        if (selectedLanguage) {
-            setCodeLanguage(newLang);
+            setConfirmAction(() => () => {
+                setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
+                setNameTemplate(selectedTemplate.code);
+            });
+        } else if (selectedTemplate) {
+            setCodeTemplate(selectedTemplate.code);
+            setNameTemplate(selectedTemplate.code);
         }
+    };
+
+    const onConfirmChange = () => {
+        confirmAction();
+        setConfirmAction(null);
+        setVisibleModalWarning(false);
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
-        setCodeTemplate(null);
-        setSelectedTemplate(null);
-        setSelectedTemplateContent(null);
-        setSelectedTemplateCode("");
+        const currentContentSummernote = $(context.current).summernote('code');
+        let templateSelected = templates.find(template => template.code === selectedCodeTemplate);
 
-        const codeTemplate = selectedCodeTemplate;
-        setCodeTemplate(codeTemplate);
-        setShowVariables(true);
-        let templateSelected = templates.find(template => template.code === codeTemplate);
+        if (selectedLanguageDropdown !== "Idioma") {
+            setShowVariables(true);
 
-        if (templateSelected.data[codeLanguage]) {
-            setSelectedTemplate(templateSelected);
-            setSelectedTemplateCode(templateSelected.code);
-            setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
+            if (selectedTemplateContent) {
+                if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
+                    setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
+                    setVisibleModalWarning(true);
+
+                    setConfirmAction(() => () => {
+                        onClickContentTemplate(templateSelected);
+                        setNameTemplate(selectedCodeTemplate);
+                        setActionButtonUpdate(true);
+                    });
+                }
+            } else {
+                setCodeTemplate(templateSelected.code);
+                onClickContentTemplate(templateSelected);
+                setActionButtonUpdate(true);
+            }
+        } else {
+            alert("Selecciona un idioma antes de escoger plantilla");
         }
     };
-
-    const handleInfoContext = (infoContext) => {
-        console.log("Codigo: ", infoContext.code);
-    }
 
     const onShowModal = () => {
         setVisible(true);
     }
 
     useEffect(() => {
-        console.log('contexto seleccionado:', contextDropDown);
         console.log('Accion o variable seleccionado:', selectedVariable);
-        console.log('Contenido:', selectedTemplateContent);
-    }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, selectedTemplate, selectedTemplateContent, selectedTemplateCode, visible]);
+        console.log('Nombre plantilla:', nameTemplate);
+    }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, selectedTemplate, selectedTemplateContent, visibleModalWarning, selectedTemplateDropwdown, visible]);
 
     return (
         <div className='row m-3 p-2 align-items-center'>
@@ -142,14 +175,14 @@ const DropdownTemplate = ({
                     {listLanguages.map((language) => (
                         <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
                             {language.value}
-                        </button >
+                        </button>
                     ))
                     }
                 </div>
             </div>
 
             <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                <a class="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
+                <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {contextDropDown}
                 </a>
@@ -162,9 +195,9 @@ const DropdownTemplate = ({
                 </div>
             </div>
 
-            {placeholdersList.length > 0 && templates.length > 0 && (
+            {templates.length > 0 && (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button a class="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Plantillas
                     </button>
 
@@ -180,7 +213,7 @@ const DropdownTemplate = ({
 
             {placeholdersList.length > 0 && showVariables && (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button class="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Variables
                     </button>
 
@@ -204,6 +237,15 @@ const DropdownTemplate = ({
                 <ModalComponent
                     setVisible={setVisible}
                     setSelectedTemplateContent={setSelectedTemplateContent}
+                    setActionButtonUpdate={setActionButtonUpdate}
+                />
+            )}
+
+            {visibleModalWarning && (
+                <ModalWarning
+                    setVisibleModalWarning={setVisibleModalWarning}
+                    onConfirmChange={onConfirmChange}
+                    warningMessage={warningMessage}
                 />
             )}
         </div>
@@ -211,6 +253,3 @@ const DropdownTemplate = ({
 };
 
 export default DropdownTemplate;
-
-
-//<button className="btn btn-primary" onClick={onUpdateTemplate}>Actualizar Plantilla</button>
