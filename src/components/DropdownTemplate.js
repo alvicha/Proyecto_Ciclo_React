@@ -161,12 +161,6 @@ const DropdownTemplate = ({
         } else {
             onClickContentTemplate(templateSelected);
             setNameTemplate(selectedCodeTemplate);
-
-            // Asegurar que el editor de texto se actualiza
-            setTimeout(() => {
-                $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
-            }, 0);
-
         }
     };
 

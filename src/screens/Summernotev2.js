@@ -126,13 +126,9 @@ const SummernoteEditorv2 = () => {
 
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-        console.log("Boton:", actionButtonUpdate);
-    }, [codeLanguage, changeSummernoteLanguage, codeTemplate, actionButtonUpdate, selectedTemplateContent]);
+    }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate, selectedTemplateContent]);
 
     useEffect(() => {
-        console.log(codeTemplate);
-        console.log(nameTemplate);
-
         setActionButtonUpdate(nameTemplate === codeTemplate);
     }, [nameTemplate, codeTemplate]);
 
