@@ -18,11 +18,11 @@ const SummernoteEditorv2 = () => {
     const [contexts, setContexts] = useState([]);
     const [placeholdersList, setPlaceholdersList] = useState([]);
     const [templates, setTemplates] = useState([]);
-    const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [selectedTemplate, setSelectedTemplate] = useState("");
     const [selectedTemplateContent, setSelectedTemplateContent] = useState(null);
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
-    const [codeTemplate, setCodeTemplate] = useState(null);
+    const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
     const { setContext } = useContext(ScreensContext);
 
@@ -39,6 +39,7 @@ const SummernoteEditorv2 = () => {
                 ["fontsize", ["fontsize"]],
                 ["color", ["color"]],
                 ["para", ["ul", "ol", "paragraph"]],
+                ['insert', ['picture']],
             ],
         }).summernote("code", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
@@ -112,9 +113,10 @@ const SummernoteEditorv2 = () => {
         }
     };
 
-    const handleNameTemplateChange = (event) => {
+    const onChangeNameTemplate = (event) => {
         setNameTemplate(event.target.value);
     };
+
 
     useEffect(() => {
         languagesApi();
@@ -123,12 +125,14 @@ const SummernoteEditorv2 = () => {
 
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-        console.log("Codigo: ", codeTemplate);
-
-        if (codeTemplate !== null) {
+        if (nameTemplate !== codeTemplate) {
             setNameTemplate(codeTemplate);
         }
-    }, [codeLanguage, changeSummernoteLanguage, codeTemplate, actionButtonUpdate, selectedTemplateContent]);
+    }, [codeLanguage, changeSummernoteLanguage, codeTemplate, selectedTemplateContent]);
+
+    useEffect(() => {
+        setActionButtonUpdate(nameTemplate === codeTemplate);
+    }, [nameTemplate]);
 
     return (
         <div className="container mt-5">
@@ -157,12 +161,14 @@ const SummernoteEditorv2 = () => {
                         setNameTemplate={setNameTemplate}
                         setCodeTemplate={setCodeTemplate}
                         setActionButtonUpdate={setActionButtonUpdate}
+                        actionButtonUpdate={actionButtonUpdate}
                     />
                 </div>
 
                 <div className="form-group d-flex justify-content-center border border-success mt-2 p-2 mb-2 p-4 rounded">
                     <label for="nameTemplate" className="fw-bold m-2">Nombre Plantilla:</label>
-                    <input type="text" value={nameTemplate} onChange={handleNameTemplateChange} className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
+                    <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
+                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
                 </div>
 
                 <div className="form-group mb-3">

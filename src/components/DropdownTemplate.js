@@ -56,12 +56,14 @@ const DropdownTemplate = ({
         setSelectedTemplateDropdown(templateSelected.code);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
         setCodeTemplate(templateSelected.code);
+        setActionButtonUpdate(true);
     };
 
     const handleContextChange = (selectedCodeContext) => {
         let selectedContext = contexts.find(context => context.code === selectedCodeContext);
 
         if (selectedTemplateContent) {
+            setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
             setVisibleModalWarning(true);
 
@@ -134,34 +136,36 @@ const DropdownTemplate = ({
     const onCancelChange = () => {
         setNameTemplate(previousTemplateName);
         setVisibleModalWarning(false);
+        setShowVariables(false);
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
         const currentContentSummernote = $(context.current).summernote('code');
-        console.log(currentContentSummernote);
         let templateSelected = templates.find(template => template.code === selectedCodeTemplate);
 
-        if (selectedLanguageDropdown !== "Idioma") {
-            setShowVariables(true);
+        if (selectedLanguageDropdown === "Idioma") {
+            alert("Selecciona un idioma antes de escoger plantilla");
+            return;
+        }
 
-            if (selectedTemplateContent) {
-                if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
-                    setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
-                    setVisibleModalWarning(true);
+        setShowVariables(true);
 
-                    setConfirmAction(() => () => {
-                        onClickContentTemplate(templateSelected);
-                        setNameTemplate(selectedCodeTemplate);
-                        setActionButtonUpdate(true);
-                    });
-                }
-            } else {
-                onClickContentTemplate(templateSelected);
-                setActionButtonUpdate(true);
+        if (selectedTemplateContent) {
+            if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
+                setPreviousTemplateName(nameTemplate);
+                setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
+                setVisibleModalWarning(true);
+
+                setConfirmAction(() => () => {
+                    onClickContentTemplate(templateSelected);
+                    setNameTemplate(selectedCodeTemplate);
+                });
             }
         } else {
-            alert("Selecciona un idioma antes de escoger plantilla");
+            onClickContentTemplate(templateSelected);
+            setNameTemplate(selectedCodeTemplate);            
         }
+
     };
 
     const onShowModal = () => {

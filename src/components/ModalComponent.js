@@ -9,7 +9,7 @@ const ModalComponent = ({ setVisible, setSelectedTemplateContent, setActionButto
     const handleConfirmDelete = () => {
         $(context.current).summernote("code", null);
         setVisible(false);
-        setSelectedTemplateContent(null);
+        setSelectedTemplateContent("");
         setActionButtonUpdate(false);
     };
 
