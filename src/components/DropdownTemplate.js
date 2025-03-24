@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
@@ -136,8 +136,8 @@ const DropdownTemplate = ({
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
+        const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
         const currentContentSummernote = $(context.current).summernote('code');
-        let templateSelected = templates.find(template => template.code === selectedCodeTemplate);
 
         if (selectedLanguageDropdown === "Idioma") {
             alert("Selecciona un idioma antes de escoger plantilla");
@@ -145,7 +145,6 @@ const DropdownTemplate = ({
         }
 
         setShowVariables(true);
-        setSelectedTemplateContent(currentContentSummernote);
 
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
@@ -156,17 +155,31 @@ const DropdownTemplate = ({
                 setConfirmAction(() => () => {
                     onClickContentTemplate(templateSelected);
                     setNameTemplate(selectedCodeTemplate);
+
+                    setTimeout(() => {
+                        $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
+                    }, 0);
                 });
             }
         } else {
             onClickContentTemplate(templateSelected);
             setNameTemplate(selectedCodeTemplate);
+
+            // Asegurar que el editor de texto se actualiza
+            setTimeout(() => {
+                $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
+            }, 0);
+
         }
     };
 
     const onShowModal = () => {
         setVisible(true);
     }
+
+    useEffect(() => {
+        console.log("Contenido actualizado:", selectedTemplateContent);
+    }, [contextDropDown, codeLanguage, selectedLanguageDropdown, previousTemplateName, selectedTemplate, selectedTemplateContent, visibleModalWarning, visible]);
 
     return (
         <div className='row m-3 p-2 align-items-center'>

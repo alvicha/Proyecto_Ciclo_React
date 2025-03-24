@@ -7,10 +7,8 @@ const ModalComponent = ({ setVisible, setSelectedTemplateContent, setActionButto
     const { context } = useContext(ScreensContext);
 
     const handleConfirmDelete = () => {
-        $(context.current).summernote("code", null);
+        $(context.current).summernote("code", "");
         setVisible(false);
-        setSelectedTemplateContent("");
-        setActionButtonUpdate(false);
     };
 
     return (
