@@ -101,14 +101,12 @@ const DropdownTemplate = ({
     const handleLanguageChange = (selectedCodeLanguage) => {
         const selectedLanguage = listLanguages.find(lang => lang.code === selectedCodeLanguage);
         const currentContentSummernote = $(context.current).summernote('code');
-        let templateNameSelected = nameTemplate;
 
         setSelectedTemplateContent(currentContentSummernote);
         setCodeLanguage(selectedCodeLanguage);
 
         if (selectedTemplateContent) {
             setPreviousTemplateName(nameTemplate);
-            setCodeTemplate(templateNameSelected);
             setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
             setVisibleModalWarning(true);
 
