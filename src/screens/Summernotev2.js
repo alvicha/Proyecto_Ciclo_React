@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, postDataTemplate } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from './ScreensContext';
 
@@ -123,10 +123,11 @@ const SummernoteEditorv2 = () => {
 
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
+        console.log("Codigo: ", codeTemplate);
+
         if (codeTemplate !== null) {
             setNameTemplate(codeTemplate);
         }
-        console.log("Codigo: ", actionButtonUpdate);
     }, [codeLanguage, changeSummernoteLanguage, codeTemplate, actionButtonUpdate, selectedTemplateContent]);
 
     return (

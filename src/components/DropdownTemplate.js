@@ -35,6 +35,7 @@ const DropdownTemplate = ({
     const [showVariables, setShowVariables] = useState(false);
     const [warningMessage, setWarningMessage] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
+    const [previousTemplateName, setPreviousTemplateName] = useState("");
     const { context } = useContext(ScreensContext);
 
     const resetData = () => {
@@ -54,6 +55,7 @@ const DropdownTemplate = ({
         setSelectedTemplate(templateSelected);
         setSelectedTemplateDropdown(templateSelected.code);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
+        setCodeTemplate(templateSelected.code);
     };
 
     const handleContextChange = (selectedCodeContext) => {
@@ -101,22 +103,25 @@ const DropdownTemplate = ({
     const handleLanguageChange = (selectedCodeLanguage) => {
         const selectedLanguage = listLanguages.find(lang => lang.code === selectedCodeLanguage);
         const currentContentSummernote = $(context.current).summernote('code');
+        let templateNameSelected = nameTemplate;
 
         setSelectedTemplateContent(currentContentSummernote);
         setCodeLanguage(selectedCodeLanguage);
-        setSelectedLanguageDropdown(selectedLanguage.value);
 
         if (selectedTemplateContent) {
+            setPreviousTemplateName(nameTemplate);
+            setCodeTemplate(templateNameSelected);
             setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
             setVisibleModalWarning(true);
 
             setConfirmAction(() => () => {
                 setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
+                setCodeTemplate(selectedTemplate.code)
                 setNameTemplate(selectedTemplate.code);
+                setSelectedLanguageDropdown(selectedLanguage.value);
             });
-        } else if (selectedTemplate) {
-            setCodeTemplate(selectedTemplate.code);
-            setNameTemplate(selectedTemplate.code);
+        } else {
+            setSelectedLanguageDropdown(selectedLanguage.value);
         }
     };
 
@@ -126,8 +131,14 @@ const DropdownTemplate = ({
         setVisibleModalWarning(false);
     };
 
+    const onCancelChange = () => {
+        setNameTemplate(previousTemplateName);
+        setVisibleModalWarning(false);
+    };
+
     const handleTemplateChange = (selectedCodeTemplate) => {
         const currentContentSummernote = $(context.current).summernote('code');
+        console.log(currentContentSummernote);
         let templateSelected = templates.find(template => template.code === selectedCodeTemplate);
 
         if (selectedLanguageDropdown !== "Idioma") {
@@ -145,7 +156,6 @@ const DropdownTemplate = ({
                     });
                 }
             } else {
-                setCodeTemplate(templateSelected.code);
                 onClickContentTemplate(templateSelected);
                 setActionButtonUpdate(true);
             }
@@ -161,7 +171,7 @@ const DropdownTemplate = ({
     useEffect(() => {
         console.log('Accion o variable seleccionado:', selectedVariable);
         console.log('Nombre plantilla:', nameTemplate);
-    }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, selectedTemplate, selectedTemplateContent, visibleModalWarning, selectedTemplateDropwdown, visible]);
+    }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, previousTemplateName, selectedTemplate, selectedTemplateContent, visibleModalWarning, selectedTemplateDropwdown, visible]);
 
     return (
         <div className='row m-3 p-2 align-items-center'>
@@ -244,6 +254,7 @@ const DropdownTemplate = ({
                 <ModalWarning
                     setVisibleModalWarning={setVisibleModalWarning}
                     onConfirmChange={onConfirmChange}
+                    onCancelChange={onCancelChange}
                     warningMessage={warningMessage}
                 />
             )}
