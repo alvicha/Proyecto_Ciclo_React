@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { useContext } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 
-const ModalComponent = ({ setVisible, setSelectedTemplateContent, setActionButtonUpdate }) => {
+const ModalComponent = ({ setVisible }) => {
 
     const { context } = useContext(ScreensContext);
 

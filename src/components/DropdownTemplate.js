@@ -132,7 +132,6 @@ const DropdownTemplate = ({
     const onCancelChange = () => {
         setNameTemplate(previousTemplateName);
         setVisibleModalWarning(false);
-        setShowVariables(false);
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
@@ -251,11 +250,7 @@ const DropdownTemplate = ({
             </div>
 
             {visible && (
-                <ModalComponent
-                    setVisible={setVisible}
-                    setSelectedTemplateContent={setSelectedTemplateContent}
-                    setActionButtonUpdate={setActionButtonUpdate}
-                />
+                <ModalComponent setVisible={setVisible} />
             )}
 
             {visibleModalWarning && (
