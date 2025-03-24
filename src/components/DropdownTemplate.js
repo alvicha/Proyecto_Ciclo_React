@@ -149,6 +149,7 @@ const DropdownTemplate = ({
         }
 
         setShowVariables(true);
+        setSelectedTemplateContent(currentContentSummernote);
 
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
@@ -163,7 +164,7 @@ const DropdownTemplate = ({
             }
         } else {
             onClickContentTemplate(templateSelected);
-            setNameTemplate(selectedCodeTemplate);            
+            setNameTemplate(selectedCodeTemplate);
         }
 
     };
@@ -174,17 +175,17 @@ const DropdownTemplate = ({
 
     useEffect(() => {
         console.log('Accion o variable seleccionado:', selectedVariable);
-        console.log('Nombre plantilla:', nameTemplate);
+        console.log("Contenido: ", selectedTemplateContent);
     }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, previousTemplateName, selectedTemplate, selectedTemplateContent, visibleModalWarning, selectedTemplateDropwdown, visible]);
 
     return (
         <div className='row m-3 p-2 align-items-center'>
             <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
-                <a class="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
+                <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {selectedLanguageDropdown}
                 </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {listLanguages.map((language) => (
                         <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
                             {language.value}
@@ -199,7 +200,7 @@ const DropdownTemplate = ({
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {contextDropDown}
                 </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {contexts.map((context) => (
                         <button className='dropdown-item' key={context.code} onClick={() => handleContextChange(context.code)}>
                             {context.code}
@@ -214,7 +215,7 @@ const DropdownTemplate = ({
                         Plantillas
                     </button>
 
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {templates.map((template) => (
                             <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
                                 {template.code}
@@ -230,7 +231,7 @@ const DropdownTemplate = ({
                         Variables
                     </button>
 
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {placeholdersList.map((context) => (
                             <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
                                 {context.code}
@@ -242,7 +243,7 @@ const DropdownTemplate = ({
 
             <div className="col-12 col-lg-1 col-md-2 mb-3">
                 <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
-                    <i class="fa fa-trash" />
+                    <i className="fa fa-trash" />
                 </button>
             </div>
 
