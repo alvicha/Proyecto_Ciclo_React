@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
@@ -28,8 +28,6 @@ const DropdownTemplate = ({
     setCodeTemplate,
     setActionButtonUpdate }) => {
 
-    const [selectedVariable, setSelectedVariable] = useState('Variables');
-    const [selectedTemplateDropwdown, setSelectedTemplateDropdown] = useState('Plantillas');
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
     const [showVariables, setShowVariables] = useState(false);
@@ -53,7 +51,6 @@ const DropdownTemplate = ({
 
     const onClickContentTemplate = (templateSelected) => {
         setSelectedTemplate(templateSelected);
-        setSelectedTemplateDropdown(templateSelected.code);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
         setCodeTemplate(templateSelected.code);
         setActionButtonUpdate(true);
@@ -82,7 +79,6 @@ const DropdownTemplate = ({
     };
 
     const handleActionChange = (action) => {
-        setSelectedVariable(action);
         const isEmpty = $(context.current).summernote('isEmpty');
 
         if (isEmpty) {
@@ -166,17 +162,11 @@ const DropdownTemplate = ({
             onClickContentTemplate(templateSelected);
             setNameTemplate(selectedCodeTemplate);
         }
-
     };
 
     const onShowModal = () => {
         setVisible(true);
     }
-
-    useEffect(() => {
-        console.log('Accion o variable seleccionado:', selectedVariable);
-        console.log("Contenido: ", selectedTemplateContent);
-    }, [contextDropDown, selectedVariable, codeLanguage, selectedLanguageDropdown, previousTemplateName, selectedTemplate, selectedTemplateContent, visibleModalWarning, selectedTemplateDropwdown, visible]);
 
     return (
         <div className='row m-3 p-2 align-items-center'>
@@ -257,7 +247,6 @@ const DropdownTemplate = ({
 
             {visibleModalWarning && (
                 <ModalWarning
-                    setVisibleModalWarning={setVisibleModalWarning}
                     onConfirmChange={onConfirmChange}
                     onCancelChange={onCancelChange}
                     warningMessage={warningMessage}

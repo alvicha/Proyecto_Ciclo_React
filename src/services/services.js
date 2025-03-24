@@ -185,11 +185,31 @@ export const getTemplatesContexts = async (context) => {
         response = [
           {
             "id": 55,
-            "code": "ROOM_CODE"
+            "code": "ROOM_CODE",
+            "data": {
+              "es": {
+                "content": '<div><p>Hola.</p><p>La tarea {{CASE_ID}} lleva más de {{CASE_ALERT_TIME}} en el estado {{CASE_STATUS}}.</p><p style="text-decoration:underline"><strong>RESUMEN DE LA TAREA</strong></p><table><tbody><tr><td style="text-align:left"><strong>Descripción:</strong></td><td style="text-align:left">{{CASE_DESCRIPTION}}</td></tr><tr><td style="text-align:left"><strong>Tipo:</strong></td><td style="text-align:left">{{CASE_TYPE_3}}</td></tr><tr><td style="text-align:left"><strong>Ubicación:</strong></td><td style="text-align:left">{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style="text-align:left"><strong>Asignada a:</strong></td><td style="text-align:left">{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style="text-align:left"><strong>Motivo:</strong></td><td style="text-align:left">{{CASE_SCHEDULED_REASON}}</td></tr></tbody></table><p>Saludos,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
+                "subject": "GUEXT 1080: Alerta sobre tarea."
+              },
+              "en": {
+                "content": '<div><p>Hello.</p><p>The task {{CASE_ID}} remains more than {{CASE_ALERT_TIME}} with the {{CASE_STATUS}} status.</p><p style="text-decoration:underline"><strong>TASK SUMMARYd</strong></p><table><tbody><tr><td style="text-align:left"><strong>Description:</strong></td><td style="text-align:left">{{CASE_DESCRIPTION}}</td></tr><tr><td style="text-align:left"><strong>Type:</strong></td><td style="text-align:left">{{CASE_TYPE_3}}</td></tr><tr><td style="text-align:left"><strong>Location:</strong></td><td style="text-align:left">{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style="text-align:left"><strong>Assigned to:<strong></strong></strong></td><td style="text-align:left">{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style="text-align:left"><strong>Reason:</strong></td><td style="text-align:left">{{CASE_SCHEDULED_REASON}}</td></tr></tbody></table><p>Greetings,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
+                "subject": "GUEXT1080: Case alert."
+              }
+            }
           },
           {
             "id": 56,
-            "code": "GUEST_NAME"
+            "code": "GUEST_NAME",
+            "data": {
+              "es": {
+                "content": '<div><p>Hola.</p><p>La tarea {{CASE_ID}} lleva más de {{CASE_ALERT_TIME}} en el estado {{CASE_STATUS}}.</p><p style="text-decoration:underline"><strong>RESUMEN DE LA TAREA</strong></p><table><tbody><tr><td style="text-align:left"><strong>Descripción:</strong></td><td style="text-align:left">{{CASE_DESCRIPTION}}</td></tr><tr><td style="text-align:left"><strong>Tipo:</strong></td><td style="text-align:left">{{CASE_TYPE_3}}</td></tr><tr><td style="text-align:left"><strong>Ubicación:</strong></td><td style="text-align:left">{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style="text-align:left"><strong>Asignada a:</strong></td><td style="text-align:left">{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style="text-align:left"><strong>Motivo:</strong></td><td style="text-align:left">{{CASE_SCHEDULED_REASON}}</td></tr></tbody></table><p>Saludos,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
+                "subject": "GUEXT 1080: Alerta sobre tarea."
+              },
+              "en": {
+                "content": '<div><p>Hello.</p><p>The task {{CASE_ID}} remains more than {{CASE_ALERT_TIME}} with the {{CASE_STATUS}} status.</p><p style="text-decoration:underline"><strong>TASK SUMMARYd</strong></p><table><tbody><tr><td style="text-align:left"><strong>Description:</strong></td><td style="text-align:left">{{CASE_DESCRIPTION}}</td></tr><tr><td style="text-align:left"><strong>Type:</strong></td><td style="text-align:left">{{CASE_TYPE_3}}</td></tr><tr><td style="text-align:left"><strong>Location:</strong></td><td style="text-align:left">{{CASE_LOCATION_TYPE}} - {{CASE_LOCATION_CODE}}</td></tr><tr><td style="text-align:left"><strong>Assigned to:<strong></strong></strong></td><td style="text-align:left">{{CASE_SOLVER_NAME}} {{CASE_SOLVER_SURNAME}}</td></tr><tr><td style="text-align:left"><strong>Reason:</strong></td><td style="text-align:left">{{CASE_SCHEDULED_REASON}}</td></tr></tbody></table><p>Greetings,<br><b>GUEXT 1080</b></p><p>Powered by NETHITS</p></div>',
+                "subject": "GUEXT1080: Case alert."
+              }
+            }
           }
         ]
         break;

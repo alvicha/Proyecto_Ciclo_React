@@ -109,7 +109,7 @@ const SummernoteEditorv2 = () => {
             };
             console.log("Mi cuerpo es: ", body)
             const response = await updateTemplateApi(body);
-            console.log("Actualizado plantilla con ID: ", selectedTemplate.id + " y la respuesta es: ", response);
+            console.log("Actualizado plantilla con ID: ", selectedTemplate.id + "y la respuesta es: ", response);
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
@@ -118,7 +118,6 @@ const SummernoteEditorv2 = () => {
     const onChangeNameTemplate = (event) => {
         setNameTemplate(event.target.value);
     };
-
 
     useEffect(() => {
         languagesApi();
