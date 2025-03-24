@@ -38,7 +38,7 @@ const DropdownTemplate = ({
 
     const resetData = () => {
         setSelectedTemplate(null);
-        setSelectedTemplateContent(null);
+        setSelectedTemplateContent("");
         setCodeTemplate(null);
         setNameTemplate("");
     };
@@ -120,6 +120,7 @@ const DropdownTemplate = ({
             setSelectedLanguageDropdown(selectedLanguage.value);
         }
     };
+    
 
     const onConfirmChange = () => {
         confirmAction();

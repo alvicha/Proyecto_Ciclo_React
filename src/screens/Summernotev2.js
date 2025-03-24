@@ -126,11 +126,18 @@ const SummernoteEditorv2 = () => {
 
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-    }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate, selectedTemplateContent]);
+    }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate]);
 
     useEffect(() => {
-        setActionButtonUpdate(nameTemplate === codeTemplate);
-    }, [nameTemplate, codeTemplate]);
+        const currentContent = $(editorRef.current).summernote('code');
+
+        if (nameTemplate !== codeTemplate) {
+            setActionButtonUpdate(false);
+        } else {
+            setActionButtonUpdate(true);
+        }
+        setSelectedTemplateContent(currentContent);
+    }, [nameTemplate, codeTemplate, selectedTemplateContent]);
 
     return (
         <div className="container mt-5">
