@@ -1,9 +1,8 @@
 .note-toolbar {
-    display: flex;
     background-color: #007bff !important;
     color: white !important;
     border-radius: 5px;
-    justify-content: start;
+    text-align: left;
 }
 
 .note-toolbar button {

@@ -45,6 +45,9 @@ const SummernoteEditorv2 = () => {
                 ["para", ["ul", "ol", "paragraph"]],
                 ['insert', ['picture']],
             ],
+            fontNames: ['Sans Serif', 'Serif', 'Monospace'],
+            fontNamesIgnoreCheck: ['Sans Serif', 'Serif', 'Monospace'],
+            addDefaultFonts: false,
         }).summernote("code", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
 
