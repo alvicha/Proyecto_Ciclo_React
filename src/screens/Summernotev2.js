@@ -26,17 +26,21 @@ const SummernoteEditorv2 = () => {
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
     const { setContext } = useContext(ScreensContext);
 
+    /**
+     * Esta función sirve para cargar el menu del editor con las opciones deseadas
+     */
     const changeSummernoteLanguage = useCallback((lang) => {
         setContext(editorRef);
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
             placeholder: "Introduce una descripción",
-            height: 300,
+            height: 370,
             lang: lang,
             toolbar: [
                 ["style", ["bold", "italic", "underline", "clear"]],
                 ["font", ["strikethrough", "superscript", "subscript"]],
                 ["fontsize", ["fontsize"]],
+                ['fontname', ['fontname']],
                 ["color", ["color"]],
                 ["para", ["ul", "ol", "paragraph"]],
                 ['insert', ['picture']],
@@ -45,6 +49,9 @@ const SummernoteEditorv2 = () => {
     }, [selectedTemplateContent, setContext]);
 
 
+    /**
+     * Función para que me devuelva la lista de idiomas que hay en la base de datos
+     */
     const languagesApi = async () => {
         try {
             const response = await getDataApi();
@@ -54,6 +61,9 @@ const SummernoteEditorv2 = () => {
         }
     };
 
+    /**
+     * Función para que me devuelva la lista de contextos de la BD
+     */
     const contextsApi = async () => {
         try {
             const response = await getDataContexts();
@@ -63,6 +73,11 @@ const SummernoteEditorv2 = () => {
         }
     };
 
+
+    /**
+     * Función para que me devuelva la lista de variables dependiendo del contexto
+     * @param {*} infoContext Contexto seleccionado 
+     */
     const getPlaceholdersApi = async (infoContext) => {
         try {
             const response = await getPlaceholdersContexts(infoContext);
@@ -72,6 +87,10 @@ const SummernoteEditorv2 = () => {
         }
     };
 
+    /**
+     * Función para añadir una plantilla y almacenarla en la base de datos mediante una llamada a la API
+     * @param {*} event Evento del clic en el botón de guardar
+     */
     const onClickData = async (event) => {
         try {
             event.preventDefault();
@@ -93,6 +112,10 @@ const SummernoteEditorv2 = () => {
         }
     };
 
+    /**
+     * Función para actualizar una plantilla en la base de datos con llamada a la API
+     * @param {*} event Evento del clic en el botón de actualizar plantilla
+     */
     const onUpdateTemplate = async (event) => {
         try {
             event.preventDefault();
@@ -115,19 +138,34 @@ const SummernoteEditorv2 = () => {
         }
     };
 
+    /**
+     * Función para actualizar el estado del nombre de la plantilla constantemente
+     * @param {Event} event - Evento del input.
+     */
     const onChangeNameTemplate = (event) => {
         setNameTemplate(event.target.value);
     };
 
+    /**
+     * Llama a las APIs de idiomas y contextos al montar el componente.
+     */
     useEffect(() => {
         languagesApi();
         contextsApi();
     }, []); // Se ejecuta solo una vez al montar el componente
 
+
+    /**
+     * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
+     */
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
     }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate]);
 
+
+    /**
+    * Verifica si el nombre de la plantilla ha cambiado y actualiza el estado del botón.
+    */
     useEffect(() => {
         const currentContent = $(editorRef.current).summernote('code');
 
@@ -169,7 +207,7 @@ const SummernoteEditorv2 = () => {
                 />
             </div>
 
-            <div className="form-group d-flex justify-content-center border border-success mt-2 p-2 mb-2 p-4 rounded">
+            <div className="form-group d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
                 <label for="nameTemplate" className="fw-bold m-2">Nombre Plantilla:</label>
                 <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
                     className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />

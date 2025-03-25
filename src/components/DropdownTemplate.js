@@ -35,6 +35,7 @@ const DropdownTemplate = ({
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
     const { context } = useContext(ScreensContext);
+    const [visibleContexts, setVisibleContexts] = useState(false);
 
     const resetData = () => {
         setSelectedTemplate(null);
@@ -104,6 +105,7 @@ const DropdownTemplate = ({
 
         setSelectedTemplateContent(currentContentSummernote);
         setCodeLanguage(selectedCodeLanguage);
+        setVisibleContexts(true);
 
         if (selectedTemplateContent) {
             setPreviousTemplateName(nameTemplate);
@@ -120,7 +122,6 @@ const DropdownTemplate = ({
             setSelectedLanguageDropdown(selectedLanguage.value);
         }
     };
-    
 
     const onConfirmChange = () => {
         confirmAction();
@@ -136,11 +137,6 @@ const DropdownTemplate = ({
     const handleTemplateChange = (selectedCodeTemplate) => {
         const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
         const currentContentSummernote = $(context.current).summernote('code');
-
-        if (selectedLanguageDropdown === "Idioma") {
-            alert("Selecciona un idioma antes de escoger plantilla");
-            return;
-        }
 
         setShowVariables(true);
 
@@ -174,7 +170,7 @@ const DropdownTemplate = ({
     }, [contextDropDown, codeLanguage, selectedLanguageDropdown, previousTemplateName, selectedTemplate, selectedTemplateContent, visibleModalWarning, visible]);
 
     return (
-        <div className='row m-3 p-2 align-items-center'>
+        <div className='row m-2 d-flex align-items-center'>
             <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
                 <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -190,19 +186,21 @@ const DropdownTemplate = ({
                 </div>
             </div>
 
-            <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {contextDropDown}
-                </a>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {contexts.map((context) => (
-                        <button className='dropdown-item' key={context.code} onClick={() => handleContextChange(context.code)}>
-                            {context.code}
-                        </button>
-                    ))}
+            {visibleContexts && (
+                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                    <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {contextDropDown}
+                    </a>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {contexts.map((context) => (
+                            <button className='dropdown-item' key={context.code} onClick={() => handleContextChange(context.code)}>
+                                {context.code}
+                            </button>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {templates.length > 0 && (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">

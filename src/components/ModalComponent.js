@@ -6,6 +6,9 @@ const ModalComponent = ({ setVisible }) => {
 
     const { context } = useContext(ScreensContext);
 
+    /**
+     * Función para eliminar el contenido del editor HTML y desaparezca el modal
+     */
     const handleConfirmDelete = () => {
         $(context.current).summernote("code", "");
         setVisible(false);
