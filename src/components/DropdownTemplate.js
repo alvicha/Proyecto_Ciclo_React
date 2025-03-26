@@ -76,8 +76,7 @@ const DropdownTemplate = ({
 
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
-        const content = $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
-        setSelectedTemplateContent(content);
+        $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
     };
 
     const handleActionChange = (action) => {
@@ -145,7 +144,7 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
 
         setShowVariables(true);
-
+        
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
                 setPreviousTemplateName(nameTemplate);

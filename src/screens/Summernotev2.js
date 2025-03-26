@@ -51,7 +51,6 @@ const SummernoteEditorv2 = () => {
         }).summernote("code", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
 
-
     /**
      * Función para que me devuelva la lista de idiomas que hay en la base de datos
      */
@@ -134,7 +133,7 @@ const SummernoteEditorv2 = () => {
                 }
             };
             console.log("Mi cuerpo es: ", body)
-            const response = await updateTemplateApi(body);
+            const response = await updateTemplateApi(body); //Función para actualizar los datos de la plantilla
             console.log("Actualizado plantilla con ID: ", selectedTemplate.id + "y la respuesta es: ", response);
         } catch (error) {
             console.error("Error fetching languages:", error);
