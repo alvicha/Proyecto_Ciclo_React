@@ -34,7 +34,7 @@ const SummernoteEditorv2 = () => {
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
             placeholder: "Introduce una descripción",
-            height: 370,
+            height: 400,
             lang: lang,
             toolbar: [
                 ["style", ["bold", "italic", "underline", "clear"]],
