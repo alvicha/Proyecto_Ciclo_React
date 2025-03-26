@@ -76,7 +76,8 @@ const DropdownTemplate = ({
 
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
-        $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
+        const content = $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
+        setSelectedTemplateContent(content);
     };
 
     const handleActionChange = (action) => {
@@ -113,10 +114,15 @@ const DropdownTemplate = ({
             setVisibleModalWarning(true);
 
             setConfirmAction(() => () => {
-                setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
-                setCodeTemplate(selectedTemplate.code)
-                setNameTemplate(selectedTemplate.code);
-                setSelectedLanguageDropdown(selectedLanguage.value);
+                if (selectedTemplate) {
+                    setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
+                    setCodeTemplate(selectedTemplate.code);
+                    setNameTemplate(selectedTemplate.code);
+                    setSelectedLanguageDropdown(selectedLanguage.value);
+                } else {
+                    resetData();
+                    setSelectedLanguageDropdown(selectedLanguage.value);
+                }
             });
         } else {
             setSelectedLanguageDropdown(selectedLanguage.value);
