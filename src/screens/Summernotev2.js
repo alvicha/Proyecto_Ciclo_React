@@ -108,6 +108,9 @@ const SummernoteEditorv2 = () => {
             };
             console.log("Mi cuerpo es: ", body)
             const response = await postDataTemplate(body);
+            if (response) {
+                alert("Se ha guardado la plantilla correctamente");
+            }
             console.log("Añadiendo plantilla con respuesta: ", response);
         } catch (error) {
             console.error("Error fetching languages:", error);
@@ -134,6 +137,9 @@ const SummernoteEditorv2 = () => {
             };
             console.log("Mi cuerpo es: ", body)
             const response = await updateTemplateApi(body); //Función para actualizar los datos de la plantilla
+            if (response) {
+                alert("Se ha actualizado la plantilla correctamente");
+            }
             console.log("Actualizado plantilla con ID: ", selectedTemplate.id + "y la respuesta es: ", response);
         } catch (error) {
             console.error("Error fetching languages:", error);

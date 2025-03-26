@@ -16,7 +16,7 @@ const ModalWarning = ({ onConfirmChange, onCancelChange, warningMessage }) => {
                             {warningMessage}
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" onClick={onCancelChange}>Cancelar</button>
+                            <button type="button" className="btn btn-danger" onClick={onCancelChange}>Cancelar</button>
                             <button type="button" className="btn btn-primary" onClick={onConfirmChange}>Cambiar Plantilla</button>
                         </div>
                     </div>

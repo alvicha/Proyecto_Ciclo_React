@@ -31,7 +31,7 @@ const ModalComponent = ({ setVisible }) => {
                             ¿Desea eliminar el contenido del editor?
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" onClick={() => setVisible(false)}>Cancelar</button>
+                            <button type="button" className="btn btn-danger" onClick={() => setVisible(false)}>Cancelar</button>
                             <button type="button" className="btn btn-primary" onClick={handleConfirmDelete}>Aceptar</button>
                         </div>
                     </div>
