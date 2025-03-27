@@ -24,7 +24,7 @@ export const getDataApi = async (setAlert, setVisibleAlert) => {
 
     if (response.ok) return await response.json();
   } catch (error) {
-    setAlert(error.message);
+    setAlert("Error al realizar la petición: " + error.message);
     setVisibleAlert(true);
     return console.log(error);
   }
