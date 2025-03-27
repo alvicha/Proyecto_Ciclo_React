@@ -1,7 +1,17 @@
+import { useContext } from "react";
+import ScreensContext from "../screens/ScreensContext";
+
 const urlData = process.env.REACT_APP_URL_API;
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 
-export const getDataApi = async () => {
+const DropdownTemplate = () => {
+  const { setAlert, setVisibleAlert } = useContext(ScreensContext);
+  getDataApi(setAlert, setVisibleAlert);
+}
+
+export default DropdownTemplate;
+
+export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
     const response = await fetch(`${urlData}${endPointLanguage}`, {
       method: 'POST',
@@ -13,24 +23,16 @@ export const getDataApi = async () => {
     });
 
     if (response.ok) return await response.json();
-    else throw new Error('Error al obtener los datos');
   } catch (error) {
+    setAlert(error.message);
+    setVisibleAlert(true);
     return console.log(error);
   }
 };
 
 export const getDataContexts = async () => {
   try {
-    const response = await fetch(`${urlData}${endPointLanguage}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer kiPuzuNhBCevGS30XJbJpZQOs1tbHzy7bY0DqFinmhlyU+UkB2ylHWXN/qCoQpZ/0Jxkb1+OgTWN5FqogEPwnM5uDr2Jl16ck3nKkHiEmy7WAOBsZsTvKWGR+LLnQiOc8PlxlxX90Vosg0jVRLaSX/LVVuVcez49zn2knuR0m2YIx/hjLamEyZ3zZORtrJiYGafUZ5pdETZoXyYUiP7zzAS1vXvGsXCQ34filnSBoaOcriO6rVkyie+J9+k6X/2wyYVKrlvluBxBO9UJrD2FL0Vxv8az5RCE+jMqzNpQjZVvfqqHgaTbpz+6QrytWmFm9GE4w78fXihXmCw8hk+PxFW6qk/d62EqD85ng+stvnBnbcD1tkRf2SdTRUk6elBGtcEIZmIGACvtMmqSL8p7uNXcAMjRT/TKgPW+SaEa7OruFh5BNw5Tk1idvJRuUBgn6fHju0otUs9zR6zBaIHBrJJ3QGkI1IT17+um8XJ7OsWrkulNgDaBBqXAQADE8ooYK2aJG07CXd+Sef1tebvP+J9I1xr2GrPyqp9ApU0m3uUjrJ4LssduMqZeSphxcgpo'
-      },
-      body: {},
-    });
-
-    const response2 = [
+    const response = [
       {
         "id": 1,
         "code": "USER_MANAGEMENT"

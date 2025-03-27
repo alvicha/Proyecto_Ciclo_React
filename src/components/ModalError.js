@@ -1,4 +1,9 @@
-const ModalError = ({ alert, setVisibleAlert }) => {
+import { useContext } from "react";
+import ScreensContext from "../screens/ScreensContext";
+
+const ModalError = () => {
+    const { alert, setVisibleAlert } = useContext(ScreensContext);
+
     return (
         <>
             <div className="modal-backdrop show"></div>

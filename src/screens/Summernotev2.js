@@ -25,8 +25,7 @@ const SummernoteEditorv2 = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
-    const { setContext, alert, setAlert } = useContext(ScreensContext);
-    const [visibleAlert, setVisibleAlert] = useState(false);
+    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert } = useContext(ScreensContext);
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -63,16 +62,15 @@ const SummernoteEditorv2 = () => {
      */
     const languagesApi = async () => {
         try {
-            const response = await getDataApi();
-            setListLanguages(response);
+            const response = await getDataApi(setAlert, setVisibleAlert);
+
             if (response) {
-                setListLanguages(response);
+                setListLanguages(response)
             } else {
                 setListLanguages([]);
             }
         } catch (error) {
-            setAlerts(error.message);
-            setVisibleAlert(true);
+            console.log(error);
         }
     };
 
@@ -247,10 +245,7 @@ const SummernoteEditorv2 = () => {
             </div>
 
             {visibleAlert && (
-                <ModalError
-                    alert={alerts}
-                    setVisibleAlert={setVisibleAlert}
-                />
+                <ModalError />
             )}
         </div>
     );
