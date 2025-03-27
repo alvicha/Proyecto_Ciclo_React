@@ -1,7 +1,6 @@
 const urlData = process.env.REACT_APP_URL_API;
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 
-
 export const getDataApi = async () => {
   try {
     const response = await fetch(`${urlData}${endPointLanguage}`, {
