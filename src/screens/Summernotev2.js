@@ -25,8 +25,7 @@ const SummernoteEditorv2 = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
-    const { setContext } = useContext(ScreensContext);
-    const [alerts, setAlerts] = useState("");
+    const { setContext, alert, setAlert } = useContext(ScreensContext);
     const [visibleAlert, setVisibleAlert] = useState(false);
 
     /**
