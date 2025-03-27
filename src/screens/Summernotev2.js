@@ -9,6 +9,7 @@ import "./summernote.css";
 import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, postDataTemplate } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from './ScreensContext';
+import ModalError from '../components/ModalError';
 
 const SummernoteEditorv2 = () => {
     const [nameTemplate, setNameTemplate] = useState("");
@@ -25,10 +26,12 @@ const SummernoteEditorv2 = () => {
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
     const { setContext } = useContext(ScreensContext);
+    const [alerts, setAlerts] = useState("");
+    const [visibleAlert, setVisibleAlert] = useState(false);
 
     /**
-     * Esta función sirve para cargar el menu del editor con las opciones deseadas
-     */
+    * Esta función sirve para cargar el menu del editor con las opciones deseadas
+    */
     const changeSummernoteLanguage = useCallback((lang) => {
         setContext(editorRef);
         $(editorRef.current).summernote("destroy");
@@ -63,8 +66,14 @@ const SummernoteEditorv2 = () => {
         try {
             const response = await getDataApi();
             setListLanguages(response);
+            if (response) {
+                setListLanguages(response);
+            } else {
+                setListLanguages([]);
+            }
         } catch (error) {
-            console.error("Error fetching languages:", error);
+            setAlerts(error.message);
+            setVisibleAlert(true);
         }
     };
 
@@ -173,7 +182,7 @@ const SummernoteEditorv2 = () => {
      */
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-    }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate]);
+    }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate, visibleAlert]);
 
 
     /**
@@ -237,6 +246,13 @@ const SummernoteEditorv2 = () => {
                     {actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"}
                 </button>
             </div>
+
+            {visibleAlert && (
+                <ModalError
+                    alert={alerts}
+                    setVisibleAlert={setVisibleAlert}
+                />
+            )}
         </div>
     );
 };

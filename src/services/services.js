@@ -1,43 +1,37 @@
-/*
-const getData = async (url) => {
-  try {
-    const response = await fetch(url);
-    if (response.ok) return await response.json();
-  } catch (error) {
-    return console.log(error);
-  }
-};
-*/
+const urlData = process.env.REACT_APP_URL_API;
+const endPointLanguage = process.env.REACT_APP_LANGUAGES;
+
+
 export const getDataApi = async () => {
   try {
-    //const url = '';
-    const response = [
-      {
-        "id": 3,
-        "code": "es",
-        "value": "Español",
-        "isDefault": false,
-        "isFrontEnd": true
+    const response = await fetch(`${urlData}${endPointLanguage}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer kiPuzuNhBCevGS30XJbJpZQOs1tbHzy7bY0DqFinmhlyU+UkB2ylHWXN/qCoQpZ/0Jxkb1+OgTWN5FqogEPwnM5uDr2Jl16ck3nKkHiEmy7WAOBsZsTvKWGR+LLnQiOc8PlxlxX90Vosg0jVRLaSX/LVVuVcez49zn2knuR0m2YIx/hjLamEyZ3zZORtrJiYGafUZ5pdETZoXyYUiP7zzAS1vXvGsXCQ34filnSBoaOcriO6rVkyie+J9+k6X/2wyYVKrlvluBxBO9UJrD2FL0Vxv8az5RCE+jMqzNpQjZVvfqqHgaTbpz+6QrytWmFm9GE4w78fXihXmCw8hk+PxFW6qk/d62EqD85ng+stvnBnbcD1tkRf2SdTRUk6elBGtcEIZmIGACvtMmqSL8p7uNXcAMjRT/TKgPW+SaEa7OruFh5BNw5Tk1idvJRuUBgn6fHju0otUs9zR6zBaIHBrJJ3QGkI1IT17+um8XJ7OsWrkulNgDaBBqXAQADE8ooYK2aJG07CXd+Sef1tebvP+J9I1xr2GrPyqp9ApU0m3uUjrJ4LssduMqZeSphxcgpo'
       },
-      {
-        "id": 4,
-        "code": "en",
-        "value": "English",
-        "isDefault": true,
-        "isFrontEnd": true
-      }
-    ];
-    return response;
+      body: {},
+    });
+
+    if (response.ok) return await response.json();
+    else throw new Error('Error al obtener los datos');
   } catch (error) {
     return console.log(error);
   }
 };
-
 
 export const getDataContexts = async () => {
   try {
-    //const url = '';
-    const response = [
+    const response = await fetch(`${urlData}${endPointLanguage}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer kiPuzuNhBCevGS30XJbJpZQOs1tbHzy7bY0DqFinmhlyU+UkB2ylHWXN/qCoQpZ/0Jxkb1+OgTWN5FqogEPwnM5uDr2Jl16ck3nKkHiEmy7WAOBsZsTvKWGR+LLnQiOc8PlxlxX90Vosg0jVRLaSX/LVVuVcez49zn2knuR0m2YIx/hjLamEyZ3zZORtrJiYGafUZ5pdETZoXyYUiP7zzAS1vXvGsXCQ34filnSBoaOcriO6rVkyie+J9+k6X/2wyYVKrlvluBxBO9UJrD2FL0Vxv8az5RCE+jMqzNpQjZVvfqqHgaTbpz+6QrytWmFm9GE4w78fXihXmCw8hk+PxFW6qk/d62EqD85ng+stvnBnbcD1tkRf2SdTRUk6elBGtcEIZmIGACvtMmqSL8p7uNXcAMjRT/TKgPW+SaEa7OruFh5BNw5Tk1idvJRuUBgn6fHju0otUs9zR6zBaIHBrJJ3QGkI1IT17+um8XJ7OsWrkulNgDaBBqXAQADE8ooYK2aJG07CXd+Sef1tebvP+J9I1xr2GrPyqp9ApU0m3uUjrJ4LssduMqZeSphxcgpo'
+      },
+      body: {},
+    });
+
+    const response2 = [
       {
         "id": 1,
         "code": "USER_MANAGEMENT"
