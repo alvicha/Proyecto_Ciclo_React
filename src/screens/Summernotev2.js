@@ -48,6 +48,11 @@ const SummernoteEditorv2 = () => {
             fontNames: ['Sans Serif', 'Serif', 'Monospace'],
             fontNamesIgnoreCheck: ['Sans Serif', 'Serif', 'Monospace'],
             addDefaultFonts: false,
+            callbacks: {
+                onInit: function () {
+                    $(".note-editable").css("font-size", "12px");
+                }
+            }
         }).summernote("code", selectedTemplateContent);
     }, [selectedTemplateContent, setContext]);
 
