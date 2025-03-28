@@ -144,7 +144,7 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
 
         setShowVariables(true);
-        
+
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
                 setPreviousTemplateName(nameTemplate);
@@ -191,23 +191,38 @@ const DropdownTemplate = ({
                 </div>
             </div>
 
-            {visibleContexts && (
+            {visibleContexts && contexts?.length > 0 ? (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a
+                        className="btn btn-secondary dropdown-toggle w-100 text-truncate"
+                        href="#"
+                        role="button"
+                        id="dropdownMenuLink"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
                         {contextDropDown}
                     </a>
                     <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         {contexts.map((context) => (
-                            <button className='dropdown-item' key={context.code} onClick={() => handleContextChange(context.code)}>
+                            <button
+                                className="dropdown-item"
+                                key={context.code}
+                                onClick={() => handleContextChange(context.code)}
+                            >
                                 {context.code}
                             </button>
                         ))}
                     </div>
                 </div>
+            ) : (
+                <div class="alert alert-warning mt-3 mx-2" role="alert">
+                    No hay contextos disponibles
+                </div>
             )}
 
-            {templates.length > 0 && (
+            {templates.length > 0 ? (
                 <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
                     <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Plantillas
@@ -221,23 +236,32 @@ const DropdownTemplate = ({
                         ))}
                     </div>
                 </div>
-            )}
-
-            {placeholdersList.length > 0 && showVariables && (
-                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Variables
-                    </button>
-
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {placeholdersList.map((context) => (
-                            <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
-                                {context.code}
-                            </button>
-                        ))}
-                    </div>
+            ) : (
+                <div class="alert alert-warning mt-3 mx-2" role="alert">
+                    No hay plantillas disponibles
                 </div>
             )}
+            
+            {showVariables && (
+                placeholdersList.length > 0 ? (
+                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Variables
+                        </button>
+
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {placeholdersList.map((context) => (
+                                <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
+                                    {context.code}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div class="alert alert-warning mt-3 mx-2" role="alert">
+                        No hay variables disponibles
+                    </div>
+                ))}
 
             <div className="col-12 col-lg-1 col-md-2 mb-3">
                 <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>

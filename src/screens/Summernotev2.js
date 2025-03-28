@@ -63,6 +63,7 @@ const SummernoteEditorv2 = () => {
     const languagesApi = async () => {
         try {
             const response = await getDataApi(setAlert, setVisibleAlert);
+            console.log(response);
 
             if (response) {
                 setListLanguages(response)
@@ -80,7 +81,12 @@ const SummernoteEditorv2 = () => {
     const contextsApi = async () => {
         try {
             const response = await getDataContexts();
-            setContexts(response);
+            console.log(response);
+            if (response) {
+                setContexts(response)
+            } else {
+                setContexts([]);
+            }
         } catch (error) {
             console.error("Error fetching contexts API:", error);
         }
@@ -94,7 +100,11 @@ const SummernoteEditorv2 = () => {
     const getPlaceholdersApi = async (infoContext) => {
         try {
             const response = await getPlaceholdersContexts(infoContext);
-            setPlaceholdersList(response);
+            if (response) {
+                setPlaceholdersList(response)
+            } else {
+                setPlaceholdersList([]);
+            }
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
@@ -125,6 +135,8 @@ const SummernoteEditorv2 = () => {
             console.log("Añadiendo plantilla con respuesta: ", response);
         } catch (error) {
             console.error("Error fetching languages:", error);
+            setAlert("Error al guardar la plantilla: " + error.message);
+            setVisibleAlert(true);
         }
     };
 
@@ -193,6 +205,7 @@ const SummernoteEditorv2 = () => {
         } else {
             setActionButtonUpdate(true);
         }
+        setActionButtonUpdate(false);
         setSelectedTemplateContent(currentContent);
     }, [nameTemplate, codeTemplate, selectedTemplateContent]);
 
