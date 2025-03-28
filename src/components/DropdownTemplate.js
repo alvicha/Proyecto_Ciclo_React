@@ -36,6 +36,7 @@ const DropdownTemplate = ({
     const [previousTemplateName, setPreviousTemplateName] = useState("");
     const { context } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
+    const [visibleTemplates, setVisibleTemplates] = useState(false);
 
     const resetData = () => {
         setSelectedTemplate(null);
@@ -94,6 +95,7 @@ const DropdownTemplate = ({
         try {
             const response = await getTemplatesContexts(context);
             setTemplates(response);
+            setVisibleTemplates(true);
         } catch (error) {
             console.error("Error fetching languages:", error);
         }
@@ -191,57 +193,60 @@ const DropdownTemplate = ({
                 </div>
             </div>
 
-            {visibleContexts && contexts?.length > 0 ? (
-                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <a
-                        className="btn btn-secondary dropdown-toggle w-100 text-truncate"
-                        href="#"
-                        role="button"
-                        id="dropdownMenuLink"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                    >
-                        {contextDropDown}
-                    </a>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {contexts.map((context) => (
-                            <button
-                                className="dropdown-item"
-                                key={context.code}
-                                onClick={() => handleContextChange(context.code)}
-                            >
-                                {context.code}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                <div class="alert alert-warning mt-3 mx-2" role="alert">
-                    No hay contextos disponibles
-                </div>
-            )}
 
-            {templates.length > 0 ? (
-                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Plantillas
-                    </button>
-
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {templates.map((template) => (
-                            <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
-                                {template.code}
-                            </button>
-                        ))}
+            {visibleContexts && (
+                contexts?.length > 0 ? (
+                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                        <a
+                            className="btn btn-secondary dropdown-toggle w-100 text-truncate"
+                            href="#"
+                            role="button"
+                            id="dropdownMenuLink"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            {contextDropDown}
+                        </a>
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {contexts.map((context) => (
+                                <button
+                                    className="dropdown-item"
+                                    key={context.code}
+                                    onClick={() => handleContextChange(context.code)}
+                                >
+                                    {context.code}
+                                </button>
+                            ))}
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div class="alert alert-warning mt-3 mx-2" role="alert">
-                    No hay plantillas disponibles
-                </div>
-            )}
-            
+                ) : (
+                    <div className="alert alert-warning mt-3 mx-2" role="alert">
+                        No hay contextos disponibles
+                    </div>
+                ))}
+
+            {visibleTemplates && (
+                templates.length > 0 ? (
+                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Plantillas
+                        </button>
+
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {templates.map((template) => (
+                                <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
+                                    {template.code}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="alert alert-warning mt-3 mx-2" role="alert">
+                        No hay plantillas disponibles
+                    </div>
+                ))}
+
             {showVariables && (
                 placeholdersList.length > 0 ? (
                     <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
@@ -258,7 +263,7 @@ const DropdownTemplate = ({
                         </div>
                     </div>
                 ) : (
-                    <div class="alert alert-warning mt-3 mx-2" role="alert">
+                    <div className="alert alert-warning mt-3 mx-2" role="alert">
                         No hay variables disponibles
                     </div>
                 ))}

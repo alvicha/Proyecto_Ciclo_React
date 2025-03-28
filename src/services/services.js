@@ -5,7 +5,7 @@ const urlData = process.env.REACT_APP_URL_API;
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 const endPointContexts = process.env.REACT_APP_CONTEXTS;
 const endPointVariables = process.env.REACT_APP_VARIABLES;
-const endPointTemplates = process.env.REACT_APP_CONTEXTS;
+const endPointTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_POSTEMPLATE;
 const endPointUpdateTemplate = process.env.REACT_APP_POSTDATA;
 
@@ -15,6 +15,8 @@ const DropdownTemplate = () => {
   getDataContexts(setAlert, setVisibleAlert);
   getPlaceholdersContexts(setAlert, setVisibleAlert);
   getTemplatesContexts(setAlert, setVisibleAlert);
+  postDataTemplate(setAlert, setVisibleAlert);
+  updateTemplateApi(setAlert, setVisibleAlert);
 }
 
 export default DropdownTemplate;
@@ -282,7 +284,7 @@ export const getTemplatesContexts = async (context, setAlert, setVisibleAlert) =
 };
 
 
-export const postDataTemplate = async (body) => {
+export const postDataTemplate = async (body, setAlert, setVisibleAlert) => {
   try {
     const response = await fetch(`${endPointPostTemplate}`, {
       method: 'POST',
@@ -295,12 +297,14 @@ export const postDataTemplate = async (body) => {
 
     if (response.ok) return await response.json();
   } catch (error) {
+    setAlert("Ha habido un error al guardar la plantilla: " + error.message);
+    setVisibleAlert(true);
     console.error('There was a problem with the POST request:', error);
   }
 };
 
 
-export const updateTemplateApi = async (body) => {
+export const updateTemplateApi = async (body, setAlert, setVisibleAlert) => {
   try {
     const response = await fetch(`${endPointUpdateTemplate}`, {
       method: 'POST',
@@ -312,6 +316,8 @@ export const updateTemplateApi = async (body) => {
 
     if (response.ok) return await response.json();
   } catch (error) {
+    setAlert("Ha habido un error al actualizar la plantilla: " + error.message);
+    setVisibleAlert(true);
     console.error('Ha habido un problema para actualizar:', error);
   }
 };

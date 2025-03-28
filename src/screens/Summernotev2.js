@@ -83,7 +83,8 @@ const SummernoteEditorv2 = () => {
             const response = await getDataContexts();
             console.log(response);
             if (response) {
-                setContexts(response)
+                setContexts(response);
+                console.log(contexts);
             } else {
                 setContexts([]);
             }
