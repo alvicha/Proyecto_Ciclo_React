@@ -34,7 +34,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
-    const { context } = useContext(ScreensContext);
+    const { context, setVisibleActionButton } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
 
@@ -146,6 +146,7 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
 
         setShowVariables(true);
+        setActionButtonUpdate(true);
 
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
@@ -180,7 +181,8 @@ const DropdownTemplate = ({
         <div className='row m-2 d-flex align-items-center'>
             <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
                 <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={listLanguages.length === 0}
+                >
                     {selectedLanguageDropdown}
                 </a>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -195,81 +197,78 @@ const DropdownTemplate = ({
 
 
             {visibleContexts && (
-                contexts?.length > 0 ? (
-                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                        <a
-                            className="btn btn-secondary dropdown-toggle w-100 text-truncate"
-                            href="#"
-                            role="button"
-                            id="dropdownMenuLink"
-                            data-bs-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                        >
-                            {contextDropDown}
-                        </a>
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {contexts.map((context) => (
-                                <button
-                                    className="dropdown-item"
-                                    key={context.code}
-                                    onClick={() => handleContextChange(context.code)}
-                                >
-                                    {context.code}
-                                </button>
-                            ))}
-                        </div>
+                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                    <button
+                        className="btn btn-secondary dropdown-toggle w-100 text-truncate"
+                        href="#"
+                        role="button"
+                        id="dropdownMenuLink"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        disabled={contexts.length === 0}
+                    >
+                        {contextDropDown}
+                    </button>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {contexts.map((context) => (
+                            <button
+                                className="dropdown-item"
+                                key={context.code}
+                                onClick={() => handleContextChange(context.code)}
+                            >
+                                {context.code}
+                            </button>
+                        ))}
                     </div>
-                ) : (
-                    <div className="alert alert-warning mt-3 mx-2" role="alert">
-                        No hay contextos disponibles
-                    </div>
-                ))}
+                </div>
+            )}
 
-            {visibleTemplates && (
-                templates.length > 0 ? (
-                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Plantillas
-                        </button>
+            {visibleTemplates && templates.length > 0 && (
+                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        disabled={templates.length === 0}>
+                        Plantillas
+                    </button>
 
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {templates.map((template) => (
-                                <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
-                                    {template.code}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {templates.map((template) => (
+                            <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
+                                {template.code}
+                            </button>
+                        ))}
                     </div>
-                ) : (
-                    <div className="alert alert-warning mt-3 mx-2" role="alert">
-                        No hay plantillas disponibles
-                    </div>
-                ))}
+                </div>
+            )}
 
             {showVariables && (
-                placeholdersList.length > 0 ? (
-                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Variables
-                        </button>
+                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate"
+                        role="button"
+                        id="dropdownMenuLink"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        disabled={templates.length === 0}
+                    >
+                        Variables
+                    </button>
 
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {placeholdersList.map((context) => (
-                                <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
-                                    {context.code}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {placeholdersList.map((context) => (
+                            <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
+                                {context.code}
+                            </button>
+                        ))}
                     </div>
-                ) : (
-                    <div className="alert alert-warning mt-3 mx-2" role="alert">
-                        No hay variables disponibles
-                    </div>
-                ))}
+                </div>
+            )}
 
             <div className="col-12 col-lg-1 col-md-2 mb-3">
-                <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
+                <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" disabled={selectedTemplateContent} onClick={onShowModal}>
                     <i className="fa fa-trash" />
                 </button>
             </div>

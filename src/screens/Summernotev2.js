@@ -25,7 +25,7 @@ const SummernoteEditorv2 = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
-    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert } = useContext(ScreensContext);
+    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton } = useContext(ScreensContext);
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -63,7 +63,6 @@ const SummernoteEditorv2 = () => {
     const languagesApi = async () => {
         try {
             const response = await getDataApi(setAlert, setVisibleAlert);
-            console.log(response);
 
             if (response) {
                 setListLanguages(response)
@@ -81,7 +80,6 @@ const SummernoteEditorv2 = () => {
     const contextsApi = async () => {
         try {
             const response = await getDataContexts();
-            console.log(response);
             if (response) {
                 setContexts(response);
                 console.log(contexts);
@@ -253,6 +251,7 @@ const SummernoteEditorv2 = () => {
                 <button
                     className="btn btn-primary"
                     onClick={actionButtonUpdate ? onUpdateTemplate : onClickData}
+                    disabled={!visibleActionButton}
                 >
                     {actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"}
                 </button>
