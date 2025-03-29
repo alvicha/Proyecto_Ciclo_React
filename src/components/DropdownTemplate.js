@@ -252,7 +252,7 @@ const DropdownTemplate = ({
                         data-toggle="dropdown"
                         aria-haspopup="true"
                         aria-expanded="false"
-                        disabled={templates.length === 0}
+                        disabled={placeholdersList.length === 0}
                     >
                         Variables
                     </button>
