@@ -3,7 +3,7 @@ import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
 import ModalComponent from '../components/ModalComponent';
-import "../screens/summernote.css";
+import "../pages/summernote.css";
 import ModalWarning from './ModalWarning';
 
 const DropdownTemplate = ({

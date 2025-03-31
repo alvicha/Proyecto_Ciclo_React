@@ -8,7 +8,7 @@ import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
 import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, postDataTemplate } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
-import ScreensContext from './ScreensContext';
+import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 
 const EditTemplate = () => {
