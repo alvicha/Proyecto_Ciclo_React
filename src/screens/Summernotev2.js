@@ -25,7 +25,7 @@ const SummernoteEditorv2 = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
-    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton } = useContext(ScreensContext);
+    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton } = useContext(ScreensContext);
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -201,10 +201,10 @@ const SummernoteEditorv2 = () => {
 
         if (nameTemplate !== codeTemplate) {
             setActionButtonUpdate(false);
+            setVisibleActionButton(true);
         } else {
-            setActionButtonUpdate(true);
+            setVisibleActionButton(false);
         }
-        setActionButtonUpdate(false);
         setSelectedTemplateContent(currentContent);
     }, [nameTemplate, codeTemplate, selectedTemplateContent]);
 

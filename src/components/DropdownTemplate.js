@@ -34,7 +34,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(false);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
-    const { context, setVisibleActionButton } = useContext(ScreensContext);
+    const { context } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
 
@@ -170,7 +170,9 @@ const DropdownTemplate = ({
     };
 
     const onShowModal = () => {
-        setVisible(true);
+        if (selectedTemplateContent !== "") {
+            setVisible(true);
+        }     
     }
 
     useEffect(() => {
@@ -268,12 +270,12 @@ const DropdownTemplate = ({
             )}
 
             <div className="col-12 col-lg-1 col-md-2 mb-3">
-                <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" disabled={selectedTemplateContent} onClick={onShowModal}>
+                <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
                     <i className="fa fa-trash" />
                 </button>
             </div>
 
-            {visible && (
+            {visible && selectedTemplateContent !== "" && (
                 <ModalComponent setVisible={setVisible} />
             )}
 

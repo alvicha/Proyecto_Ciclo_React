@@ -7,7 +7,7 @@ const endPointContexts = process.env.REACT_APP_CONTEXTS;
 const endPointVariables = process.env.REACT_APP_VARIABLES;
 const endPointTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_POSTEMPLATE;
-const endPointUpdateTemplate = process.env.REACT_APP_POSTDATA;
+const endPointUpdateTemplate = process.env.REACT_APP_UPDATETEMPLATE;
 
 const DropdownTemplate = () => {
   const { setAlert, setVisibleAlert } = useContext(ScreensContext);
