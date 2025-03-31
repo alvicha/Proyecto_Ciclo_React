@@ -182,11 +182,11 @@ const DropdownTemplate = ({
     return (
         <div className='row m-2 d-flex align-items-center'>
             <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
-                <a className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
+                <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={listLanguages.length === 0}
                 >
                     {selectedLanguageDropdown}
-                </a>
+                </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {listLanguages.map((language) => (
                         <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>

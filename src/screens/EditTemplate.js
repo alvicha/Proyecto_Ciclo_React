@@ -11,7 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from './ScreensContext';
 import ModalError from '../components/ModalError';
 
-const SummernoteEditorv2 = () => {
+const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
@@ -190,7 +190,7 @@ const SummernoteEditorv2 = () => {
      */
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-    }, [codeLanguage, changeSummernoteLanguage, actionButtonUpdate, visibleAlert]);
+    }, [codeLanguage, changeSummernoteLanguage, visibleAlert]);
 
 
     /**
@@ -206,7 +206,7 @@ const SummernoteEditorv2 = () => {
             setVisibleActionButton(false);
         }
         setSelectedTemplateContent(currentContent);
-    }, [nameTemplate, codeTemplate, selectedTemplateContent]);
+    }, [nameTemplate, codeTemplate, selectedTemplateContent, visibleActionButton, actionButtonUpdate]);
 
     return (
         <div className="container mt-5">
@@ -264,4 +264,4 @@ const SummernoteEditorv2 = () => {
     );
 };
 
-export default SummernoteEditorv2; 
+export default EditTemplate; 

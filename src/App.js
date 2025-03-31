@@ -1,13 +1,15 @@
 import './App.css';
 import { ScreensProvider } from './screens/ScreensContext';
 import SummernoteEditor from './screens/Summernote';
-import SummernoteEditorv2 from './screens/Summernotev2';
+import TemplatesList from './screens/TemplatesList';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 function App() {
   return (
     <ScreensProvider>
       <div className="App">
-        <SummernoteEditorv2 />
+        <TemplatesList />
       </div>
     </ScreensProvider>
   );
