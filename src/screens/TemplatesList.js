@@ -4,35 +4,14 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
+import FiltersTemplateList from '../components/FiltersTemplateList';
 
 const TemplatesList = () => {
 
     return (
         <div className="m-5">
-            <h2 class="text-left">Listado de Plantillas</h2>
-            <div className="dropdown border border-success d-flex align-items-center justify-content-center m-auto" style={{ width: "350px", height: "150px" }}>
-                <button className="btn btn-secondary dropdown-toggle w-50" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Contexto
-                </button>
-                <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li><a className="dropdown-item" href="#">Action</a></li>
-                </ul>
-            </div>
-
-            <div className="mt-5 d-flex justify-content-between align-items-center">
-                <button type="button" className="btn btn-primary">
-                    <i className="bi bi-plus"></i>Crear
-                </button>
-
-                <div className="d-flex justify-content-center align-items-center">
-                    <form className="form-inline d-flex">
-                        <input className="form-control" type="search" placeholder="Buscar..." />
-                        <button className="btn btn-outline-secondary bg-info text-white">
-                            <i className="bi bi-search"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
+            <h2 class="text-left mb-4">Listado de Plantillas</h2>
+            <FiltersTemplateList />
 
             <table className="table table-hover table-bordered mt-5">
                 <thead className="table-primary">
@@ -121,6 +100,25 @@ const TemplatesList = () => {
                 </tbody>
             </table>
 
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     );
 };
