@@ -36,7 +36,7 @@ const TableTemplatesList = () => {
 
     useEffect(() => {
         getContextsTemplates();
-    }, [templates, contextsList]);
+    }, [templates]);
 
 
     return (
