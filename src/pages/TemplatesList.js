@@ -5,80 +5,40 @@ import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
 import FiltersTemplateList from '../components/FiltersTemplateList';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import TableTemplatesList from '../components/TableTemplatesList';
+import PaginationTemplateList from '../components/PaginationTemplateList';
 
 const TemplatesList = () => {
-    const [idTemplate, setIdTemplate] = useState("2");
-
     return (
-        <div className="m-5">
-            <h2 className="text-left mb-4">Listado de Plantillas</h2>
+        <div>
+            <h2 style={{
+                marginTop: '20px',
+                fontSize: '35px',
+                textAlign: 'left',
+                fontWeight: '600',
+                color: '#333',
+                letterSpacing: '0.5px',
+                transition: 'border-color 0.3s ease, color 0.3s ease',
+                paddingBottom: '40px',
+                paddingTop: '40px',
+                display: 'inline-block',
+                borderBottom: '3px solid #007bff',
+            }}
+                onMouseOver={(e) => {
+                    e.target.style.color = '#007bff';
+                }}
+                onMouseOut={(e) => {
+                    e.target.style.color = '#333';
+                }} >
+                Listado de Plantillas
+            </h2>
 
-            <FiltersTemplateList />
+            <div className='m-5'>
+                <FiltersTemplateList />
+                <TableTemplatesList />
+                <PaginationTemplateList />
+            </div>
 
-            <table className="table table-hover table-bordered mt-5">
-                <thead className="table-primary">
-                    <tr>
-                        <th>Id</th>
-                        <th>Contexto</th>
-                        <th>Nombre</th>
-                        <th>Asunto</th>
-                        <th>Contenido</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {[
-                        { id: 1, nombre: "Juan Pérez", correo: "juan@example.com", asunto: "25", contenido: "28" },
-                        { id: 2, nombre: "María López", correo: "maria@example.com", asunto: "30", contenido: "28" },
-                        { id: 3, nombre: "Carlos Ruiz", correo: "carlos@example.com", asunto: "28", contenido: "28" }
-                    ].map((template) => (
-                        <tr key={template.id}>
-                            <td>{template.id}</td>
-                            <td>{template.nombre}</td>
-                            <td>{template.correo}</td>
-                            <td>{template.asunto}</td>
-                            <td>{template.contenido}</td>
-                            <td>
-                                <button className="btn btn-outline-secondary bg-success text-white">
-                                    <i className="bi bi-eye"></i>
-                                </button>
-
-                                <Link to={`/template/${template.id}`}>
-                                    <button className="btn btn-outline-secondary bg-primary text-white mx-1">
-                                        <i className="bi bi-pencil-square"></i>
-                                    </button>
-                                </Link>
-
-                                <button className="btn btn-outline-secondary bg-danger text-white">
-                                    <i className="bi bi-trash3"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-
-            <nav aria-label="Page navigation example">
-                <ul className="pagination">
-                    <li className="page-item">
-                        <a className="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            <span className="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item">
-                        <a className="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span className="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     );
 };

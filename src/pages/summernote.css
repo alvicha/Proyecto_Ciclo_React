@@ -1,3 +1,39 @@
+html,
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #fffefc;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    border-bottom: 3px solid rgb(1, 149, 186);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
+.navegacion {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
+
+.navegacion .nav-item {
+    margin-right: 8px;
+}
+
+.navegacion .nav-link {
+    color: #616161;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+}
+
+.navegacion .nav-link:hover {
+    color: #007bff;
+    transform: scale(1.05);
+}
+
 .note-toolbar {
     background-color: #007bff !important;
     color: white !important;
@@ -46,4 +82,34 @@
 
 .title {
     text-align: left;
+}
+
+.page-item :hover {
+    background-color: lightblue;
+    opacity: 0.7;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f7ede9;
+    padding: 20px 40px;
+    min-height: 130px;
+    border-top: 3px solid #ddd;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+footer .description,
+footer .version {
+    display: flex;
+    align-items: center;
+}
+
+footer .description p,
+footer .version p {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
 }

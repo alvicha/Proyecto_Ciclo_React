@@ -7,9 +7,15 @@ export const ScreensProvider = ({ children }) => {
   const [alert, setAlert] = useState(null);
   const [visibleAlert, setVisibleAlert] = useState(false);
   const [visibleActionButton, setVisibleActionButton] = useState(false);
+  const [contextsList, setContextsList] = useState([]);
+  const [placeholdersList, setPlaceholdersList] = useState([]);
+  const [templates, setTemplates] = useState([]);
 
   return (
-    <ScreensContext.Provider value={{ context, setContext, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton }}>
+    <ScreensContext.Provider value={{
+      context, setContext, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList,
+      placeholdersList, setPlaceholdersList, templates, setTemplates
+    }}>
       {children}
     </ScreensContext.Provider>
   );

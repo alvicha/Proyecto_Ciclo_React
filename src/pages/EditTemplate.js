@@ -16,16 +16,15 @@ const EditTemplate = () => {
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
     const [listLanguages, setListLanguages] = useState([]);
-    const [contexts, setContexts] = useState([]);
-    const [placeholdersList, setPlaceholdersList] = useState([]);
-    const [templates, setTemplates] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState("");
     const [selectedTemplateContent, setSelectedTemplateContent] = useState(null);
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
-    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton } = useContext(ScreensContext);
+    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contexts, setContexts, placeholdersList,
+        setPlaceholdersList, templates, setTemplates
+    } = useContext(ScreensContext);
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -82,7 +81,6 @@ const EditTemplate = () => {
             const response = await getDataContexts();
             if (response) {
                 setContexts(response);
-                console.log(contexts);
             } else {
                 setContexts([]);
             }

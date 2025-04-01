@@ -43,43 +43,42 @@ export const getDataApi = async (setAlert, setVisibleAlert) => {
 export const getDataContexts = async (setAlert, setVisibleAlert) => {
   try {
     let response = [];
-    if (endPointContexts) {
-      response = [
-        {
-          "id": 1,
-          "code": "USER_MANAGEMENT"
-        },
-        {
-          "id": 2,
-          "code": "CASE_MANAGEMENT"
-        },
-        {
-          "id": 3,
-          "code": "CSV_MANAGEMENT"
-        },
-        {
-          "id": 4,
-          "code": "SHOP_RESERVATION_MANAGEMENT"
-        },
-        {
-          "id": 5,
-          "code": "SECURITY_MANAGEMENT"
-        },
-        {
-          "id": 6,
-          "code": "HOUSEKEEPING_MANAGEMENT"
-        },
-        {
-          "id": 7,
-          "code": "MINIBAR_MANAGEMENT"
-        },
-        {
-          "id": 8,
-          "code": "WALLET_MANAGEMENT"
-        }
-      ];
-    }
-    if (response.ok) return await response.json();
+    response = [
+      {
+        "id": 1,
+        "code": "USER_MANAGEMENT"
+      },
+      {
+        "id": 2,
+        "code": "CASE_MANAGEMENT"
+      },
+      {
+        "id": 3,
+        "code": "CSV_MANAGEMENT"
+      },
+      {
+        "id": 4,
+        "code": "SHOP_RESERVATION_MANAGEMENT"
+      },
+      {
+        "id": 5,
+        "code": "SECURITY_MANAGEMENT"
+      },
+      {
+        "id": 6,
+        "code": "HOUSEKEEPING_MANAGEMENT"
+      },
+      {
+        "id": 7,
+        "code": "MINIBAR_MANAGEMENT"
+      },
+      {
+        "id": 8,
+        "code": "WALLET_MANAGEMENT"
+      }
+    ];
+
+    return response;
   } catch (error) {
     setAlert("Error al realizar la petición: " + error.message);
     setVisibleAlert(true);
