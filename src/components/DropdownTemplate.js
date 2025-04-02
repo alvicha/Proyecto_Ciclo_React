@@ -175,10 +175,6 @@ const DropdownTemplate = ({
         }     
     }
 
-    useEffect(() => {
-        console.log("Contenido actualizado:", selectedTemplateContent);
-    }, [contextDropDown, codeLanguage, selectedLanguageDropdown, previousTemplateName, selectedTemplate, selectedTemplateContent, visibleModalWarning, visible]);
-
     return (
         <div className='row m-2 d-flex align-items-center'>
             <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">

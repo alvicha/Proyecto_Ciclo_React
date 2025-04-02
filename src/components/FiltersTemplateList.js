@@ -1,18 +1,19 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import ScreensContext from "../screens/ScreensContext";
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
+import ModalCreateTemplate from "./ModalCreateTemplate";
 
 const FiltersTemplateList = () => {
-
     const { contextsList } = useContext(ScreensContext);
+    const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
 
     return (
-        <div className="row mb-5 mt-2 d-flex justify-content-between align-items-center">
-            <div className="col-1">
-                <button type="button" className="btn btn-primary">
-                    <i className="bi bi-plus"></i>Crear
+        <div className="row mb-5w d-flex justify-content-between align-items-center">
+            <div className="col-2">
+                <button type="button" className="btn btn-primary" onClick={() => setvisibleModalCreateTemplate(true)}>
+                    <i className="bi bi-plus"></i>Crear Plantilla
                 </button>
             </div>
 
@@ -34,7 +35,7 @@ const FiltersTemplateList = () => {
                     ))}
                 </div>
 
-                <div className="col-10 d-flex justify-content-center align-items-center py-4">
+                <div className="col-9 d-flex justify-content-center align-items-center py-4">
                     <div className="flex">
                         <IconField iconPosition="left">
                             <InputIcon aria-label="Buscar" className="pi pi-search" onClick={() => console.log("Hola mundo")}></InputIcon>
@@ -43,6 +44,10 @@ const FiltersTemplateList = () => {
                     </div>
                 </div>
             </div>
+
+            {visibleModalCreateTemplate && (
+                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} />
+            )}
         </div>
     );
 };
