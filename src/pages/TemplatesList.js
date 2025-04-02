@@ -6,7 +6,6 @@ import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
 import FiltersTemplateList from '../components/FiltersTemplateList';
 import TableTemplatesList from '../components/TableTemplatesList';
-import PaginationTemplateList from '../components/PaginationTemplateList';
 
 const TemplatesList = () => {
     return (
@@ -36,7 +35,6 @@ const TemplatesList = () => {
             <div className='m-5'>
                 <FiltersTemplateList />
                 <TableTemplatesList />
-                <PaginationTemplateList />
             </div>
 
         </div>

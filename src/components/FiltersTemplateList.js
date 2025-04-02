@@ -1,5 +1,8 @@
 import { useContext } from "react";
 import ScreensContext from "../screens/ScreensContext";
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { InputText } from 'primereact/inputtext';
 
 const FiltersTemplateList = () => {
 
@@ -32,19 +35,12 @@ const FiltersTemplateList = () => {
                 </div>
 
                 <div className="col-10 d-flex justify-content-center align-items-center py-4">
-                    <form className="d-flex w-100 shadow-sm">
-                        <div className="input-group">
-                            <input
-                                type="search"
-                                className="form-control px-4"
-                                placeholder="Buscar..."
-                                aria-label="Buscar"
-                            />
-                            <button className="input-group-text">
-                                <i className="bi bi-search"></i>
-                            </button>
-                        </div>
-                    </form>
+                    <div className="flex">
+                        <IconField iconPosition="left">
+                            <InputIcon aria-label="Buscar" className="pi pi-search" onClick={() => console.log("Hola mundo")}></InputIcon>
+                            <InputText placeholder="Buscar..." className="w-100" />
+                        </IconField>
+                    </div>
                 </div>
             </div>
         </div>

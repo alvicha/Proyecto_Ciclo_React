@@ -2,10 +2,10 @@
 const FooterComponent = () => {
     return (
         <footer>
-            <div class="description">
+            <div className="description">
                 <p>Powered By Nethits</p>
             </div>
-            <div class="version">
+            <div className="version">
                 <p>&copy; Version 1.43</p>
             </div>
         </footer>
