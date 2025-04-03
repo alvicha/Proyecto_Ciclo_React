@@ -2,8 +2,8 @@ html,
 body {
     display: flex;
     flex-direction: column;
-    background-color: #fffefc;
-    font-family: Arial, sans-serif;
+    background-color: #e6e6e6;
+    font-family: "Roboto";
 }
 
 header {
@@ -30,7 +30,7 @@ header {
 }
 
 .navegacion .nav-link:hover {
-    color: #007bff;
+    color: #060054;
     transform: scale(1.05);
 }
 
@@ -75,11 +75,6 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.dropdown-item:hover {
-    background: #007bff;
-    color: #ffffff;
-}
-
 .title {
     text-align: left;
 }
@@ -87,6 +82,15 @@ header {
 .page-item :hover {
     background-color: lightblue;
     opacity: 0.7;
+}
+
+.filters {
+    background-color: #befbe8;
+}
+
+.filter-text {
+    font-size: 16px;
+    font-weight: bold;
 }
 
 footer {

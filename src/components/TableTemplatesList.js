@@ -68,6 +68,12 @@ const TableTemplatesList = () => {
 
     return (
         <div className="card">
+            <div className="d-flex align-items-center text-left bg-white border p-2">
+                <button type="button" className="btn rounded-pill filter-text" style={{ backgroundColor: "#18787F", color: "white" }}>
+                    <i className="bi bi-plus mr-2"></i>Crear
+                </button>
+            </div>
+
             <DataTable value={templates} showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                 paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No hay plantillas disponibles">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>

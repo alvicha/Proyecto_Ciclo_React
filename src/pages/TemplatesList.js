@@ -32,7 +32,7 @@ const TemplatesList = () => {
                 Listado de Plantillas
             </h2>
 
-            <div className='m-5'>
+            <div className='mt-5 m-1'>
                 <FiltersTemplateList />
                 <TableTemplatesList />
             </div>

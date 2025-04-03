@@ -1,54 +1,54 @@
 import { useContext, useState } from "react";
 import ScreensContext from "../screens/ScreensContext";
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import ModalCreateTemplate from "./ModalCreateTemplate";
+import { Dropdown } from "primereact/dropdown";
 
 const FiltersTemplateList = () => {
     const { contextsList } = useContext(ScreensContext);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
+    const [visibleDropDown, setVisibleDropDown] = useState(false);
+    const [optionContext, setOptionContext] = useState(null);
+    const [nameTemplate, setNameTemplate] = useState("");
+
+
+    const onHandleButton = () => {
+        const dropDownState = !visibleDropDown;
+        setVisibleDropDown(dropDownState);
+    }
 
     return (
-        <div className="row mb-5w d-flex justify-content-between align-items-center">
-            <div className="col-2">
-                <button type="button" className="btn btn-primary" onClick={() => setvisibleModalCreateTemplate(true)}>
-                    <i className="bi bi-plus"></i>Crear Plantilla
-                </button>
+        <div className="mb-5 border ml-1">
+            <div className="d-flex justify-content-start filters p-2">
+                <i className={visibleDropDown ? "bi bi-chevron-down fa-xl mr-4" : "bi bi-chevron-up fa-xl mr-4"} onClick={onHandleButton}></i>
+                <p className="filter-text">Filtros</p>
             </div>
 
-            <div className="col-4 d-flex align-items-center justify-content-end">
-                <button className="btn btn-secondary dropdown-toggle mr-4"
-                    href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    Contextos
+            {visibleDropDown && (
+                <div className="d-flex bg-white border-top p-3">
+                    <div className="mr-5">
+                        <p className="filter-text text-left">Contextos</p>
+                        <Dropdown
+                            value={optionContext}
+                            onChange={(e) => setOptionContext(e.value)}
+                            options={contextsList}
+                            optionLabel="code"
+                            placeholder="Seleccionar"
+                            style={{ width: "500px", marginBottom: '15px', textAlign: "left" }}
+                        />
+                    </div>
 
-                </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {contextsList.map((context) => (
-                        <button
-                            className="dropdown-item"
-                            key={context.code}
-                            aria-labelledby="dropdownMenuLink"
-                        >
-                            {context.code}
-                        </button>
-                    ))}
-                </div>
-
-                <div className="col-9 d-flex justify-content-center align-items-center py-4">
-                    <div className="flex">
-                        <IconField iconPosition="left">
-                            <InputIcon aria-label="Buscar" className="pi pi-search" onClick={() => console.log("Hola mundo")}></InputIcon>
-                            <InputText placeholder="Buscar..." className="w-100" />
-                        </IconField>
+                    <div className="">
+                        <p className="filter-text text-left">Buscar</p>
+                        <InputText value={nameTemplate} placeholder="Nombre/Contenido/Asunto" onChange={(e) => setNameTemplate(e.target.value)} style={{ width: "450px" }} />
                     </div>
                 </div>
-            </div>
+            )}
 
             {visibleModalCreateTemplate && (
                 <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} />
             )}
-        </div>
+        </div >
     );
 };
 
