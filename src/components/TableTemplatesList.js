@@ -69,9 +69,7 @@ const TableTemplatesList = () => {
     return (
         <div className="card">
             <div className="d-flex align-items-center text-left bg-white border p-2">
-                <button type="button" className="btn rounded-pill filter-text" style={{ backgroundColor: "#18787F", color: "white" }}>
-                    <i className="bi bi-plus mr-2"></i>Crear
-                </button>
+                <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill filter-text" style={{ backgroundColor: "#18787F", color: "white" }} />
             </div>
 
             <DataTable value={templates} showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
