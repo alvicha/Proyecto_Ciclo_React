@@ -23,9 +23,8 @@ header {
 }
 
 .navegacion .nav-link {
-    color: #616161;
+    color: black;
     font-weight: 600;
-    text-transform: uppercase;
     transition: all 0.3s ease-in-out;
 }
 
@@ -85,12 +84,7 @@ header {
 }
 
 .filters {
-    background-color: #befbe8;
-}
-
-.filter-text {
-    font-size: 16px;
-    font-weight: bold;
+    background-color: #46d9aa;
 }
 
 footer {

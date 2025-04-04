@@ -14,17 +14,17 @@ const ModalShowTemplate = ({ selectedTemplate, showModalDataTemplate, setShowMod
             <Dialog header={selectedTemplate.code} footer={footerContent} visible={showModalDataTemplate} style={{ width: '50vw' }} onHide={() => { if (!showModalDataTemplate) return; setShowModalDataTemplate(false); }}>
                 <ul class="list-unstyled m-2">
                     <li class="mb-3">
-                        <strong><img src="./images/context.png" alt="Icono de contexto" width="30" className='mr-3 my-2' />Contexto: </strong>{selectedTemplate?.context || "No hay contexto"}
+                        <strong><img src="./images/context.jpg" alt="Icono de contexto" width="30" className='mr-3 my-2' />Contexto: </strong>{selectedTemplate?.context || "No hay contexto"}
                     </li>
                     <li class="mb-3">
-                        <strong><img src="./images/subject.png" alt="Icono de asunto de correo" width="30" className='mr-3 my-2' />Asunto: </strong> {selectedTemplate?.data?.es?.subject || "No hay asunto"}
+                        <strong><img src="./images/subject.jpg" alt="Icono de asunto de correo" width="30" className='mr-3 my-2' />Asunto: </strong> {selectedTemplate?.data?.es?.subject || "No hay asunto"}
                     </li>
                     <li className="mb-3">
-                        <div className="d-flex ml-2">
-                            <div className="">
-                                <i className="bi bi-body-text"></i>
+                        <div className="d-flex">
+                            <div>
+                                <img src="./images/content.jpg" alt="Icono de contexto" width="30" className='mr-3 my-2' />
                             </div>
-                            <div className='ml-4'>
+                            <div>
                                 <strong>
                                     Contenido:
                                 </strong> {selectedTemplate?.contentText || "No hay contenido"}

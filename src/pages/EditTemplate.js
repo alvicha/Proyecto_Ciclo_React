@@ -207,7 +207,7 @@ const EditTemplate = () => {
     }, [nameTemplate, codeTemplate, selectedTemplateContent, visibleActionButton, actionButtonUpdate]);
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5 mb-5">
             <h2 className="mb-5">Editor de Texto con Summernote</h2>
             <div className="w-100 bg-info mt-4 p-1 rounded">
                 <DropDownTemplate

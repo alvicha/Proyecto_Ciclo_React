@@ -6,11 +6,13 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import ModalShowTemplate from "./ModalShowTemplate";
+import ModalCreateTemplate from "./ModalCreateTemplate";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
     const { contextsList, setContextsList, templates, setTemplates, setAlert, setVisibleAlert } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
+    const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
 
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
@@ -32,6 +34,10 @@ const TableTemplatesList = () => {
     const onShowDataTemplate = (template) => {
         setSelectedTemplate(template);
         setShowModalDataTemplate(true);
+    }
+
+    const onCreateModalTemplate = () => {
+        setvisibleModalCreateTemplate(true);
     }
 
     const getTemplatesList = async () => {
@@ -67,9 +73,9 @@ const TableTemplatesList = () => {
     }, [contextsList]);
 
     return (
-        <div className="card">
+        <div className="card ml-1">
             <div className="d-flex align-items-center text-left bg-white border p-2">
-                <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill filter-text" style={{ backgroundColor: "#18787F", color: "white" }} />
+                <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill filter-text" onClick={onCreateModalTemplate} style={{ backgroundColor: "#18787F", color: "white" }} />
             </div>
 
             <DataTable value={templates} showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
@@ -89,27 +95,25 @@ const TableTemplatesList = () => {
                     header="Contenido"
                     sortable
                     style={{ width: '30%' }} />
-                <Column header="Acciones" sortable style={{ width: '25%' }} body={(rowData) => (
-                    <div>
-                        <button className="btn btn-outline-secondary bg-success text-white" onClick={() => onShowDataTemplate(rowData)}>
-                            <i className="bi bi-eye"></i>
-                        </button>
-
-                        <button onClick={() => {
+                <Column header="Acciones" sortable style={{ width: '20%' }} body={(rowData) => (
+                    <div className="d-flex w-100 h-25">
+                        <Button icon="pi pi-eye" className="rounded-pill mr-1" outlined severity="help" aria-label="Visualización" onClick={() => onShowDataTemplate(rowData)} />
+                        <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => {
                             navigate(`/template/${rowData.id}`)
-                        }} className="btn btn-outline-secondary bg-primary text-white mx-1">
-                            <i className="bi bi-pencil-square"></i>
-                        </button>
-
-                        <button className="btn btn-outline-secondary bg-danger text-white">
-                            <i className="bi bi-trash3"></i>
-                        </button>
+                        }} />
+                        <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={() => {
+                            console.log("Hola mundo");
+                        }} />
                     </div>
                 )} />
             </DataTable>
 
             {showModalDataTemplate && (
                 <ModalShowTemplate selectedTemplate={selectedTemplate} showModalDataTemplate={showModalDataTemplate} setShowModalDataTemplate={setShowModalDataTemplate} />
+            )}
+
+            {visibleModalCreateTemplate && (
+                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} />
             )}
         </div>
     );

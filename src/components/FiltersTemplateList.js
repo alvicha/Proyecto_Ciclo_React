@@ -1,13 +1,11 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ScreensContext from "../screens/ScreensContext";
 import { InputText } from 'primereact/inputtext';
-import ModalCreateTemplate from "./ModalCreateTemplate";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 
 const FiltersTemplateList = () => {
     const { contextsList } = useContext(ScreensContext);
-    const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [optionContext, setOptionContext] = useState(null);
@@ -20,22 +18,29 @@ const FiltersTemplateList = () => {
 
     const handleClearData = () => {
         setNameTemplate("");
-        setOptionContext("");
-        setIsDisabled(true);
+        setOptionContext(null);
     }
+
+    useEffect(() => {
+        if (nameTemplate !== "" || optionContext !== null) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [nameTemplate, optionContext]);
 
     return (
         <div className="mb-4 border ml-1">
             <div className="d-flex justify-content-start filters pt-2 pl-2">
                 <i className={visibleDropDown ? "bi bi-chevron-down fa-xl mr-4" : "bi bi-chevron-up fa-xl mr-4"} onClick={onHandleButton}></i>
-                <p className="filter-text">Filtros</p>
+                <p className="font-weight-bold">Filtros</p>
             </div>
 
             {visibleDropDown && (
-                <div className="bg-white border-top p-3">
+                <div className="bg-white border shadow-sm p-3">
                     <div className="d-flex">
                         <div className="mr-5">
-                            <p className="filter-text text-left">Contextos</p>
+                            <p className="font-weight-bold text-left">Contextos</p>
                             <Dropdown
                                 value={optionContext}
                                 onChange={(e) => setOptionContext(e.value)}
@@ -46,7 +51,7 @@ const FiltersTemplateList = () => {
                             />
                         </div>
                         <div>
-                            <p className="filter-text text-left">Buscar</p>
+                            <p className="font-weight-bold text-left">Buscar</p>
                             <InputText value={nameTemplate} placeholder="Nombre/Contenido/Asunto" onChange={(e) => setNameTemplate(e.target.value)} style={{ width: "450px" }} />
                         </div>
                     </div>
@@ -55,12 +60,8 @@ const FiltersTemplateList = () => {
                     </div>
                 </div>
             )}
-
-            {visibleModalCreateTemplate && (
-                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} />
-            )}
         </div >
     );
 };
 
-export default FiltersTemplateList; 
+export default FiltersTemplateList;

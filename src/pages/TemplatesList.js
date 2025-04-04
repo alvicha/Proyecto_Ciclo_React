@@ -10,9 +10,9 @@ import TableTemplatesList from '../components/TableTemplatesList';
 const TemplatesList = () => {
     return (
         <div>
-            <h2 style={{
+            <h1 style={{
                 marginTop: '20px',
-                fontSize: '35px',
+                fontSize: '40px',
                 textAlign: 'left',
                 fontWeight: '600',
                 color: '#333',
@@ -30,7 +30,7 @@ const TemplatesList = () => {
                     e.target.style.color = '#333';
                 }} >
                 Listado de Plantillas
-            </h2>
+            </h1>
 
             <div className='mt-5 m-1'>
                 <FiltersTemplateList />
