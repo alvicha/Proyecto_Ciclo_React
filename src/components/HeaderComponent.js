@@ -8,10 +8,11 @@ const HeaderComponent = () => {
                     <img src="/images/logo.png" alt="Logo de la aplicación" width="100" height="90" />
                 </a>
                 <h2 className="text-left font-weight-bold" style={{ fontSize: "35px" }}>Demo Hotels</h2>
-                <div class="d-flex justify-content-end justify-content-sm-center align-items-sm-center">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#opciones"
+                
+                <div className="d-flex justify-content-end justify-content-sm-center align-items-sm-center">
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#opciones"
                         aria-controls="opciones" aria-expanded="false" aria-label="Navegación hamburguesa">
-                        <span class="navbar-toggler-icon"></span>
+                        <span className="navbar-toggler-icon"></span>
                     </button>
                 </div>
 

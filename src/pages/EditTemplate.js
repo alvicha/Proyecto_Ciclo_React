@@ -208,7 +208,26 @@ const EditTemplate = () => {
 
     return (
         <div className="container mt-5 mb-5">
-            <h2 className="mb-5 font-weight-bold">EDICIÓN PLANTILLAS</h2>
+            <h1 className="mb-5" style={{
+                fontSize: '40px',
+                textAlign: 'left',
+                fontWeight: '600',
+                color: '#333',
+                transition: 'border-color 0.3s ease, color 0.3s ease',
+                paddingBottom: '40px',
+                paddingTop: '40px',
+                display: 'inline-block',
+                borderBottom: '3px solid #007bff',
+            }}
+                onMouseOver={(e) => {
+                    e.target.style.color = '#007bff';
+                }}
+                onMouseOut={(e) => {
+                    e.target.style.color = '#333';
+                }} >
+                EDICIÓN PLANTILLAS
+            </h1>
+
             <div className="w-100 bg-info mt-4 p-1 rounded">
                 <DropDownTemplate
                     listLanguages={listLanguages}
@@ -237,7 +256,7 @@ const EditTemplate = () => {
             </div>
 
             <div className="form-group d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
-                <label for="nameTemplate" className="fw-bold m-2">Nombre Plantilla:</label>
+                <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
                 <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
                     className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
             </div>

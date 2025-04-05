@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { getDataContexts, getTemplatesContexts } from "../services/services";
 import ScreensContext from "../screens/ScreensContext";
@@ -7,6 +7,8 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import ModalShowTemplate from "./ModalShowTemplate";
 import ModalCreateTemplate from "./ModalCreateTemplate";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
@@ -14,9 +16,31 @@ const TableTemplatesList = () => {
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
-
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
     const paginatorRight = <Button type="button" icon="pi pi-download" text />;
+
+    const toast = useRef(null);
+
+    const accept = () => {
+        toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+    }
+
+    const reject = () => {
+        toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+    }
+
+    const onDeleteTemplate = () => {
+        console.log("Hola mundo");
+        confirmDialog({
+            message: '¿Estás seguro que desea eliminar esta plantilla?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
+            defaultFocus: 'reject',
+            acceptClassName: 'p-button-danger',
+            accept,
+            reject
+        });
+    };
 
     const getContextsTemplates = async () => {
         try {
@@ -78,6 +102,8 @@ const TableTemplatesList = () => {
                 <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill filter-text" onClick={onCreateModalTemplate} style={{ backgroundColor: "#18787F", color: "white" }} />
             </div>
 
+            <Toast ref={toast} />
+            <ConfirmDialog />
             <DataTable value={templates} showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                 paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No hay plantillas disponibles">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
@@ -101,9 +127,7 @@ const TableTemplatesList = () => {
                         <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => {
                             navigate(`/template/${rowData.id}`)
                         }} />
-                        <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={() => {
-                            console.log("Hola mundo");
-                        }} />
+                        <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={onDeleteTemplate} />
                     </div>
                 )} />
             </DataTable>
