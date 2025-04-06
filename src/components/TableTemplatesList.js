@@ -30,13 +30,14 @@ const TableTemplatesList = () => {
     }
 
     const onDeleteTemplate = () => {
-        console.log("Hola mundo");
         confirmDialog({
             message: '¿Estás seguro que desea eliminar esta plantilla?',
             header: 'Delete Confirmation',
             icon: 'pi pi-info-circle',
             defaultFocus: 'reject',
             acceptClassName: 'p-button-danger',
+            acceptLabel: 'Sí',
+            rejectLabel: 'No',
             accept,
             reject
         });
