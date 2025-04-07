@@ -31,11 +31,10 @@ const FiltersTemplateList = () => {
         }
 
         if (nameTemplate !== "") {
-            console.log(templates);
             filterTemplatesList = templates.filter(template =>
-                template.name.includes(nameTemplate.toLowerCase()) ||
+                template.code.includes(nameTemplate.toLowerCase()) ||
                 template.content.includes(nameTemplate.toLowerCase()) ||
-                template.subject.includes(nameTemplate.toLowerCase())
+                template.data.es.subject.includes(nameTemplate.toLowerCase())
             );
         }
         setFilteredTemplates(filterTemplatesList);
