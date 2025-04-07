@@ -6,11 +6,12 @@ import { Button } from "primereact/button";
 import '../pages/summernote.css'
 
 const FiltersTemplateList = () => {
-    const { contextsList } = useContext(ScreensContext);
+    const { contextsList, templates } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplate, setNameTemplate] = useState("");
+    const [filteredTemplates, setFilteredTemplates] = useState(templates); // Estado para almacenar las plantillas filtradas
 
     const onHandleButton = () => {
         const dropDownState = !visibleDropDown;
@@ -22,6 +23,24 @@ const FiltersTemplateList = () => {
         setOptionContext(null);
     }
 
+    const filterDataTemplates = () => {
+        let filterTemplatesList = templates;
+
+        if (optionContext !== null) {
+            filterTemplatesList = templates.filter(template => template.context === optionContext);
+        }
+
+        if (nameTemplate !== "") {
+            console.log(templates);
+            filterTemplatesList = templates.filter(template =>
+                template.name.includes(nameTemplate.toLowerCase()) ||
+                template.content.includes(nameTemplate.toLowerCase()) ||
+                template.subject.includes(nameTemplate.toLowerCase())
+            );
+        }
+        setFilteredTemplates(filterTemplatesList);
+    }
+
     useEffect(() => {
         if (nameTemplate !== "" || optionContext !== null) {
             setIsDisabled(false);
@@ -29,6 +48,10 @@ const FiltersTemplateList = () => {
             setIsDisabled(true);
         }
     }, [nameTemplate, optionContext]);
+
+    useEffect(() => {
+        filterDataTemplates();
+    }, [nameTemplate, optionContext, templates]);
 
     return (
         <div className="mb-4 border ml-1">
@@ -61,6 +84,15 @@ const FiltersTemplateList = () => {
                     </div>
                 </div>
             )}
+
+            <div className="filtered-templates-list">
+                {filteredTemplates.map(template => (
+                    <div key={template.id} className="template-item">
+                        <h4>{template.name}</h4>
+                        <p>{template.content}</p>
+                    </div>
+                ))}
+            </div>
         </div >
     );
 };

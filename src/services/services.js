@@ -286,14 +286,27 @@ export const filterDataTemplate = async (setAlert, setVisibleAlert,) => {
     response = [
       {
         "pageModel":
-          { "page": 2, "size": 10, "orderBy": "id", "orientation": "desc" },
+        {
+          "page": 2,
+          "size": 10,
+          "orderBy": "id",
+          "orientation": "desc"
+        },
         "filter":
-          { "type3": null, "status": null, "dates": null, "search": "tv", "department": null, "assignedWorker": null, "creatorWorker": null }
+        {
+          "type3": null,
+          "status": null,
+          "dates": null,
+          "search": "tv",
+          "department": null,
+          "assignedWorker": null,
+          "creatorWorker": null
+        }
       }
     ];
     return response;
   } catch (error) {
-    setAlert("Error al realizar la petición: " + error.message);
+    setAlert("Error al realizar el filtrado: " + error.message);
     setVisibleAlert(true);
     return console.log(error);
   }
