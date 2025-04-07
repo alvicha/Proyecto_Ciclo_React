@@ -1,15 +1,24 @@
+import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { InputText } from 'primereact/inputtext';
+import { useState } from 'react';
 
 const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate }) => {
+    const [nameTemplate, setNameTemplate] = useState("");
+
+    const footerContent = (
+        <div>
+            <Button label="Añadir" icon="pi pi-plus" className='rounded-pill buttons mt-3' onClick={() => setvisibleModalCreateTemplate(false)} autoFocus />
+        </div>
+    );
+
     return (
         <div className="card flex justify-content-center">
-            <Dialog header="Header" visible={visibleModalCreateTemplate} style={{ width: '50vw' }} onHide={() => { if (!visibleModalCreateTemplate) return; setvisibleModalCreateTemplate(false); }}>
-                <p className="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
+            <Dialog header="Crear Plantilla" footer={footerContent} visible={visibleModalCreateTemplate} style={{ width: '50vw' }} onHide={() => { if (!visibleModalCreateTemplate) return; setvisibleModalCreateTemplate(false); }}>
+                <div className="align-items-center mt-3">
+                    <label className='mr-3' htmlFor="firstname">Nombre Plantilla: </label>
+                    <InputText value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} />
+                </div>
             </Dialog>
         </div>
     )

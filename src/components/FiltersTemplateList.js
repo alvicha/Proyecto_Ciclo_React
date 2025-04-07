@@ -3,6 +3,7 @@ import ScreensContext from "../screens/ScreensContext";
 import { InputText } from 'primereact/inputtext';
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
+import '../pages/summernote.css'
 
 const FiltersTemplateList = () => {
     const { contextsList } = useContext(ScreensContext);
@@ -56,7 +57,7 @@ const FiltersTemplateList = () => {
                         </div>
                     </div>
                     <div className="text-left mt-2">
-                        <Button label="Limpiar" icon="pi pi-times-circle" aria-label="Limpiar" disabled={isDisabled} className="rounded-pill" onClick={handleClearData} style={{ backgroundColor: "#18787F", color: "white" }} />
+                        <Button label="Limpiar" icon="pi pi-times-circle" aria-label="Limpiar" disabled={isDisabled} className="rounded-pill buttons" onClick={handleClearData} />
                     </div>
                 </div>
             )}

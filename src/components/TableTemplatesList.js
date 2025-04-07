@@ -10,6 +10,7 @@ import ModalCreateTemplate from "./ModalCreateTemplate";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
 
+
 const TableTemplatesList = () => {
     const navigate = useNavigate();
     const { contextsList, setContextsList, templates, setTemplates, setAlert, setVisibleAlert } = useContext(ScreensContext);
@@ -32,7 +33,7 @@ const TableTemplatesList = () => {
     const onDeleteTemplate = () => {
         confirmDialog({
             message: '¿Estás seguro que desea eliminar esta plantilla?',
-            header: 'Delete Confirmation',
+            header: 'Eliminación Plantilla',
             icon: 'pi pi-info-circle',
             defaultFocus: 'reject',
             acceptClassName: 'p-button-danger',
@@ -98,9 +99,9 @@ const TableTemplatesList = () => {
     }, [contextsList]);
 
     return (
-        <div className="card ml-1">
+        <div className="card mb-3 ml-1">
             <div className="d-flex align-items-center text-left bg-white border p-2">
-                <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill filter-text" onClick={onCreateModalTemplate} style={{ backgroundColor: "#18787F", color: "white" }} />
+                <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill buttons" onClick={onCreateModalTemplate} />
             </div>
 
             <Toast ref={toast} />

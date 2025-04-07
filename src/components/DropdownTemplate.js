@@ -1,10 +1,11 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
-import ModalComponent from '../components/ModalComponent';
 import "../pages/summernote.css";
-import ModalWarning from './ModalWarning';
+import { ConfirmDialog } from 'primereact/confirmdialog';
+import { Toast } from 'primereact/toast';
+import { Button } from 'primereact/button';
 
 const DropdownTemplate = ({
     contexts,
@@ -31,12 +32,34 @@ const DropdownTemplate = ({
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
     const [showVariables, setShowVariables] = useState(false);
-    const [warningMessage, setWarningMessage] = useState(false);
+    const [warningMessage, setWarningMessage] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
     const { context } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
+
+    const toast = useRef(null);
+
+    const acceptModalAcceptContent = () => {
+        handleConfirmDelete();
+        toast.current.show({ severity: 'info', summary: 'Eliminado', detail: 'Eliminado el contenido con éxito', life: 3000 });
+    }
+
+    const rejectModalDeleteContent = () => {
+        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Se ha cancelado la operación', life: 3000 });
+    }
+
+    const acceptModalWarning = () => {
+        onConfirmChange();
+        toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+    }
+
+    const rejectModalWarning = () => {
+        onCancelChange();
+        toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+    }
+
 
     const resetData = () => {
         setSelectedTemplate(null);
@@ -172,117 +195,143 @@ const DropdownTemplate = ({
     const onShowModal = () => {
         if (selectedTemplateContent !== "") {
             setVisible(true);
-        }     
+        }
     }
 
+    const handleConfirmDelete = () => {
+        $(context.current).summernote("code", "");
+        setVisible(false);
+    };
+
     return (
-        <div className='row m-2 d-flex align-items-center'>
-            <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
-                <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={listLanguages.length === 0}
-                >
-                    {selectedLanguageDropdown}
-                </button>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {listLanguages.map((language) => (
-                        <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
-                            {language.value}
+        <>
+            <Toast ref={toast} />
+            <div className='row m-2 d-flex align-items-center'>
+                <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
+                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={listLanguages.length === 0}
+                    >
+                        {selectedLanguageDropdown}
+                    </button>
+                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {listLanguages.map((language) => (
+                            <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
+                                {language.value}
+                            </button>
+                        ))
+                        }
+                    </div>
+                </div>
+
+                {visibleContexts && (
+                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                        <button
+                            className="btn btn-secondary dropdown-toggle w-100 text-truncate"
+                            href="#"
+                            role="button"
+                            id="dropdownMenuLink"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            disabled={contexts.length === 0}
+                        >
+                            {contextDropDown}
                         </button>
-                    ))
-                    }
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {contexts.map((context) => (
+                                <button
+                                    className="dropdown-item"
+                                    key={context.code}
+                                    onClick={() => handleContextChange(context.code)}
+                                >
+                                    {context.code}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {visibleTemplates && templates.length > 0 && (
+                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            disabled={templates.length === 0}>
+                            Plantillas
+                        </button>
+
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {templates.map((template) => (
+                                <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
+                                    {template.code}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {showVariables && (
+                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
+                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate"
+                            role="button"
+                            id="dropdownMenuLink"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            disabled={placeholdersList.length === 0}
+                        >
+                            Variables
+                        </button>
+
+                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {placeholdersList.map((context) => (
+                                <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
+                                    {context.code}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                <div className="col-12 col-lg-1 col-md-2 mb-3">
+                    <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" onClick={onShowModal} />
                 </div>
+
+                {visible && selectedTemplateContent !== "" && (
+                    <ConfirmDialog
+                        group="declarative"
+                        visible={visible}
+                        onHide={() => setVisible(false)}
+                        message="¿Desea eliminar el contenido del editor?"
+                        header="Confirmación"
+                        icon="pi pi-exclamation-triangle"
+                        acceptLabel='Sí'
+                        rejectLabel='No'
+                        accept={acceptModalAcceptContent}
+                        reject={rejectModalDeleteContent}
+                        breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
+                    />
+                )}
+
+                {visibleModalWarning && (
+                    <ConfirmDialog
+                        group="declarative"
+                        visible={visible}
+                        onHide={onCancelChange}
+                        message={warningMessage}
+                        header="Advertencia"
+                        icon="pi pi-exclamation-triangle"
+                        acceptLabel='Cambiar Plantilla'
+                        rejectLabel='Cancelar'
+                        accept={acceptModalWarning}
+                        reject={rejectModalWarning}
+                        style={{ width: '50vw' }}
+                        breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
+                    />
+                )}
             </div>
-
-
-            {visibleContexts && (
-                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button
-                        className="btn btn-secondary dropdown-toggle w-100 text-truncate"
-                        href="#"
-                        role="button"
-                        id="dropdownMenuLink"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        disabled={contexts.length === 0}
-                    >
-                        {contextDropDown}
-                    </button>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {contexts.map((context) => (
-                            <button
-                                className="dropdown-item"
-                                key={context.code}
-                                onClick={() => handleContextChange(context.code)}
-                            >
-                                {context.code}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {visibleTemplates && templates.length > 0 && (
-                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        disabled={templates.length === 0}>
-                        Plantillas
-                    </button>
-
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {templates.map((template) => (
-                            <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
-                                {template.code}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {showVariables && (
-                <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate"
-                        role="button"
-                        id="dropdownMenuLink"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        disabled={placeholdersList.length === 0}
-                    >
-                        Variables
-                    </button>
-
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {placeholdersList.map((context) => (
-                            <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
-                                {context.code}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            <div className="col-12 col-lg-1 col-md-2 mb-3">
-                <button type="button" className="btn btn-danger m-auto" data-toggle="modal" data-target="#exampleModal" onClick={onShowModal}>
-                    <i className="fa fa-trash" />
-                </button>
-            </div>
-
-            {visible && selectedTemplateContent !== "" && (
-                <ModalComponent setVisible={setVisible} />
-            )}
-
-            {visibleModalWarning && (
-                <ModalWarning
-                    onConfirmChange={onConfirmChange}
-                    onCancelChange={onCancelChange}
-                    warningMessage={warningMessage}
-                />
-            )}
-        </div>
+        </>
     );
 };
 

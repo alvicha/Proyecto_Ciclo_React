@@ -1,32 +1,25 @@
 import { useContext } from "react";
 import ScreensContext from "../screens/ScreensContext";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
 
 const ModalError = () => {
-    const { alert, setVisibleAlert } = useContext(ScreensContext);
+    const { alert, visibleAlert, setVisibleAlert } = useContext(ScreensContext);
+
+    const footerContent = (
+        <div>
+            <Button label="Cerrar" className="rounded-pill buttons" icon="pi pi-sign-out" onClick={() => setVisibleAlert(false)} />
+        </div>
+    );
 
     return (
-        <>
-            <div className="modal-backdrop show"></div>
-
-            <div className="modal show d-block" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLongTitle">Error</h5>
-                            <button type="button" className="close" onClick={() => setVisibleAlert(false)} aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            {alert}
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-primary" onClick={() => setVisibleAlert(false)}>Aceptar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+        <div className="card flex justify-content-center">
+            <Dialog visible={visibleAlert} modal header="Error" footer={footerContent} style={{ width: '50rem' }} onHide={() => { if (!visibleAlert) return; setVisibleAlert(false); }}>
+                <p className="m-0">
+                    {alert}
+                </p>
+            </Dialog>
+        </div>
     )
 }
 

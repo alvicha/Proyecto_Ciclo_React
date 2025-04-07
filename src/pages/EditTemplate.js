@@ -10,6 +10,7 @@ import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
+import { Button } from 'primereact/button';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
@@ -196,6 +197,8 @@ const EditTemplate = () => {
     */
     useEffect(() => {
         const currentContent = $(editorRef.current).summernote('code');
+        console.log(nameTemplate);
+        console.log(codeTemplate);
 
         if (nameTemplate !== codeTemplate) {
             setActionButtonUpdate(false);
@@ -204,80 +207,78 @@ const EditTemplate = () => {
             setVisibleActionButton(false);
         }
         setSelectedTemplateContent(currentContent);
+
     }, [nameTemplate, codeTemplate, selectedTemplateContent, visibleActionButton, actionButtonUpdate]);
 
     return (
-        <div className="container mt-5 mb-5">
-            <h1 className="mb-5" style={{
-                fontSize: '40px',
-                textAlign: 'left',
-                fontWeight: '600',
-                color: '#333',
-                transition: 'border-color 0.3s ease, color 0.3s ease',
-                paddingBottom: '40px',
-                paddingTop: '40px',
-                display: 'inline-block',
-                borderBottom: '3px solid #007bff',
-            }}
-                onMouseOver={(e) => {
-                    e.target.style.color = '#007bff';
+        <>
+            <div className="container mt-5 mb-5">
+                <h1 className="mb-5" style={{
+                    fontSize: '40px',
+                    textAlign: 'left',
+                    fontWeight: '600',
+                    color: '#333',
+                    transition: 'border-color 0.3s ease, color 0.3s ease',
+                    paddingBottom: '40px',
+                    paddingTop: '40px',
+                    display: 'inline-block',
+                    borderBottom: '3px solid #007bff',
                 }}
-                onMouseOut={(e) => {
-                    e.target.style.color = '#333';
-                }} >
-                EDICIÓN PLANTILLAS
-            </h1>
+                    onMouseOver={(e) => {
+                        e.target.style.color = '#007bff';
+                    }}
+                    onMouseOut={(e) => {
+                        e.target.style.color = '#333';
+                    }} >
+                    EDICIÓN PLANTILLAS
+                </h1>
 
-            <div className="w-100 bg-info mt-4 p-1 rounded">
-                <DropDownTemplate
-                    listLanguages={listLanguages}
-                    setListLanguages={setListLanguages}
-                    contexts={contexts}
-                    templates={templates}
-                    setTemplates={setTemplates}
-                    selectedTemplate={selectedTemplate}
-                    setSelectedTemplate={setSelectedTemplate}
-                    selectedTemplateContent={selectedTemplateContent}
-                    setSelectedTemplateContent={setSelectedTemplateContent}
-                    contextDropDown={selectedContextDropdown}
-                    setContextDropDown={setSelectedContextDropdown}
-                    codeLanguage={codeLanguage}
-                    setCodeLanguage={setCodeLanguage}
-                    selectedLanguageDropdown={selectedLanguageDropdown}
-                    setSelectedLanguageDropdown={setSelectedLanguageDropdown}
-                    placeholdersList={placeholdersList}
-                    getPlaceholdersApi={getPlaceholdersApi}
-                    nameTemplate={nameTemplate}
-                    setNameTemplate={setNameTemplate}
-                    setCodeTemplate={setCodeTemplate}
-                    setActionButtonUpdate={setActionButtonUpdate}
-                    actionButtonUpdate={actionButtonUpdate}
-                />
-            </div>
+                <div className="w-100 bg-info mt-4 p-1 rounded">
+                    <DropDownTemplate
+                        listLanguages={listLanguages}
+                        setListLanguages={setListLanguages}
+                        contexts={contexts}
+                        templates={templates}
+                        setTemplates={setTemplates}
+                        selectedTemplate={selectedTemplate}
+                        setSelectedTemplate={setSelectedTemplate}
+                        selectedTemplateContent={selectedTemplateContent}
+                        setSelectedTemplateContent={setSelectedTemplateContent}
+                        contextDropDown={selectedContextDropdown}
+                        setContextDropDown={setSelectedContextDropdown}
+                        codeLanguage={codeLanguage}
+                        setCodeLanguage={setCodeLanguage}
+                        selectedLanguageDropdown={selectedLanguageDropdown}
+                        setSelectedLanguageDropdown={setSelectedLanguageDropdown}
+                        placeholdersList={placeholdersList}
+                        getPlaceholdersApi={getPlaceholdersApi}
+                        nameTemplate={nameTemplate}
+                        setNameTemplate={setNameTemplate}
+                        setCodeTemplate={setCodeTemplate}
+                        setActionButtonUpdate={setActionButtonUpdate}
+                        actionButtonUpdate={actionButtonUpdate}
+                    />
+                </div>
 
-            <div className="form-group d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
-                <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
-                <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
-                    className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
-            </div>
+                <div className="form-group d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
+                    <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
+                    <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
+                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
+                </div>
 
-            <div className="form-group mb-3">
-                <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
-            </div>
-            <div className="mb-2">
-                <button
-                    className="btn btn-primary"
-                    onClick={actionButtonUpdate ? onUpdateTemplate : onClickData}
-                    disabled={!visibleActionButton}
-                >
-                    {actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"}
-                </button>
-            </div>
+                <div className="form-group mb-3">
+                    <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
+                </div>
+                <div className="mb-2">
+                    <Button label={actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"} aria-label="Actualizar-Guardar" className="rounded-pill buttons" disabled={!visibleActionButton}
+                        onClick={actionButtonUpdate ? onUpdateTemplate : onClickData} />
+                </div>
 
-            {visibleAlert && (
-                <ModalError />
-            )}
-        </div>
+                {visibleAlert && (
+                    <ModalError />
+                )}
+            </div>
+        </>
     );
 };
 
