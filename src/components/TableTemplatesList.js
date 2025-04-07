@@ -19,6 +19,8 @@ const TableTemplatesList = () => {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
     const paginatorRight = <Button type="button" icon="pi pi-download" text />;
+    const [currentPage, setCurrentPage] = useState(0);
+    const [rows, setRows] = useState(5);
 
     const toast = useRef(null);
 
@@ -98,6 +100,13 @@ const TableTemplatesList = () => {
         }
     }, [contextsList]);
 
+    const handlePageChange = (event) => {
+        setCurrentPage(event.first);
+        setRows(event.rows);
+        const currentPage = event.first / event.rows + 1;
+        console.log("Página actual:", currentPage);
+    };
+
     return (
         <div className="card mb-3 ml-1">
             <div className="d-flex align-items-center text-left bg-white border p-2">
@@ -106,7 +115,7 @@ const TableTemplatesList = () => {
 
             <Toast ref={toast} />
             <ConfirmDialog />
-            <DataTable value={templates} showGridlines paginator rows={5} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
+            <DataTable value={templates} first={currentPage} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                 paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No hay plantillas disponibles">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
                 <Column field="context" header="Contexto" sortable style={{ width: '5%' }}></Column>
