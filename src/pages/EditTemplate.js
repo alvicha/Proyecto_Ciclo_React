@@ -11,6 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
+import { useParams } from 'react-router-dom';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
@@ -18,7 +19,7 @@ const EditTemplate = () => {
     const editorRef = useRef(null);
     const [listLanguages, setListLanguages] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState("");
-    const [selectedTemplateContent, setSelectedTemplateContent] = useState(null);
+    const [selectedTemplateContent, setSelectedTemplateContent] = useState("");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
@@ -26,6 +27,7 @@ const EditTemplate = () => {
     const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contexts, setContexts, placeholdersList,
         setPlaceholdersList, templates, setTemplates
     } = useContext(ScreensContext);
+    const idTemplate = useParams();
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -73,6 +75,20 @@ const EditTemplate = () => {
             console.log(error);
         }
     };
+
+    const getSelectedTemplateEditor = () => {
+        if (templates && templates.length > 0) {
+            const template = templates.find(template =>
+                template.id === Number(idTemplate.id)
+            );
+            if (template) {
+                setSelectedTemplate(template);
+                setNameTemplate(template.code);
+                console.log(template.data?.es?.content)
+                setSelectedTemplateContent(template.data?.es?.content);
+            }
+        }
+    }
 
     /**
      * Función para que me devuelva la lista de contextos de la BD
@@ -176,13 +192,14 @@ const EditTemplate = () => {
     };
 
     /**
-     * Llama a las APIs de idiomas y contextos al montar el componente.
+     * Llama a las APIs de idiomas y contextos una vez al montar el componente.
      */
     useEffect(() => {
+        getSelectedTemplateEditor();
         languagesApi();
         contextsApi();
-    }, []); // Se ejecuta solo una vez al montar el componente
-
+        console.log("Contenido: ", selectedTemplateContent);
+    }, [nameTemplate]);
 
     /**
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
@@ -196,19 +213,13 @@ const EditTemplate = () => {
     * Verifica si el nombre de la plantilla ha cambiado y actualiza el estado del botón.
     */
     useEffect(() => {
-        const currentContent = $(editorRef.current).summernote('code');
-        console.log(nameTemplate);
-        console.log(codeTemplate);
-
         if (nameTemplate !== codeTemplate) {
             setActionButtonUpdate(false);
             setVisibleActionButton(true);
         } else {
             setVisibleActionButton(false);
         }
-        setSelectedTemplateContent(currentContent);
-
-    }, [nameTemplate, codeTemplate, selectedTemplateContent, visibleActionButton, actionButtonUpdate]);
+    }, [nameTemplate, codeTemplate, visibleActionButton, actionButtonUpdate]);
 
     return (
         <>

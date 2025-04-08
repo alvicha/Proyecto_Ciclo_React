@@ -13,7 +13,7 @@ import { Toast } from "primereact/toast";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
-    const { contextsList, setContextsList, templates, setTemplates, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { contextsList, setContextsList, templates, setTemplates, filteredTemplates, setAlert, setVisibleAlert } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -95,16 +95,16 @@ const TableTemplatesList = () => {
     }, []);
 
     useEffect(() => {
-        if (contextsList.length > 0) {
+        if (contextsList.length > 0 && filteredTemplates.length === 0) {
             getTemplatesList();
         }
-    }, [contextsList]);
+    }, [contextsList, filteredTemplates]);
 
     const handlePageChange = (event) => {
         setCurrentPage(event.first);
         setRows(event.rows);
         const currentPage = event.first / event.rows + 1;
-        console.log("Página actual:", currentPage);
+        console.log(currentPage);
     };
 
     return (
@@ -115,7 +115,7 @@ const TableTemplatesList = () => {
 
             <Toast ref={toast} />
             <ConfirmDialog />
-            <DataTable value={templates} first={currentPage} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
+            <DataTable value={filteredTemplates.length > 0 ? filteredTemplates : templates} first={currentPage} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
                 paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No hay plantillas disponibles">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
                 <Column field="context" header="Contexto" sortable style={{ width: '5%' }}></Column>

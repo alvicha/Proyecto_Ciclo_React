@@ -10,11 +10,12 @@ export const ScreensProvider = ({ children }) => {
   const [contextsList, setContextsList] = useState([]);
   const [placeholdersList, setPlaceholdersList] = useState([]);
   const [templates, setTemplates] = useState([]);
+  const [filteredTemplates, setFilteredTemplates] = useState([]); // Templates filtrados
 
   return (
     <ScreensContext.Provider value={{
       context, setContext, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList,
-      placeholdersList, setPlaceholdersList, templates, setTemplates
+      placeholdersList, setPlaceholdersList, templates, setTemplates, filteredTemplates, setFilteredTemplates
     }}>
       {children}
     </ScreensContext.Provider>

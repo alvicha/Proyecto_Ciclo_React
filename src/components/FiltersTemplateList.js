@@ -6,12 +6,11 @@ import { Button } from "primereact/button";
 import '../pages/summernote.css'
 
 const FiltersTemplateList = () => {
-    const { contextsList, templates } = useContext(ScreensContext);
+    const { contextsList, templates, filteredTemplates, setFilteredTemplates } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplate, setNameTemplate] = useState("");
-    const [filteredTemplates, setFilteredTemplates] = useState(templates); // Estado para almacenar las plantillas filtradas
 
     const onHandleButton = () => {
         const dropDownState = !visibleDropDown;
@@ -24,20 +23,26 @@ const FiltersTemplateList = () => {
     }
 
     const filterDataTemplates = () => {
-        let filterTemplatesList = templates;
+        let filtered = [];
 
         if (optionContext !== null) {
-            filterTemplatesList = templates.filter(template => template.context === optionContext);
+            filtered = templates.filter(template => template.context === optionContext.code);
         }
 
         if (nameTemplate !== "") {
-            filterTemplatesList = templates.filter(template =>
-                template.code.includes(nameTemplate.toLowerCase()) ||
-                template.content.includes(nameTemplate.toLowerCase()) ||
-                template.data.es.subject.includes(nameTemplate.toLowerCase())
-            );
+            filtered = templates.filter(template => {
+                return (
+                    template.contentText === nameTemplate.toUpperCase() ||
+                    template.code === nameTemplate.toUpperCase() ||
+                    template.data?.es?.subject === nameTemplate
+                )
+            });
         }
-        setFilteredTemplates(filterTemplatesList);
+
+        // Solo actualiza el estado si hay un cambio real
+        if (filtered !== filteredTemplates) {
+            setFilteredTemplates(filtered);
+        }
     }
 
     useEffect(() => {
@@ -50,7 +55,7 @@ const FiltersTemplateList = () => {
 
     useEffect(() => {
         filterDataTemplates();
-    }, [nameTemplate, optionContext, templates]);
+    }, [nameTemplate, optionContext]);
 
     return (
         <div className="mb-4 border ml-1">
@@ -83,15 +88,6 @@ const FiltersTemplateList = () => {
                     </div>
                 </div>
             )}
-
-            <div className="filtered-templates-list">
-                {filteredTemplates.map(template => (
-                    <div key={template.id} className="template-item">
-                        <h4>{template.name}</h4>
-                        <p>{template.content}</p>
-                    </div>
-                ))}
-            </div>
         </div >
     );
 };

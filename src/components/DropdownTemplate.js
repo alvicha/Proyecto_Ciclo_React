@@ -38,7 +38,6 @@ const DropdownTemplate = ({
     const { context } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
-
     const toast = useRef(null);
 
     const acceptModalAcceptContent = () => {
