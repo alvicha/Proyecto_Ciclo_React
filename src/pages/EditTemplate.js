@@ -81,10 +81,10 @@ const EditTemplate = () => {
             const template = templates.find(template =>
                 template.id === Number(idTemplate.id)
             );
+            
             if (template) {
                 setSelectedTemplate(template);
                 setNameTemplate(template.code);
-                console.log(template.data?.es?.content)
                 setSelectedTemplateContent(template.data?.es?.content);
             }
         }

@@ -15,17 +15,17 @@ const HeaderComponent = () => {
 
                     <div className="navegacion" id="opciones">
                         <ul className="navbar-nav d-flex flex-row flex-wrap justify-content-end">
-                            <li className="nav-item mr-2">
+                            <li className="nav-item mr-3">
                                 <a className="nav-link text-gray-700 hover:text-blue-600 transition-all">
                                     <i className="bi bi-info-circle mx-2"></i>Ayuda
                                 </a>
                             </li>
-                            <li className="nav-item mr-2">
+                            <li className="nav-item mr-3">
                                 <a className="nav-link">
                                     <i className="bi bi-lock mx-2"></i>Contraseña
                                 </a>
                             </li>
-                            <li className="nav-item mr-2">
+                            <li className="nav-item mr-3">
                                 <a className="nav-link text-gray-700 hover:text-blue-600 transition-all">
                                     <i className="bi bi-box-arrow-right mx-2"></i>Cerrar sesión
                                 </a>

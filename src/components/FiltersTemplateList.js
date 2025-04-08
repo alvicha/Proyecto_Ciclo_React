@@ -5,9 +5,10 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import '../pages/summernote.css'
 import { Dialog } from "primereact/dialog";
+import { filterInfoTemplate } from "../services/services";
 
 const FiltersTemplateList = () => {
-    const { contextsList, templates, filteredTemplates, setFilteredTemplates } = useContext(ScreensContext);
+    const { contextsList, templates, setTemplates, filteredTemplates, setFilteredTemplates, currentPage, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [optionContext, setOptionContext] = useState(null);
@@ -24,10 +25,35 @@ const FiltersTemplateList = () => {
         setOptionContext(null);
     }
 
-    const filterDataTemplates = () => {
+    const filterDataTemplates = async () => {
         let filtered = [];
+        /*
+        let data;
+        if (optionContext && optionContext.code) {
+            data = {
+                nameTemplate: nameTemplate,
+                context: optionContext.code,
+                page: currentPage,
+                rows: rows
+            }
+        } else {
+            data = {
+                nameTemplate: nameTemplate,
+                context: null,
+                page: currentPage,
+                rows: rows
+            };
+        }
 
-        if (optionContext !== null) {
+        try {
+            const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
+            console.log(response);
+        } catch (error) {
+            console.error("Error fetching contexts API:", error);
+        }
+*/
+
+        if (optionContext) {
             filtered = templates.filter(template => template.context === optionContext.code);
         }
 
@@ -40,11 +66,8 @@ const FiltersTemplateList = () => {
                 )
             });
         }
-
-        // Solo actualiza el estado si hay un cambio real
-        if (filtered !== filteredTemplates) {
-            setFilteredTemplates(filtered);
-        }
+        console.log("Filtradoooo: ", filtered);
+        setFilteredTemplates(filtered);
     }
 
     useEffect(() => {
@@ -53,11 +76,11 @@ const FiltersTemplateList = () => {
         } else {
             setIsDisabled(true);
         }
-    }, [nameTemplate, optionContext]);
+    }, [optionContext]);
 
     useEffect(() => {
         filterDataTemplates();
-    }, [nameTemplate, optionContext]);
+    }, [nameTemplate, optionContext, templates, currentPage, rows]);
 
     return (
         <div className="mb-4 border ml-1">

@@ -280,15 +280,15 @@ export const getTemplatesContexts = async (context, setAlert, setVisibleAlert) =
   }
 };
 
-export const filterDataTemplate = async (setAlert, setVisibleAlert) => {
+export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
   try {
     let response = [];
     response = [
       {
         "pageModel":
         {
-          "page": 2,
-          "size": 10,
+          "page": data.page,
+          "size": data.rows,
           "orderBy": "id",
           "orientation": "desc"
         },
@@ -296,8 +296,8 @@ export const filterDataTemplate = async (setAlert, setVisibleAlert) => {
         {
           "type3": null,
           "status": null,
-          "dates": null,
-          "search": "tv",
+          "dates": data.context,
+          "search": data.nameTemplate,
           "department": null,
           "assignedWorker": null,
           "creatorWorker": null

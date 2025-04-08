@@ -10,17 +10,15 @@ import ModalCreateTemplate from "./ModalCreateTemplate";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
 
-
 const TableTemplatesList = () => {
     const navigate = useNavigate();
-    const { contextsList, setContextsList, templates, setTemplates, filteredTemplates, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { contextsList, setContextsList, filteredTemplates, templates, setTemplates, setAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const [pageTable, setPageTable] = useState(false);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
     const paginatorRight = <Button type="button" icon="pi pi-download" text />;
-    const [currentPage, setCurrentPage] = useState(0);
-    const [rows, setRows] = useState(5);
 
     const toast = useRef(null);
 
@@ -98,14 +96,16 @@ const TableTemplatesList = () => {
         if (contextsList.length > 0 && filteredTemplates.length === 0) {
             getTemplatesList();
         }
-    }, [contextsList, filteredTemplates]);
+    }, [contextsList]);
 
     const handlePageChange = (event) => {
-        setCurrentPage(event.first);
+        setPageTable(event.first)
         setRows(event.rows);
-        const currentPage = event.first / event.rows + 1;
-        console.log(currentPage);
+        const currentPage = event.first / event.rows;
+        setCurrentPage(currentPage);
     };
+
+    const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
 
     return (
         <div className="card mb-3 ml-1">
@@ -115,8 +115,8 @@ const TableTemplatesList = () => {
 
             <Toast ref={toast} />
             <ConfirmDialog />
-            <DataTable value={filteredTemplates.length > 0 ? filteredTemplates : templates} first={currentPage} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
-                paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No hay plantillas disponibles">
+            <DataTable value={templatesToDisplay} first={pageTable} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
+                paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No se han encontrado registros">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
                 <Column field="context" header="Contexto" sortable style={{ width: '5%' }}></Column>
                 <Column field="code" header="Nombre" sortable style={{ width: '5%' }}></Column>
