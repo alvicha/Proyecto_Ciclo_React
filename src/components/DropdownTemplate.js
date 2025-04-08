@@ -6,6 +6,7 @@ import "../pages/summernote.css";
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
+import { Dropdown } from 'primereact/dropdown';
 
 const DropdownTemplate = ({
     contexts,
@@ -206,22 +207,15 @@ const DropdownTemplate = ({
         <>
             <Toast ref={toast} />
             <div className='row m-2 d-flex align-items-center'>
-                <div className="dropdown show col-12 col-lg-2 col-md-4 mb-3">
-                    <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" href="#" role="button" id="dropdownMenuLink"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" disabled={listLanguages.length === 0}
-                    >
-                        {selectedLanguageDropdown}
-                    </button>
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        {listLanguages.map((language) => (
-                            <button className='dropdown-item' key={language.code} onClick={() => handleLanguageChange(language.code)}>
-                                {language.value}
-                            </button>
-                        ))
-                        }
-                    </div>
+                <div className="card mb-3">
+                    <Dropdown
+                        value={selectedLanguageDropdown}
+                        onChange={(e) => handleLanguageChange(e.value)}
+                        options={listLanguages}
+                        optionLabel="value"
+                        placeholder="Idioma"
+                        disabled={listLanguages.length === 0} />
                 </div>
-
                 {visibleContexts && (
                     <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
                         <button

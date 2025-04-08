@@ -280,7 +280,7 @@ export const getTemplatesContexts = async (context, setAlert, setVisibleAlert) =
   }
 };
 
-export const filterDataTemplate = async (setAlert, setVisibleAlert,) => {
+export const filterDataTemplate = async (setAlert, setVisibleAlert) => {
   try {
     let response = [];
     response = [

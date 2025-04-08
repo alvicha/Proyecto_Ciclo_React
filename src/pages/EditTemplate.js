@@ -67,7 +67,7 @@ const EditTemplate = () => {
             const response = await getDataApi(setAlert, setVisibleAlert);
 
             if (response) {
-                setListLanguages(response)
+                setListLanguages(response);
             } else {
                 setListLanguages([]);
             }
@@ -198,7 +198,6 @@ const EditTemplate = () => {
         getSelectedTemplateEditor();
         languagesApi();
         contextsApi();
-        console.log("Contenido: ", selectedTemplateContent);
     }, [nameTemplate]);
 
     /**
