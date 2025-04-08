@@ -11,17 +11,15 @@ const TemplatesList = () => {
     return (
         <div>
             <h1 style={{
+                textAlign: 'center',
                 marginTop: '20px',
                 fontSize: '40px',
-                textAlign: 'left',
                 fontWeight: '600',
                 color: '#333',
                 letterSpacing: '0.5px',
                 transition: 'border-color 0.3s ease, color 0.3s ease',
                 paddingBottom: '40px',
                 paddingTop: '40px',
-                display: 'inline-block',
-                borderBottom: '3px solid #007bff',
             }}
                 onMouseOver={(e) => {
                     e.target.style.color = '#007bff';
@@ -31,6 +29,13 @@ const TemplatesList = () => {
                 }} >
                 Listado de Plantillas
             </h1>
+            <hr style={{
+                width: "30%",
+                height: "2px",
+                backgroundColor: "#007bff",
+                border: "none",
+                margin: "0 auto",
+            }} />
 
             <div className='mt-5 m-1'>
                 <FiltersTemplateList />

@@ -225,14 +225,11 @@ const EditTemplate = () => {
             <div className="container mt-5 mb-5">
                 <h1 className="mb-5" style={{
                     fontSize: '40px',
-                    textAlign: 'left',
+                    textAlign: 'center',
                     fontWeight: '600',
                     color: '#333',
                     transition: 'border-color 0.3s ease, color 0.3s ease',
-                    paddingBottom: '40px',
                     paddingTop: '40px',
-                    display: 'inline-block',
-                    borderBottom: '3px solid #007bff',
                 }}
                     onMouseOver={(e) => {
                         e.target.style.color = '#007bff';
@@ -243,7 +240,15 @@ const EditTemplate = () => {
                     EDICIÓN PLANTILLAS
                 </h1>
 
-                <div className="w-100 bg-info mt-4 p-1 rounded">
+                <hr style={{
+                    width: "30%",
+                    height: "2px",
+                    backgroundColor: "#007bff",
+                    border: "none",
+                    margin: "0 auto",
+                }} />
+                
+                <div className="w-100 bg-info mt-5 p-1 rounded">
                     <DropDownTemplate
                         listLanguages={listLanguages}
                         setListLanguages={setListLanguages}

@@ -12,13 +12,11 @@ function App() {
   return (
     <ScreensProvider>
       <HeaderComponent />
-      <div className="App">
         <Routes>
           <Route path="/" element={<TemplatesList />} />
           <Route path="/template/:id" element={<EditTemplate />} />
           <Route path="*" element={<TemplatesList />} />
         </Routes>
-      </div>
       <FooterComponent />
     </ScreensProvider>
   );

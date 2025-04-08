@@ -4,6 +4,8 @@ body {
     flex-direction: column;
     background-color: #e6e6e6;
     font-family: "Roboto";
+    margin: 0;
+    padding: 0; 
 }
 
 header {
