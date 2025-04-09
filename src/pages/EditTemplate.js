@@ -284,7 +284,7 @@ const EditTemplate = () => {
                 <div className="form-group mb-3">
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
-                <div className="mb-2">
+                <div className="text-center mt-4">
                     <Button label={actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"} aria-label="Actualizar-Guardar" className="rounded-pill buttons" disabled={!visibleActionButton}
                         onClick={actionButtonUpdate ? onUpdateTemplate : onClickData} />
                 </div>

@@ -6,7 +6,7 @@ const HeaderComponent = () => {
             <nav className="navbar p-1">
                 <div className="container-fluid d-flex justify-content-between align-items-center flex-wrap">
 
-                    <div class="d-flex align-items-center">
+                    <div className="d-flex align-items-center">
                         <a className="navbar-brand" href="#">
                             <img src="/images/logo.png" alt="Logo de la aplicación" width="100" height="90" />
                         </a>
