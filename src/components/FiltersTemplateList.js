@@ -97,9 +97,9 @@ const FiltersTemplateList = () => {
                             <Dropdown
                                 value={optionContext}
                                 onChange={(e) => setOptionContext(e.value)}
-                                options={contextsList}
+                                options={[{ code: 'Todos' }, ...contextsList]}
                                 optionLabel="code"
-                                placeholder="Seleccionar"
+                                placeholder="Seleccionar..."
                                 style={{ width: "500px", marginBottom: '15px', textAlign: "left" }}
                             />
                         </div>

@@ -123,16 +123,14 @@ const TableTemplatesList = () => {
                 <Column
                     field="data.es.subject"
                     header="Asunto"
-                    sortable
                     style={{ width: '20%' }}
                     body={(rowData) => rowData.data?.es?.subject || "No hay asunto"}
                 />
                 <Column
                     field="contentText"
                     header="Contenido"
-                    sortable
                     style={{ width: '30%' }} />
-                <Column header="Acciones" sortable style={{ width: '20%' }} body={(rowData) => (
+                <Column header="Acciones" style={{ width: '20%' }} body={(rowData) => (
                     <div className="d-flex w-100 h-25">
                         <Button icon="pi pi-eye" className="rounded-pill mr-1" outlined severity="help" aria-label="Visualización" onClick={() => onShowDataTemplate(rowData)} />
                         <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => {

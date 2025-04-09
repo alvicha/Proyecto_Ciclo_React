@@ -141,8 +141,9 @@ const EditTemplate = () => {
                     subject: selectedTemplate.data[codeLanguage].subject
                 }
             };
-            console.log("Mi cuerpo es: ", body)
-            const response = await postDataTemplate(body);
+            console.log("Mi cuerpo es: ", body);
+            console.log("ssedde", setAlert);
+            const response = await postDataTemplate(body, setAlert, setVisibleAlert);
             if (response) {
                 alert("Se ha guardado la plantilla correctamente");
             }
