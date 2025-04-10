@@ -58,15 +58,10 @@ const FiltersTemplateList = () => {
         }
 
         if (nameTemplate !== "") {
-            filtered = templates.filter(template => {
-                return (
-                    template.contentText === nameTemplate.toUpperCase() ||
-                    template.code === nameTemplate.toUpperCase() ||
-                    template.data?.es?.subject === nameTemplate
-                )
-            });
+            filtered = templates.filter(template => template.contentText === nameTemplate.toUpperCase() ||
+                template.code === nameTemplate.toUpperCase()
+            );
         }
-        console.log("Filtradoooo: ", filtered);
         setFilteredTemplates(filtered);
     }
 
@@ -105,7 +100,7 @@ const FiltersTemplateList = () => {
                         </div>
                         <div>
                             <p className="font-weight-bold text-left">Buscar</p>
-                            <InputText value={nameTemplate} placeholder="Nombre/Contenido/Asunto" onChange={(e) => setNameTemplate(e.target.value)} style={{ width: "450px" }} />
+                            <InputText value={nameTemplate} placeholder="Nombre" onChange={(e) => setNameTemplate(e.target.value)} style={{ width: "450px" }} />
                         </div>
                     </div>
                     <div className="text-left mt-2">
