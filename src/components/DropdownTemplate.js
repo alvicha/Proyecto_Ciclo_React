@@ -213,34 +213,21 @@ const DropdownTemplate = ({
                         onChange={(e) => handleLanguageChange(e.value)}
                         options={listLanguages}
                         optionLabel="value"
+                        optionValue="code"
                         placeholder="Idioma"
                         disabled={listLanguages.length === 0} />
                 </div>
                 {visibleContexts && (
-                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                        <button
-                            className="btn btn-secondary dropdown-toggle w-100 text-truncate"
-                            href="#"
-                            role="button"
-                            id="dropdownMenuLink"
-                            data-bs-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
+                    <div className="dropdown show col-12 col-lg-4 col-md-4 mb-3">
+                        <Dropdown
+                            value={contextDropDown}
+                            onChange={(e) => handleContextChange(e.value)}
+                            options={contexts}
+                            optionLabel="code"
+                            optionValue="code"
+                            placeholder="Contextos"
                             disabled={contexts.length === 0}
-                        >
-                            {contextDropDown}
-                        </button>
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {contexts.map((context) => (
-                                <button
-                                    className="dropdown-item"
-                                    key={context.code}
-                                    onClick={() => handleContextChange(context.code)}
-                                >
-                                    {context.code}
-                                </button>
-                            ))}
-                        </div>
+                        />
                     </div>
                 )}
 

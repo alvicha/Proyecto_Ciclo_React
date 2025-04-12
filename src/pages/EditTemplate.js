@@ -24,7 +24,7 @@ const EditTemplate = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
     const [codeTemplate, setCodeTemplate] = useState("");
     const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
-    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contexts, setContexts, placeholdersList,
+    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates
     } = useContext(ScreensContext);
     const idTemplate = useParams();
@@ -96,10 +96,11 @@ const EditTemplate = () => {
     const contextsApi = async () => {
         try {
             const response = await getDataContexts();
+            console.log(response);
             if (response) {
-                setContexts(response);
+                setContextsList(response);
             } else {
-                setContexts([]);
+                setContextsList([]);
             }
         } catch (error) {
             console.error("Error fetching contexts API:", error);
@@ -253,7 +254,7 @@ const EditTemplate = () => {
                     <DropDownTemplate
                         listLanguages={listLanguages}
                         setListLanguages={setListLanguages}
-                        contexts={contexts}
+                        contexts={contextsList}
                         templates={templates}
                         setTemplates={setTemplates}
                         selectedTemplate={selectedTemplate}

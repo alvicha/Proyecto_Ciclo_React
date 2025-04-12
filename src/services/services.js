@@ -3,7 +3,7 @@ import ScreensContext from "../screens/ScreensContext";
 
 const urlData = process.env.REACT_APP_URL_API;
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
-const endPointContexts = process.env.REACT_APP_CONTEXTS;
+const urlContexts = process.env.REACT_APP_CONTEXTS;
 const endPointVariables = process.env.REACT_APP_VARIABLES;
 const endPointTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_POSTEMPLATE;
@@ -42,43 +42,8 @@ export const getDataApi = async (setAlert, setVisibleAlert) => {
 
 export const getDataContexts = async (setAlert, setVisibleAlert) => {
   try {
-    let response = [];
-    response = [
-      {
-        "id": 1,
-        "code": "USER_MANAGEMENT"
-      },
-      {
-        "id": 2,
-        "code": "CASE_MANAGEMENT"
-      },
-      {
-        "id": 3,
-        "code": "CSV_MANAGEMENT"
-      },
-      {
-        "id": 4,
-        "code": "SHOP_RESERVATION_MANAGEMENT"
-      },
-      {
-        "id": 5,
-        "code": "SECURITY_MANAGEMENT"
-      },
-      {
-        "id": 6,
-        "code": "HOUSEKEEPING_MANAGEMENT"
-      },
-      {
-        "id": 7,
-        "code": "MINIBAR_MANAGEMENT"
-      },
-      {
-        "id": 8,
-        "code": "WALLET_MANAGEMENT"
-      }
-    ];
-
-    return response;
+    const response = await fetch(`${urlContexts}`);
+    if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Error al realizar la petición: " + error.message);
     setVisibleAlert(true);
