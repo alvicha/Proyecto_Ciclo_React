@@ -207,7 +207,7 @@ const DropdownTemplate = ({
         <>
             <Toast ref={toast} />
             <div className='row m-2 d-flex align-items-center'>
-                <div className="card mb-3">
+                <div className="card mb-3 mr-3">
                     <Dropdown
                         value={selectedLanguageDropdown}
                         onChange={(e) => handleLanguageChange(e.value)}
@@ -218,7 +218,7 @@ const DropdownTemplate = ({
                         disabled={listLanguages.length === 0} />
                 </div>
                 {visibleContexts && (
-                    <div className="dropdown show col-12 col-lg-4 col-md-4 mb-3">
+                    <div className="card mb-3">
                         <Dropdown
                             value={contextDropDown}
                             onChange={(e) => handleContextChange(e.value)}
