@@ -87,17 +87,19 @@ const FiltersTemplateList = () => {
             {visibleDropDown && (
                 <div className="bg-white border shadow-sm p-3">
                     <div className="d-flex">
-                        <div className="mr-5">
-                            <p className="font-weight-bold text-left">Contextos</p>
-                            <Dropdown
-                                value={optionContext}
-                                onChange={(e) => setOptionContext(e.value)}
-                                options={[{ code: 'Todos' }, ...contextsList]}
-                                optionLabel="code"
-                                placeholder="Seleccionar..."
-                                style={{ width: "500px", marginBottom: '15px', textAlign: "left" }}
-                            />
-                        </div>
+                        {Array.isArray(contextsList) && contextsList.length > 0 && (
+                            <div className="mr-5">
+                                <p className="font-weight-bold text-left">Contextos</p>
+                                <Dropdown
+                                    value={optionContext}
+                                    onChange={(e) => setOptionContext(e.value)}
+                                    options={[{ code: 'Todos' }, ...contextsList]}
+                                    optionLabel="code"
+                                    placeholder="Seleccionar..."
+                                    style={{ width: "500px", marginBottom: '15px', textAlign: "left" }}
+                                />
+                            </div>
+                        )}
                         <div>
                             <p className="font-weight-bold text-left">Buscar</p>
                             <InputText value={nameTemplate} placeholder="Nombre" onChange={(e) => setNameTemplate(e.target.value)} style={{ width: "450px" }} />

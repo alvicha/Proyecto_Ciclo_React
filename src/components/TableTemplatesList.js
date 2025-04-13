@@ -9,10 +9,11 @@ import ModalShowTemplate from "./ModalShowTemplate";
 import ModalCreateTemplate from "./ModalCreateTemplate";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
+import ModalError from "./ModalError";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
-    const { contextsList, setContextsList, filteredTemplates, templates, setTemplates, setAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const { contextsList, setContextsList, filteredTemplates, templates, setTemplates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [pageTable, setPageTable] = useState(false);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
@@ -84,6 +85,8 @@ const TableTemplatesList = () => {
             }
             setTemplates(updatedTemplates);
         } catch (error) {
+            setAlert(error.message);
+            setVisibleAlert(true);
             console.error("Error fetching languages:", error);
         }
     };
@@ -93,7 +96,7 @@ const TableTemplatesList = () => {
     }, []);
 
     useEffect(() => {
-        if (contextsList.length > 0 && filteredTemplates.length === 0) {
+        if (filteredTemplates.length === 0) {
             getTemplatesList();
         }
     }, [contextsList]);
@@ -147,6 +150,10 @@ const TableTemplatesList = () => {
 
             {visibleModalCreateTemplate && (
                 <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} />
+            )}
+
+            {visibleAlert && (
+                <ModalError />
             )}
         </div>
     );
