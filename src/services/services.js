@@ -4,6 +4,7 @@ import ScreensContext from "../screens/ScreensContext";
 const urlData = process.env.REACT_APP_URL_API;
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 const urlContexts = process.env.REACT_APP_CONTEXTS;
+console.log(urlContexts);
 const endPointVariables = process.env.REACT_APP_VARIABLES;
 const endPointTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_POSTEMPLATE;
