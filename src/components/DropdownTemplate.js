@@ -237,7 +237,7 @@ const DropdownTemplate = ({
                 )}
 
                 {visibleTemplates && templates.length > 0 && (
-                    <div className="card mb-3">
+                    <div className="card mb-3 mr-3">
                         <Dropdown
                             onChange={(e) => handleTemplateChange(e.value)}
                             options={templates}
@@ -254,7 +254,7 @@ const DropdownTemplate = ({
                         <Dropdown
                             onChange={(e) => handleActionChange(e.value)}
                             options={placeholdersList}
-                            optionLabel="code"
+                            optionLabel="dataVariable.code"
                             optionValue="code"
                             placeholder="Variables"
                             disabled={placeholdersList.length === 0}
