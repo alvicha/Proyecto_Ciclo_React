@@ -10,6 +10,7 @@ import ModalCreateTemplate from "./ModalCreateTemplate";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
 import ModalError from "./ModalError";
+import { Dialog } from "primereact/dialog";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
@@ -18,6 +19,8 @@ const TableTemplatesList = () => {
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [visibleSuccessDialog, setVisibleSuccessDialog] = useState(false);
+
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
     const paginatorRight = <Button type="button" icon="pi pi-download" text />;
 
@@ -149,12 +152,21 @@ const TableTemplatesList = () => {
             )}
 
             {visibleModalCreateTemplate && (
-                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} />
+                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} setVisibleSuccessDialog={setVisibleSuccessDialog} />
             )}
 
             {visibleAlert && (
                 <ModalError />
             )}
+
+            <Dialog
+                header="Información"
+                visible={visibleSuccessDialog}
+                style={{ width: '50vw' }}
+                onHide={() => setVisibleSuccessDialog(false)}
+            >
+                <p className="m-0">¡La plantilla se ha creado con éxito!</p>
+            </Dialog>
         </div>
     );
 };

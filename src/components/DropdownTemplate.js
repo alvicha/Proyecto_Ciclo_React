@@ -7,6 +7,7 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
+import ModalError from './ModalError';
 
 const DropdownTemplate = ({
     contexts,
@@ -36,7 +37,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
-    const { context } = useContext(ScreensContext);
+    const { context, setAlert, visibleAlert, setVisibleAlert } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -69,9 +70,10 @@ const DropdownTemplate = ({
     };
 
     const onClickContextTemplate = (selectedContext) => {
+        console.log(selectedContext.id);
         setContextDropDown(selectedContext.code);
-        getTemplatesApi(selectedContext.code);
-        getPlaceholdersApi(selectedContext.code);
+        getTemplatesApi(selectedContext.id);
+        getPlaceholdersApi(selectedContext.id);
     };
 
     const onClickContentTemplate = (templateSelected) => {
@@ -114,12 +116,16 @@ const DropdownTemplate = ({
         }
     };
 
-    const getTemplatesApi = async (context) => {
+    const getTemplatesApi = async (idContext) => {
         try {
-            const response = await getTemplatesContexts(context);
+
+            const response = await getTemplatesContexts(idContext, setAlert, setVisibleAlert);
+            console.log("respuesta: ", response);
             setTemplates(response);
             setVisibleTemplates(true);
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error fetching languages:", error);
         }
     };
@@ -218,7 +224,7 @@ const DropdownTemplate = ({
                         disabled={listLanguages.length === 0} />
                 </div>
                 {visibleContexts && (
-                    <div className="card mb-3">
+                    <div className="card mb-3 mr-3">
                         <Dropdown
                             value={contextDropDown}
                             onChange={(e) => handleContextChange(e.value)}
@@ -232,45 +238,28 @@ const DropdownTemplate = ({
                 )}
 
                 {visibleTemplates && templates.length > 0 && (
-                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate" role="button" id="dropdownMenuLink"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            disabled={templates.length === 0}>
-                            Plantillas
-                        </button>
-
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {templates.map((template) => (
-                                <button className='dropdown-item' key={template.code} onClick={() => handleTemplateChange(template.code)}>
-                                    {template.code}
-                                </button>
-                            ))}
-                        </div>
+                    <div className="card mb-3">
+                        <Dropdown
+                            onChange={(e) => handleTemplateChange(e.value)}
+                            options={templates}
+                            optionLabel="code"
+                            optionValue="code"
+                            placeholder="Plantillas"
+                            disabled={templates.length === 0}
+                        />
                     </div>
                 )}
 
                 {showVariables && (
-                    <div className="dropdown show col-12 col-lg-3 col-md-4 mb-3">
-                        <button className="btn btn-secondary dropdown-toggle w-100 text-truncate"
-                            role="button"
-                            id="dropdownMenuLink"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
+                    <div className="card mb-3">
+                        <Dropdown
+                            onChange={(e) => handleActionChange(e.value)}
+                            options={placeholdersList}
+                            optionLabel="code"
+                            optionValue="code"
+                            placeholder="Variables"
                             disabled={placeholdersList.length === 0}
-                        >
-                            Variables
-                        </button>
-
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            {placeholdersList.map((context) => (
-                                <button className='dropdown-item' key={context.code} onClick={() => handleActionChange(context.code)}>
-                                    {context.code}
-                                </button>
-                            ))}
-                        </div>
+                        />
                     </div>
                 )}
 
@@ -309,6 +298,10 @@ const DropdownTemplate = ({
                         style={{ width: '50vw' }}
                         breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
                     />
+                )}
+
+                {visibleAlert && (
+                    <ModalError />
                 )}
             </div>
         </>

@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, postDataTemplate } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
@@ -96,7 +96,6 @@ const EditTemplate = () => {
     const contextsApi = async () => {
         try {
             const response = await getDataContexts();
-            console.log(response);
             if (response) {
                 setContextsList(response);
             } else {
@@ -112,11 +111,11 @@ const EditTemplate = () => {
      * Función para que me devuelva la lista de variables dependiendo del contexto
      * @param {*} infoContext Contexto seleccionado 
      */
-    const getPlaceholdersApi = async (infoContext) => {
+    const getPlaceholdersApi = async (idContext) => {
         try {
-            const response = await getPlaceholdersContexts(infoContext);
+            const response = await getPlaceholdersContexts(idContext);
             if (response) {
-                setPlaceholdersList(response)
+                setPlaceholdersList(response);
             } else {
                 setPlaceholdersList([]);
             }
@@ -143,12 +142,13 @@ const EditTemplate = () => {
                 }
             };
             console.log("Mi cuerpo es: ", body);
-            console.log("ssedde", setAlert);
+            /*
             const response = await postDataTemplate(body, setAlert, setVisibleAlert);
             if (response) {
                 alert("Se ha guardado la plantilla correctamente");
             }
             console.log("Añadiendo plantilla con respuesta: ", response);
+            */
         } catch (error) {
             console.error("Error fetching languages:", error);
             setAlert("Error al guardar la plantilla: " + error.message);
