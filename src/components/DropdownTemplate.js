@@ -120,7 +120,6 @@ const DropdownTemplate = ({
         try {
 
             const response = await getTemplatesContexts(idContext, setAlert, setVisibleAlert);
-            console.log("respuesta: ", response);
             setTemplates(response);
             setVisibleTemplates(true);
         } catch (error) {

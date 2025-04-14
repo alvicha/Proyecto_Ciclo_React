@@ -75,7 +75,7 @@ const TableTemplatesList = () => {
             const updatedTemplates = [];
 
             for (let i = 0; i < contextsList.length; i++) {
-                const response = await getTemplatesContexts(contextsList[i].code);
+                const response = await getTemplatesContexts(contextsList[i].id);
 
                 if (response && response.length > 0) {
                     const templatesContext = response.map(template => ({

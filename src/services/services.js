@@ -9,17 +9,6 @@ const endPointListTemplatesByContext = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_CREATETEMPLATE;
 const endPointUpdateTemplate = process.env.REACT_APP_UPDATETEMPLATE;
 
-const DropdownTemplate = () => {
-  const { setAlert, setVisibleAlert } = useContext(ScreensContext);
-  getDataApi(setAlert, setVisibleAlert);
-  getDataContexts(setAlert, setVisibleAlert);
-  getPlaceholdersContexts(setAlert, setVisibleAlert);
-  getTemplatesContexts(setAlert, setVisibleAlert);
-  updateTemplateApi(setAlert, setVisibleAlert);
-}
-
-export default DropdownTemplate;
-
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
     const response = await fetch(`${urlData}${endPointLanguage}`, {
@@ -65,10 +54,10 @@ export const getPlaceholdersContexts = async (idContext, setAlert, setVisibleAle
   }
 };
 
-export const getTemplatesContexts = async (idContext, setAlert, setVisibleAlert) => {
+export const getTemplatesContexts = async (id, setAlert, setVisibleAlert) => {
   try {
     if (endPointListTemplatesByContext) {
-      const response = await fetch(`${endPointListTemplatesByContext}/${idContext}`);
+      const response = await fetch(`${endPointListTemplatesByContext}/${id}`);
       if (response.ok) return await response.json();
     }
   } catch (error) {

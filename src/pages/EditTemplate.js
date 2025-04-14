@@ -95,7 +95,7 @@ const EditTemplate = () => {
      */
     const contextsApi = async () => {
         try {
-            const response = await getDataContexts();
+            const response = await getDataContexts(setAlert, setVisibleAlert);
             if (response) {
                 setContextsList(response);
             } else {
