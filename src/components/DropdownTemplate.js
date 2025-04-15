@@ -21,15 +21,13 @@ const DropdownTemplate = ({
     setContextDropDown,
     codeLanguage,
     setCodeLanguage,
-    listLanguages,
     selectedLanguageDropdown,
     setSelectedLanguageDropdown,
     placeholdersList,
     getPlaceholdersApi,
     nameTemplate,
     setNameTemplate,
-    setCodeTemplate,
-    setActionButtonUpdate }) => {
+    setCodeTemplate }) => {
 
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
@@ -37,7 +35,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
-    const { context, setAlert, visibleAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, setVisibleActionButton } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -70,7 +68,6 @@ const DropdownTemplate = ({
     };
 
     const onClickContextTemplate = (selectedContext) => {
-        console.log(selectedContext.id);
         setContextDropDown(selectedContext.code);
         getTemplatesApi(selectedContext.id);
         getPlaceholdersApi(selectedContext.id);
@@ -80,7 +77,6 @@ const DropdownTemplate = ({
         setSelectedTemplate(templateSelected);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
         setCodeTemplate(templateSelected.code);
-        setActionButtonUpdate(true);
     };
 
     const handleContextChange = (selectedCodeContext) => {
@@ -130,11 +126,11 @@ const DropdownTemplate = ({
     };
 
     const handleLanguageChange = (selectedCodeLanguage) => {
-        const selectedLanguage = listLanguages.find(lang => lang.code === selectedCodeLanguage);
+        const selectedLanguage = listLanguages.find(lang => lang.value === selectedCodeLanguage);
         const currentContentSummernote = $(context.current).summernote('code');
 
         setSelectedTemplateContent(currentContentSummernote);
-        setCodeLanguage(selectedCodeLanguage);
+        setCodeLanguage(selectedLanguage.code);
         setVisibleContexts(true);
 
         if (selectedTemplateContent) {
@@ -174,7 +170,7 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
 
         setShowVariables(true);
-        setActionButtonUpdate(true);
+        setVisibleActionButton(true);
 
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
@@ -218,7 +214,6 @@ const DropdownTemplate = ({
                         onChange={(e) => handleLanguageChange(e.value)}
                         options={listLanguages}
                         optionLabel="value"
-                        optionValue="code"
                         placeholder="Idioma"
                         disabled={listLanguages.length === 0} />
                 </div>
@@ -255,7 +250,7 @@ const DropdownTemplate = ({
                             onChange={(e) => handleActionChange(e.value)}
                             options={placeholdersList}
                             optionLabel="dataVariable.code"
-                            optionValue="code"
+                            optionValue="dataVariable.code"
                             placeholder="Variables"
                             disabled={placeholdersList.length === 0}
                         />

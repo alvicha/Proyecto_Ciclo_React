@@ -1,26 +1,18 @@
-import { useContext } from "react";
-import ScreensContext from "../screens/ScreensContext";
-
-const urlData = process.env.REACT_APP_URL_API;
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 const endPointContexts = process.env.REACT_APP_CONTEXTS;
+const endPointContextsById = process.env.REACT_APP_CONTEXTS_BY_ID;
 const endPointVariables = process.env.REACT_APP_VARIABLES;
 const endPointListTemplatesByContext = process.env.REACT_APP_TEMPLATES;
-const endPointPostTemplate = process.env.REACT_APP_CREATETEMPLATE;
-const endPointUpdateTemplate = process.env.REACT_APP_UPDATETEMPLATE;
+const endPointPostTemplate = process.env.REACT_APP_CREATE_TEMPLATE;
+const endPointUpdateTemplate = process.env.REACT_APP_UPDATE_TEMPLATE;
+const endPointDeleteTemplate = process.env.REACT_APP_DELETE_TEMPLATE;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
-    const response = await fetch(`${urlData}${endPointLanguage}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer kiPuzuNhBCevGS30XJbJpZQOs1tbHzy7bY0DqFinmhlyU+UkB2ylHWXN/qCoQpZ/0Jxkb1+OgTWN5FqogEPwnM5uDr2Jl16ck3nKkHiEmy7WAOBsZsTvKWGR+LLnQiOc8PlxlxX90Vosg0jVRLaSX/LVVuVcez49zn2knuR0m2YIx/hjLamEyZ3zZORtrJiYGafUZ5pdETZoXyYUiP7zzAS1vXvGsXCQ34filnSBoaOcriO6rVkyie+J9+k6X/2wyYVKrlvluBxBO9UJrD2FL0Vxv8az5RCE+jMqzNpQjZVvfqqHgaTbpz+6QrytWmFm9GE4w78fXihXmCw8hk+PxFW6qk/d62EqD85ng+stvnBnbcD1tkRf2SdTRUk6elBGtcEIZmIGACvtMmqSL8p7uNXcAMjRT/TKgPW+SaEa7OruFh5BNw5Tk1idvJRuUBgn6fHju0otUs9zR6zBaIHBrJJ3QGkI1IT17+um8XJ7OsWrkulNgDaBBqXAQADE8ooYK2aJG07CXd+Sef1tebvP+J9I1xr2GrPyqp9ApU0m3uUjrJ4LssduMqZeSphxcgpo'
-      },
-      body: {},
-    });
-
-    if (response.ok) return await response.json();
+    if (endPointLanguage) {
+      const response = await fetch(`${endPointLanguage}`);
+      if (response.ok) return await response.json();
+    }
   } catch (error) {
     setAlert("Error al realizar la petición: " + error.message);
     setVisibleAlert(true);
@@ -62,6 +54,19 @@ export const getTemplatesContexts = async (id, setAlert, setVisibleAlert) => {
     }
   } catch (error) {
     setAlert("Error al realizar la petición: " + error);
+    setVisibleAlert(true);
+    return console.log(error);
+  }
+};
+
+export const listContextById = async (id, setAlert, setVisibleAlert) => {
+  try {
+    if (endPointContextsById) {
+      const response = await fetch(`${endPointContextsById}/${id}`);
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al obtener el contexto indicado: " + error);
     setVisibleAlert(true);
     return console.log(error);
   }
@@ -129,6 +134,24 @@ export const updateTemplateApi = async (body, setAlert, setVisibleAlert) => {
     if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Ha habido un error al actualizar la plantilla: " + error.message);
+    setVisibleAlert(true);
+    console.error('Ha habido un problema para actualizar:', error);
+  }
+};
+
+export const deleteTemplateDB = async (idTemplate, setAlert, setVisibleAlert) => {
+  try {
+    if (endPointDeleteTemplate) {
+      const response = await fetch(`${endPointDeleteTemplate}/${idTemplate}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al eliminar la plantilla: " + error.message);
     setVisibleAlert(true);
     console.error('Ha habido un problema para actualizar:', error);
   }

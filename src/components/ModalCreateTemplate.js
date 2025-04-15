@@ -1,34 +1,46 @@
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 import { Dropdown } from 'primereact/dropdown';
-import { createTemplate } from '../services/services';
+import { createTemplate, getDataApi } from '../services/services';
 
 const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, setVisibleSuccessDialog }) => {
     const [nameTemplate, setNameTemplate] = useState("");
-    const { contextsList, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);
     const [selectedContextTemplate, setSelectedContextTemplate] = useState("");
 
     const handleContextTemplateChange = (event) => {
         setSelectedContextTemplate(event);
     };
 
+    const languagesApi = async () => {
+        try {
+            const response = await getDataApi(setAlert, setVisibleAlert);
+            if (response) {
+                setListLanguages(response);
+            } else {
+                setListLanguages([]);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     const createTemplateDB = async () => {
         try {
+            let data = {};
+            listLanguages.forEach(lang => {
+                data[lang.code] = {
+                    content: "",
+                    subject: ""
+                };
+            });
+
             const body = {
                 code: nameTemplate,
-                data: {
-                    es: {
-                        content: "",
-                        subject: ""
-                    },
-                    en: {
-                        content: "",
-                        subject: ""
-                    }
-                },
+                data: data,
                 idContext: selectedContextTemplate.id
             };
 
@@ -38,11 +50,15 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 setvisibleModalCreateTemplate(false);
             }
         } catch (error) {
-            console.error("Error fetching templates:", error);
             setAlert("Error al crear la plantilla: " + error.message);
             setVisibleAlert(true);
+            console.error("Error fetching templates:", error);
         }
     };
+
+    useEffect(() => {
+        languagesApi();
+    }, []);
 
     const footerContent = (
         <div>

@@ -17,15 +17,13 @@ const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
-    const [listLanguages, setListLanguages] = useState([]);
     const [selectedTemplate, setSelectedTemplate] = useState("");
     const [selectedTemplateContent, setSelectedTemplateContent] = useState("");
-    const [selectedContextDropdown, setSelectedContextDropdown] = useState("Contextos");
-    const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("Idioma");
+    const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
+    const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [codeTemplate, setCodeTemplate] = useState("");
-    const [actionButtonUpdate, setActionButtonUpdate] = useState(false);
     const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList, placeholdersList,
-        setPlaceholdersList, templates, setTemplates
+        setPlaceholdersList, templates, setTemplates, setListLanguages
     } = useContext(ScreensContext);
     const idTemplate = useParams();
 
@@ -65,7 +63,6 @@ const EditTemplate = () => {
     const languagesApi = async () => {
         try {
             const response = await getDataApi(setAlert, setVisibleAlert);
-
             if (response) {
                 setListLanguages(response);
             } else {
@@ -81,7 +78,7 @@ const EditTemplate = () => {
             const template = templates.find(template =>
                 template.id === Number(idTemplate.id)
             );
-            
+
             if (template) {
                 setSelectedTemplate(template);
                 setNameTemplate(template.code);
@@ -200,7 +197,7 @@ const EditTemplate = () => {
         getSelectedTemplateEditor();
         languagesApi();
         contextsApi();
-    }, [nameTemplate]);
+    }, []);
 
     /**
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
@@ -208,19 +205,6 @@ const EditTemplate = () => {
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
     }, [codeLanguage, changeSummernoteLanguage, visibleAlert]);
-
-
-    /**
-    * Verifica si el nombre de la plantilla ha cambiado y actualiza el estado del botón.
-    */
-    useEffect(() => {
-        if (nameTemplate !== codeTemplate) {
-            setActionButtonUpdate(false);
-            setVisibleActionButton(true);
-        } else {
-            setVisibleActionButton(false);
-        }
-    }, [nameTemplate, codeTemplate, visibleActionButton, actionButtonUpdate]);
 
     return (
         <>
@@ -249,11 +233,9 @@ const EditTemplate = () => {
                     border: "none",
                     margin: "0 auto",
                 }} />
-                
-                <div className="w-100 bg-info mt-5 p-1 rounded">
+
+                <div className="w-100 filters mt-5 p-1 rounded">
                     <DropDownTemplate
-                        listLanguages={listLanguages}
-                        setListLanguages={setListLanguages}
                         contexts={contextsList}
                         templates={templates}
                         setTemplates={setTemplates}
@@ -272,8 +254,6 @@ const EditTemplate = () => {
                         nameTemplate={nameTemplate}
                         setNameTemplate={setNameTemplate}
                         setCodeTemplate={setCodeTemplate}
-                        setActionButtonUpdate={setActionButtonUpdate}
-                        actionButtonUpdate={actionButtonUpdate}
                     />
                 </div>
 
@@ -287,8 +267,8 @@ const EditTemplate = () => {
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
                 <div className="text-center mt-4">
-                    <Button label={actionButtonUpdate ? "Actualizar Plantilla" : "Guardar Nueva Plantilla"} aria-label="Actualizar-Guardar" className="rounded-pill buttons" disabled={!visibleActionButton}
-                        onClick={actionButtonUpdate ? onUpdateTemplate : onClickData} />
+                    <Button label="Actualizar Plantilla" aria-label="Actualizar-Guardar" className="rounded-pill buttons" disabled={!visibleActionButton}
+                        onClick={onUpdateTemplate} />
                 </div>
 
                 {visibleAlert && (

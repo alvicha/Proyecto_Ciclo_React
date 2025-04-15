@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { getDataContexts, getTemplatesContexts } from "../services/services";
+import { deleteTemplateDB, getDataContexts, getTemplatesContexts, listContextById } from "../services/services";
 import ScreensContext from "../screens/ScreensContext";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -26,15 +26,27 @@ const TableTemplatesList = () => {
 
     const toast = useRef(null);
 
-    const accept = () => {
-        toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+    const accept = async (idTemplate) => {
+        try {
+            console.log("Id seleccionado: ", idTemplate);
+            await deleteTemplateDB(idTemplate, setAlert, setVisibleAlert);
+            toast.current.show({ severity: 'info', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
+        } catch (error) {
+            console.error("Error fetching contexts API:", error);
+        }
     }
 
     const reject = () => {
-        toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Operación cancelada', life: 3000 });
     }
 
-    const onDeleteTemplate = () => {
+    const footerContent = (
+        <div>
+            <Button label="Aceptar" className='rounded-pill buttons mt-3' icon="pi pi-check" onClick={() => setVisibleSuccessDialog(false)} autoFocus />
+        </div>
+    );
+
+    const onDeleteTemplate = (idTemplate) => {
         confirmDialog({
             message: '¿Estás seguro que desea eliminar esta plantilla?',
             header: 'Eliminación Plantilla',
@@ -43,7 +55,7 @@ const TableTemplatesList = () => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Sí',
             rejectLabel: 'No',
-            accept,
+            accept: () => accept(idTemplate),
             reject
         });
     };
@@ -61,7 +73,7 @@ const TableTemplatesList = () => {
         }
     };
 
-    const onShowDataTemplate = (template) => {
+    const onShowDataTemplate = async (template) => {
         setSelectedTemplate(template);
         setShowModalDataTemplate(true);
     }
@@ -71,24 +83,30 @@ const TableTemplatesList = () => {
     }
 
     const getTemplatesList = async () => {
-        try {
-            const updatedTemplates = [];
+        let updatedTemplates = [];
 
+        try {
             for (let i = 0; i < contextsList.length; i++) {
                 const response = await getTemplatesContexts(contextsList[i].id);
-
+                
                 if (response && response.length > 0) {
-                    const templatesContext = response.map(template => ({
-                        ...template,
-                        context: contextsList[i].code,
-                        contentText: template.data?.es?.content.replace(/<[^>]+>/g, '') || "No hay contenido",
-                    }));
-                    updatedTemplates.push(...templatesContext);
+                    for (const template of response) {
+                        try {
+                            const responseContexts = await listContextById(template.idContext);
+                            updatedTemplates.push({
+                                ...template,
+                                context: responseContexts?.code || "No hay contexto",
+                                contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '') || "No hay contenido"
+                            });
+                        } catch (err) {
+                            console.error(`Error al obtener el contexto del template ID ${template.id}:`, err);
+                        }
+                    }
                 }
+                setTemplates(updatedTemplates);
             }
-            setTemplates(updatedTemplates);
         } catch (error) {
-            setAlert(error.message);
+            setAlert("Ha habido un error: " + error.message);
             setVisibleAlert(true);
             console.error("Error fetching languages:", error);
         }
@@ -142,7 +160,7 @@ const TableTemplatesList = () => {
                         <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => {
                             navigate(`/template/${rowData.id}`)
                         }} />
-                        <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={onDeleteTemplate} />
+                        <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={() => onDeleteTemplate(rowData.id)} />
                     </div>
                 )} />
             </DataTable>
@@ -161,6 +179,7 @@ const TableTemplatesList = () => {
 
             <Dialog
                 header="Información"
+                footer={footerContent}
                 visible={visibleSuccessDialog}
                 style={{ width: '50vw' }}
                 onHide={() => setVisibleSuccessDialog(false)}
