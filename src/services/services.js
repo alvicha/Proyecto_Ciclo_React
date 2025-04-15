@@ -112,6 +112,8 @@ export const createTemplate = async (body, setAlert, setVisibleAlert) => {
       body: JSON.stringify(body),
     });
 
+    console.log(body);
+
     if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Ha habido un error al crear la plantilla: " + error.message);

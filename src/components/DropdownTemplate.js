@@ -74,6 +74,7 @@ const DropdownTemplate = ({
     };
 
     const onClickContentTemplate = (templateSelected) => {
+        console.log(templateSelected);
         setSelectedTemplate(templateSelected);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
         setCodeTemplate(templateSelected.code);
