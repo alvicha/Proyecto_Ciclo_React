@@ -26,8 +26,7 @@ const DropdownTemplate = ({
     placeholdersList,
     getPlaceholdersApi,
     nameTemplate,
-    setNameTemplate,
-    setCodeTemplate }) => {
+    setNameTemplate }) => {
 
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
@@ -35,7 +34,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
-    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, setVisibleActionButton } = useContext(ScreensContext);
+    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -51,19 +50,18 @@ const DropdownTemplate = ({
 
     const acceptModalWarning = () => {
         onConfirmChange();
-        toast.current.show({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        toast.current.show({ severity: 'info', summary: 'Cambios no guardados', detail: 'Plantilla cambiada con éxito', life: 3000 });
     }
 
     const rejectModalWarning = () => {
         onCancelChange();
-        toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Operación cancelada', life: 3000 });
     }
 
 
     const resetData = () => {
         setSelectedTemplate(null);
         setSelectedTemplateContent("");
-        setCodeTemplate(null);
         setNameTemplate("");
     };
 
@@ -74,10 +72,8 @@ const DropdownTemplate = ({
     };
 
     const onClickContentTemplate = (templateSelected) => {
-        console.log(templateSelected);
         setSelectedTemplate(templateSelected);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
-        setCodeTemplate(templateSelected.code);
     };
 
     const handleContextChange = (selectedCodeContext) => {
@@ -126,15 +122,15 @@ const DropdownTemplate = ({
         }
     };
 
-    const handleLanguageChange = (selectedCodeLanguage) => {
-        const selectedLanguage = listLanguages.find(lang => lang.value === selectedCodeLanguage);
+    const handleLanguageChange = (langDropdown) => {
+        const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
         const currentContentSummernote = $(context.current).summernote('code');
 
         setSelectedTemplateContent(currentContentSummernote);
-        setCodeLanguage(selectedLanguage.code);
         setVisibleContexts(true);
 
         if (selectedTemplateContent) {
+            console.log(selectedTemplateContent);
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
             setVisibleModalWarning(true);
@@ -142,16 +138,18 @@ const DropdownTemplate = ({
             setConfirmAction(() => () => {
                 if (selectedTemplate) {
                     setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
-                    setCodeTemplate(selectedTemplate.code);
                     setNameTemplate(selectedTemplate.code);
                     setSelectedLanguageDropdown(selectedLanguage.value);
+                    setCodeLanguage(selectedLanguage.code);
                 } else {
                     resetData();
                     setSelectedLanguageDropdown(selectedLanguage.value);
+                    setCodeLanguage(selectedLanguage.code);
                 }
             });
         } else {
             setSelectedLanguageDropdown(selectedLanguage.value);
+            setCodeLanguage(selectedLanguage.code);
         }
     };
 
@@ -171,7 +169,6 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
 
         setShowVariables(true);
-        setVisibleActionButton(true);
 
         if (selectedTemplateContent) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
@@ -262,7 +259,7 @@ const DropdownTemplate = ({
                     <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" onClick={onShowModal} />
                 </div>
 
-                {visible && selectedTemplateContent !== "" && (
+                {selectedTemplateContent !== "" && (
                     <ConfirmDialog
                         group="declarative"
                         visible={visible}
@@ -278,22 +275,22 @@ const DropdownTemplate = ({
                     />
                 )}
 
-                {visibleModalWarning && (
-                    <ConfirmDialog
-                        group="declarative"
-                        visible={visible}
-                        onHide={onCancelChange}
-                        message={warningMessage}
-                        header="Advertencia"
-                        icon="pi pi-exclamation-triangle"
-                        acceptLabel='Cambiar Plantilla'
-                        rejectLabel='Cancelar'
-                        accept={acceptModalWarning}
-                        reject={rejectModalWarning}
-                        style={{ width: '50vw' }}
-                        breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
-                    />
-                )}
+                <ConfirmDialog
+                    group="declarative"
+                    visible={visibleModalWarning}
+                    onHide={onCancelChange}
+                    message={warningMessage}
+                    header="Advertencia"
+                    icon="pi pi-exclamation-triangle"
+                    acceptLabel='Cambiar Plantilla'
+                    rejectLabel='Cancelar'
+                    accept={acceptModalWarning}
+                    reject={rejectModalWarning}
+                    style={{ width: '50vw' }}
+                    breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
+                    acceptClassName='buttons rounded-pill'
+                    rejectClassName='button-reject'
+                />
 
                 {visibleAlert && (
                     <ModalError />

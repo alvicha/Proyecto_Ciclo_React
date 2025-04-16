@@ -5,7 +5,7 @@ body {
     background-color: #e6e6e6;
     font-family: "Roboto";
     margin: 0;
-    padding: 0; 
+    padding: 0;
 }
 
 header {
@@ -99,6 +99,18 @@ header {
 .buttons:hover {
     background-color: #C8F3E5;
     color: #18787F;
+}
+
+.button-reject {
+    color: #18787F;
+    background-color: transparent;
+    border: none;
+}
+
+.button-reject:hover {
+    color: #C8F3E5;
+    background-color: transparent;
+    border: none;
 }
 
 footer {

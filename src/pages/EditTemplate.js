@@ -12,6 +12,7 @@ import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
 import { useParams } from 'react-router-dom';
+import { Dialog } from 'primereact/dialog';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
@@ -21,8 +22,11 @@ const EditTemplate = () => {
     const [selectedTemplateContent, setSelectedTemplateContent] = useState("");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
-    const [codeTemplate, setCodeTemplate] = useState("");
-    const { setContext, alert, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList, placeholdersList,
+    const [visibleModalUpdate, setVisibleModalUpdate] = useState(null);
+    const [currentContent, setCurrentContent] = useState("");
+
+
+    const { setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, setListLanguages
     } = useContext(ScreensContext);
     const idTemplate = useParams();
@@ -32,6 +36,8 @@ const EditTemplate = () => {
     */
     const changeSummernoteLanguage = useCallback((lang) => {
         setContext(editorRef);
+        setCurrentContent($(editorRef.current).summernote('code'));
+
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
             placeholder: "Introduce una descripción",
@@ -52,6 +58,9 @@ const EditTemplate = () => {
             callbacks: {
                 onInit: function () {
                     $(".note-editable").css("font-size", "12px");
+                },
+                onChange: function (contents, $editable) {
+                    setCurrentContent(contents);
                 }
             }
         }).summernote("code", selectedTemplateContent);
@@ -122,38 +131,6 @@ const EditTemplate = () => {
     };
 
     /**
-     * Función para añadir una plantilla y almacenarla en la base de datos mediante una llamada a la API
-     * @param {*} event Evento del clic en el botón de guardar
-     */
-    const onClickData = async (event) => {
-        try {
-            event.preventDefault();
-            const currentContent = $(editorRef.current).summernote('code');
-            setSelectedTemplateContent(currentContent);
-
-            let body = {
-                code: nameTemplate,
-                data: {
-                    content: currentContent,
-                    subject: selectedTemplate.data[codeLanguage].subject
-                }
-            };
-            console.log("Mi cuerpo es: ", body);
-            /*
-            const response = await postDataTemplate(body, setAlert, setVisibleAlert);
-            if (response) {
-                alert("Se ha guardado la plantilla correctamente");
-            }
-            console.log("Añadiendo plantilla con respuesta: ", response);
-            */
-        } catch (error) {
-            console.error("Error fetching languages:", error);
-            setAlert("Error al guardar la plantilla: " + error.message);
-            setVisibleAlert(true);
-        }
-    };
-
-    /**
      * Función para actualizar una plantilla en la base de datos con llamada a la API
      * @param {*} event Evento del clic en el botón de actualizar plantilla
      */
@@ -163,21 +140,27 @@ const EditTemplate = () => {
             const currentContent = $(editorRef.current).summernote('code');
             setSelectedTemplateContent(currentContent);
 
-            let body = {
-                idTemplate: selectedTemplate.id,
-                codeLanguage: codeLanguage,
-                data: {
-                    content: currentContent,
-                    subject: selectedTemplate.data[codeLanguage].subject
-                }
+            const updatedData = { ...selectedTemplate.data };
+
+            //se actualizara solamente el contenido del idioma que hayamos seleccionado
+            updatedData[codeLanguage] = {
+                content: currentContent,
+                subject: selectedTemplate?.data?.[codeLanguage]?.subject
             };
-            console.log("Mi cuerpo es: ", body)
-            const response = await updateTemplateApi(body); //Función para actualizar los datos de la plantilla
+
+            let body = {
+                code: nameTemplate,
+                data: updatedData
+            };
+            console.log("Mi cuerpo es: ", body);
+
+            const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
             if (response) {
-                alert("Se ha actualizado la plantilla correctamente");
+                setVisibleModalUpdate(true);
             }
-            console.log("Actualizado plantilla con ID: ", selectedTemplate.id + "y la respuesta es: ", response);
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error fetching languages:", error);
         }
     };
@@ -204,7 +187,24 @@ const EditTemplate = () => {
      */
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-    }, [codeLanguage, changeSummernoteLanguage, visibleAlert]);
+    }, [codeLanguage, changeSummernoteLanguage]);
+
+    useEffect(() => {
+        console.log("ANTIGUO: ", selectedTemplateContent);
+        console.log("MODERNO: ", currentContent);
+        
+        if (selectedTemplateContent !== currentContent) {
+            setVisibleActionButton(true);
+        } else {
+            setVisibleActionButton(false);
+        }
+    }, [selectedTemplateContent, currentContent]);
+
+    const footerContentModalUpdate = (
+        <div>
+            <Button label="Aceptar" className="buttons rounded-pill" icon="pi pi-check" onClick={() => setVisibleModalUpdate(false)} autoFocus />
+        </div>
+    );
 
     return (
         <>
@@ -253,7 +253,6 @@ const EditTemplate = () => {
                         getPlaceholdersApi={getPlaceholdersApi}
                         nameTemplate={nameTemplate}
                         setNameTemplate={setNameTemplate}
-                        setCodeTemplate={setCodeTemplate}
                     />
                 </div>
 
@@ -267,13 +266,20 @@ const EditTemplate = () => {
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
                 <div className="text-center mt-4">
-                    <Button label="Actualizar Plantilla" aria-label="Actualizar-Guardar" className="rounded-pill buttons" disabled={!visibleActionButton}
+                    <Button label="Actualizar Plantilla" aria-label="Actualizar" className="rounded-pill buttons" disabled={!visibleActionButton}
                         onClick={onUpdateTemplate} />
                 </div>
 
                 {visibleAlert && (
                     <ModalError />
                 )}
+
+                <Dialog visible={visibleModalUpdate} modal header="Información" footer={footerContentModalUpdate} style={{ width: '50rem' }} onHide={() => { if (!visibleModalUpdate) return; setVisibleModalUpdate(false); }}>
+                    <p className="m-0">
+                        Plantilla actualizada con éxito
+                    </p>
+                </Dialog>
+
             </div>
         </>
     );

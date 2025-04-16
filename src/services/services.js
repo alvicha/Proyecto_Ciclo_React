@@ -123,14 +123,14 @@ export const createTemplate = async (body, setAlert, setVisibleAlert) => {
 };
 
 
-export const updateTemplateApi = async (body, setAlert, setVisibleAlert) => {
+export const updateTemplateApi = async (id, body, setAlert, setVisibleAlert) => {
   try {
-    const response = await fetch(`${endPointUpdateTemplate}`, {
-      method: 'POST',
+    const response = await fetch(`${endPointUpdateTemplate}/${id}`, {
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: body,
+      body: JSON.stringify(body),
     });
 
     if (response.ok) return await response.json();
