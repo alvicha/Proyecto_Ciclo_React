@@ -192,7 +192,7 @@ const EditTemplate = () => {
     useEffect(() => {
         console.log("ANTIGUO: ", selectedTemplateContent);
         console.log("MODERNO: ", currentContent);
-        
+
         if (selectedTemplateContent !== currentContent) {
             setVisibleActionButton(true);
         } else {
@@ -259,7 +259,7 @@ const EditTemplate = () => {
                 <div className="form-group d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
                     <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
                     <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
-                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" />
+                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
                 </div>
 
                 <div className="form-group mb-3">

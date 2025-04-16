@@ -8,6 +8,8 @@ import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
 import ModalError from './ModalError';
+import ConfirmDialogContent from './ConfirmDialogContent';
+import ConfirmDialogChangeTemplate from './ConfirmDialogChangeTemplate';
 
 const DropdownTemplate = ({
     contexts,
@@ -260,36 +262,20 @@ const DropdownTemplate = ({
                 </div>
 
                 {selectedTemplateContent !== "" && (
-                    <ConfirmDialog
-                        group="declarative"
+                    <ConfirmDialogContent
                         visible={visible}
-                        onHide={() => setVisible(false)}
-                        message="¿Desea eliminar el contenido del editor?"
-                        header="Confirmación"
-                        icon="pi pi-exclamation-triangle"
-                        acceptLabel='Sí'
-                        rejectLabel='No'
-                        accept={acceptModalAcceptContent}
-                        reject={rejectModalDeleteContent}
-                        breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
+                        setVisible={setVisible}
+                        acceptModalAcceptContent={acceptModalAcceptContent}
+                        rejectModalDeleteContent={rejectModalDeleteContent}
                     />
                 )}
 
-                <ConfirmDialog
-                    group="declarative"
-                    visible={visibleModalWarning}
-                    onHide={onCancelChange}
+                <ConfirmDialogChangeTemplate
+                    visibleModalWarning={visibleModalWarning}
+                    onCancelChange={onCancelChange}
                     message={warningMessage}
-                    header="Advertencia"
-                    icon="pi pi-exclamation-triangle"
-                    acceptLabel='Cambiar Plantilla'
-                    rejectLabel='Cancelar'
-                    accept={acceptModalWarning}
-                    reject={rejectModalWarning}
-                    style={{ width: '50vw' }}
-                    breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
-                    acceptClassName='buttons rounded-pill'
-                    rejectClassName='button-reject'
+                    acceptModalWarning={acceptModalWarning}
+                    rejectModalWarning={rejectModalWarning}
                 />
 
                 {visibleAlert && (
