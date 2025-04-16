@@ -130,7 +130,6 @@ const TableTemplatesList = () => {
     };
 
     const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
-    console.log(templatesToDisplay);
 
     return (
         <div className="card mb-3 ml-1">
