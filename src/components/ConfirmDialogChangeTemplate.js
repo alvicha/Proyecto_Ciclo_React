@@ -1,6 +1,6 @@
 import { ConfirmDialog } from 'primereact/confirmdialog';
 
-const ConfirmDialogChangeTemplate = ({ visibleModalWarning, onCancelChange, message, acceptModalWarning, rejectModalWarning }) => {
+const ConfirmDialogChangeTemplate = ({ visibleModalWarning, onCancelChange, message, textButton, acceptModalWarning, rejectModalWarning }) => {
     return (
         <ConfirmDialog
             group="declarative"
@@ -9,7 +9,7 @@ const ConfirmDialogChangeTemplate = ({ visibleModalWarning, onCancelChange, mess
             message={message}
             header="Advertencia"
             icon="pi pi-exclamation-triangle"
-            acceptLabel='Cambiar Plantilla'
+            acceptLabel={textButton}
             rejectLabel='Cancelar'
             accept={acceptModalWarning}
             reject={rejectModalWarning}

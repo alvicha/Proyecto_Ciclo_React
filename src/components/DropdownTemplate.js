@@ -3,7 +3,6 @@ import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
 import "../pages/summernote.css";
-import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
 import { Dropdown } from 'primereact/dropdown';
@@ -34,6 +33,7 @@ const DropdownTemplate = ({
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
     const [showVariables, setShowVariables] = useState(false);
     const [warningMessage, setWarningMessage] = useState(null);
+    const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
     const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages } = useContext(ScreensContext);
@@ -84,6 +84,7 @@ const DropdownTemplate = ({
         if (selectedTemplateContent) {
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
+            setTextButton("Cambiar contexto");
             setVisibleModalWarning(true);
 
             setConfirmAction(() => () => {
@@ -113,7 +114,6 @@ const DropdownTemplate = ({
 
     const getTemplatesApi = async (idContext) => {
         try {
-
             const response = await getTemplatesContexts(idContext, setAlert, setVisibleAlert);
             setTemplates(response);
             setVisibleTemplates(true);
@@ -135,6 +135,7 @@ const DropdownTemplate = ({
             console.log(selectedTemplateContent);
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
+            setTextButton("Cambiar idioma");
             setVisibleModalWarning(true);
 
             setConfirmAction(() => () => {
@@ -176,12 +177,11 @@ const DropdownTemplate = ({
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
                 setPreviousTemplateName(nameTemplate);
                 setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
+                setTextButton("Cambiar plantilla");
                 setVisibleModalWarning(true);
 
                 setConfirmAction(() => () => {
                     onClickContentTemplate(templateSelected);
-                    setNameTemplate(selectedCodeTemplate);
-
                     setTimeout(() => {
                         $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
                     }, 0);
@@ -273,6 +273,7 @@ const DropdownTemplate = ({
                 <ConfirmDialogChangeTemplate
                     visibleModalWarning={visibleModalWarning}
                     onCancelChange={onCancelChange}
+                    textButton={textButton}
                     message={warningMessage}
                     acceptModalWarning={acceptModalWarning}
                     rejectModalWarning={rejectModalWarning}

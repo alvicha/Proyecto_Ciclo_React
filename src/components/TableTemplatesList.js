@@ -130,6 +130,7 @@ const TableTemplatesList = () => {
     };
 
     const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
+    console.log(templatesToDisplay);
 
     return (
         <div className="card mb-3 ml-1">
@@ -145,7 +146,7 @@ const TableTemplatesList = () => {
                 <Column field="context" header="Contexto" sortable style={{ width: '5%' }}></Column>
                 <Column field="code" header="Nombre" sortable style={{ width: '5%' }}></Column>
                 <Column
-                    field="data.es.subject"
+                    field="data"
                     header="Asunto"
                     style={{ width: '20%' }}
                     body={(rowData) => rowData.data?.es?.subject || "No hay asunto"}

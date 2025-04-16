@@ -190,9 +190,6 @@ const EditTemplate = () => {
     }, [codeLanguage, changeSummernoteLanguage]);
 
     useEffect(() => {
-        console.log("ANTIGUO: ", selectedTemplateContent);
-        console.log("MODERNO: ", currentContent);
-
         if (selectedTemplateContent !== currentContent) {
             setVisibleActionButton(true);
         } else {
