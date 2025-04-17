@@ -88,7 +88,7 @@ const TableTemplatesList = () => {
         try {
             for (let i = 0; i < contextsList.length; i++) {
                 const response = await getTemplatesContexts(contextsList[i].id);
-                
+
                 if (response && response.length > 0) {
                     for (const template of response) {
                         try {

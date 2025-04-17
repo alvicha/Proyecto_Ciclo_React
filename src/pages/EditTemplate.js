@@ -59,7 +59,7 @@ const EditTemplate = () => {
                 onInit: function () {
                     $(".note-editable").css("font-size", "12px");
                 },
-                onChange: function (contents, $editable) {
+                onChange: function (contents) {
                     setCurrentContent(contents);
                 }
             }

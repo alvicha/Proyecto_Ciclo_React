@@ -6,6 +6,7 @@ const endPointListTemplatesByContext = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_CREATE_TEMPLATE;
 const endPointUpdateTemplate = process.env.REACT_APP_UPDATE_TEMPLATE;
 const endPointDeleteTemplate = process.env.REACT_APP_DELETE_TEMPLATE;
+const endPointShowTemplateById = process.env.REACT_APP_SHOW_TEMPLATE;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -63,6 +64,19 @@ export const listContextById = async (id, setAlert, setVisibleAlert) => {
   try {
     if (endPointContextsById) {
       const response = await fetch(`${endPointContextsById}/${id}`);
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al obtener el contexto indicado: " + error);
+    setVisibleAlert(true);
+    return console.log(error);
+  }
+};
+
+export const listTemplateById = async (id, setAlert, setVisibleAlert) => {
+  try {
+    if (endPointShowTemplateById) {
+      const response = await fetch(`${endPointShowTemplateById}/${id}`);
       if (response.ok) return await response.json();
     }
   } catch (error) {

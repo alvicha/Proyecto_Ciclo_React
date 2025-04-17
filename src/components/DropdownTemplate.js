@@ -9,6 +9,7 @@ import { Dropdown } from 'primereact/dropdown';
 import ModalError from './ModalError';
 import ConfirmDialogContent from './ConfirmDialogContent';
 import ConfirmDialogChangeTemplate from './ConfirmDialogChangeTemplate';
+import { Dialog } from 'primereact/dialog';
 
 const DropdownTemplate = ({
     contexts,
@@ -39,6 +40,7 @@ const DropdownTemplate = ({
     const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
+    const [visibleWarningVariables, setVisibleWarningVariables] = useState(false);
     const toast = useRef(null);
 
     const acceptModalAcceptContent = () => {
@@ -60,7 +62,6 @@ const DropdownTemplate = ({
         toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Operación cancelada', life: 3000 });
     }
 
-
     const resetData = () => {
         setSelectedTemplate(null);
         setSelectedTemplateContent("");
@@ -75,14 +76,14 @@ const DropdownTemplate = ({
 
     const onClickContentTemplate = (templateSelected) => {
         setSelectedTemplate(templateSelected);
-        console.log(templateSelected);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
     };
 
     const handleContextChange = (selectedCodeContext) => {
+        const currentContentSummernote = $(context.current).summernote('code');
         let selectedContext = contexts.find(context => context.code === selectedCodeContext);
 
-        if (selectedTemplateContent) {
+        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
             setTextButton("Cambiar contexto");
@@ -93,13 +94,18 @@ const DropdownTemplate = ({
                 onClickContextTemplate(selectedContext);
             });
         } else {
+            resetData();
             onClickContextTemplate(selectedContext);
         }
     };
 
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
-        $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
+        if (selectedTemplateContent) {
+            $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
+        } else {
+            setVisibleWarningVariables(true)
+        }
     };
 
     const handleActionChange = (action) => {
@@ -125,15 +131,16 @@ const DropdownTemplate = ({
         }
     };
 
+    const normalizeHtml = (html) => {
+        return $('<div>').html(html).text(); // Elimina escapes como \", &quot;, etc.
+    };
+
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
         const currentContentSummernote = $(context.current).summernote('code');
-
-        setSelectedTemplateContent(currentContentSummernote);
         setVisibleContexts(true);
 
-        if (selectedTemplateContent) {
-            console.log(selectedTemplateContent);
+        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
             setTextButton("Cambiar idioma");
@@ -152,6 +159,7 @@ const DropdownTemplate = ({
                 }
             });
         } else {
+            setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
             setSelectedLanguageDropdown(selectedLanguage.value);
             setCodeLanguage(selectedLanguage.code);
         }
@@ -171,10 +179,9 @@ const DropdownTemplate = ({
     const handleTemplateChange = (selectedCodeTemplate) => {
         const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
         const currentContentSummernote = $(context.current).summernote('code');
-
         setShowVariables(true);
 
-        if (selectedTemplateContent) {
+        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
             if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
                 setPreviousTemplateName(nameTemplate);
                 setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
@@ -204,6 +211,12 @@ const DropdownTemplate = ({
         $(context.current).summernote("code", "");
         setVisible(false);
     };
+
+    const footerContent = (
+        <div>
+            <Button label="Ok" icon="pi pi-check" className='rounded-pill buttons' onClick={() => setVisibleWarningVariables(false)} autoFocus />
+        </div>
+    );
 
     return (
         <>
@@ -283,6 +296,12 @@ const DropdownTemplate = ({
                 {visibleAlert && (
                     <ModalError />
                 )}
+
+                <Dialog modal header="Advertencia" visible={visibleWarningVariables} footer={footerContent} style={{ width: '50vw' }} onHide={() => { if (!visibleWarningVariables) return; setVisibleWarningVariables(false); }}>
+                    <p className="m-0">
+                        No puedes añadir variables sin una plantilla seleccionada
+                    </p>
+                </Dialog>
             </div>
         </>
     );
