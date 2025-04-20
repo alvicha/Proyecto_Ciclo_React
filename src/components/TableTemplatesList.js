@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { deleteTemplateDB, getDataContexts, getTemplatesContexts, listContextById } from "../services/services";
+import { deleteTemplateDB, getDataContexts } from "../services/services";
 import ScreensContext from "../screens/ScreensContext";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -14,7 +14,7 @@ import { Dialog } from "primereact/dialog";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
-    const { contextsList, setContextsList, filteredTemplates, templates, setTemplates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const { setContextsList, filteredTemplates, templates, setTemplates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [pageTable, setPageTable] = useState(false);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
@@ -28,8 +28,8 @@ const TableTemplatesList = () => {
 
     const accept = async (idTemplate) => {
         try {
-            console.log("Id seleccionado: ", idTemplate);
             await deleteTemplateDB(idTemplate, setAlert, setVisibleAlert);
+            await getContextsTemplates();
             toast.current.show({ severity: 'info', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
         } catch (error) {
             console.error("Error fetching contexts API:", error);
@@ -61,14 +61,29 @@ const TableTemplatesList = () => {
     };
 
     const getContextsTemplates = async () => {
+        let updatedTemplates = [];
         try {
             const response = await getDataContexts(setAlert, setVisibleAlert);
-            if (!response) {
+            if (!response || response.length === 0) {
                 setContextsList([]);
+                return;
+            }
+            setContextsList(response);
+
+            for (const context of response) {
+                for (const template of context.templates) {
+                    updatedTemplates.push({
+                        ...template,
+                        context: context?.code || "No hay contexto",
+                        contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '') || "No hay contenido",
+                    });
+                }
+                setTemplates(updatedTemplates);
             }
 
-            setContextsList(response);
         } catch (error) {
+            setAlert("Ha habido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error fetching contexts API:", error);
         }
     };
@@ -82,45 +97,11 @@ const TableTemplatesList = () => {
         setvisibleModalCreateTemplate(true);
     }
 
-    const getTemplatesList = async () => {
-        let updatedTemplates = [];
-
-        try {
-            for (let i = 0; i < contextsList.length; i++) {
-                const response = await getTemplatesContexts(contextsList[i].id);
-
-                if (response && response.length > 0) {
-                    for (const template of response) {
-                        try {
-                            const responseContexts = await listContextById(template.idContext);
-                            updatedTemplates.push({
-                                ...template,
-                                context: responseContexts?.code || "No hay contexto",
-                                contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '') || "No hay contenido"
-                            });
-                        } catch (err) {
-                            console.error(`Error al obtener el contexto del template ID ${template.id}:`, err);
-                        }
-                    }
-                }
-                setTemplates(updatedTemplates);
-            }
-        } catch (error) {
-            setAlert("Ha habido un error: " + error.message);
-            setVisibleAlert(true);
-            console.error("Error fetching languages:", error);
-        }
-    };
-
-    useEffect(() => {
-        getContextsTemplates();
-    }, []);
-
     useEffect(() => {
         if (filteredTemplates.length === 0) {
-            getTemplatesList();
+            getContextsTemplates();
         }
-    }, [contextsList]);
+    }, []);
 
     const handlePageChange = (event) => {
         setPageTable(event.first)
@@ -143,12 +124,11 @@ const TableTemplatesList = () => {
                 paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No se han encontrado registros">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
                 <Column field="context" header="Contexto" sortable style={{ width: '5%' }}></Column>
-                <Column field="code" header="Nombre" sortable style={{ width: '5%' }}></Column>
+                <Column field="name" header="Nombre" sortable style={{ width: '5%' }}></Column>
                 <Column
-                    field="data"
                     header="Asunto"
                     style={{ width: '20%' }}
-                    body={(rowData) => rowData.data?.es?.subject || "No hay asunto"}
+                    body={(rowData) => rowData.data.es.subject || "No hay asunto"}
                 />
                 <Column
                     field="contentText"
@@ -170,7 +150,7 @@ const TableTemplatesList = () => {
             )}
 
             {visibleModalCreateTemplate && (
-                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} setVisibleSuccessDialog={setVisibleSuccessDialog} />
+                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} getContextsTemplates={getContextsTemplates} setVisibleSuccessDialog={setVisibleSuccessDialog} />
             )}
 
             {visibleAlert && (

@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
@@ -82,17 +82,14 @@ const EditTemplate = () => {
         }
     };
 
-    const getSelectedTemplateEditor = () => {
-        if (templates && templates.length > 0) {
-            const template = templates.find(template =>
-                template.id === Number(idTemplate.id)
-            );
-
-            if (template) {
-                setSelectedTemplate(template);
-                setNameTemplate(template.code);
-                setSelectedTemplateContent(template.data?.es?.content);
-            }
+    const getSelectedTemplateEditor = async () => {
+        try {
+            const response = await listTemplateById(idTemplate.id, setAlert, setVisibleAlert);
+            setSelectedTemplate(response);
+            setNameTemplate(response.code);
+            setSelectedTemplateContent(response.data?.es?.content);
+        } catch (error) {
+            console.log(error);
         }
     }
 

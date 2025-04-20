@@ -82,7 +82,6 @@ const DropdownTemplate = ({
     const handleContextChange = (selectedCodeContext) => {
         const currentContentSummernote = $(context.current).summernote('code');
         let selectedContext = contexts.find(context => context.code === selectedCodeContext);
-
         if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
@@ -140,26 +139,31 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
         setVisibleContexts(true);
 
-        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
-            setPreviousTemplateName(nameTemplate);
-            setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
-            setTextButton("Cambiar idioma");
-            setVisibleModalWarning(true);
+        if (selectedTemplate !== null) {
+            if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
+                setPreviousTemplateName(nameTemplate);
+                setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
+                setTextButton("Cambiar idioma");
+                setVisibleModalWarning(true);
 
-            setConfirmAction(() => () => {
-                if (selectedTemplate) {
-                    setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
-                    setNameTemplate(selectedTemplate.code);
-                    setSelectedLanguageDropdown(selectedLanguage.value);
-                    setCodeLanguage(selectedLanguage.code);
-                } else {
-                    resetData();
-                    setSelectedLanguageDropdown(selectedLanguage.value);
-                    setCodeLanguage(selectedLanguage.code);
-                }
-            });
+                setConfirmAction(() => () => {
+                    if (selectedTemplate) {
+                        setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
+                        setNameTemplate(selectedTemplate.code);
+                        setSelectedLanguageDropdown(selectedLanguage.value);
+                        setCodeLanguage(selectedLanguage.code);
+                    } else {
+                        resetData();
+                        setSelectedLanguageDropdown(selectedLanguage.value);
+                        setCodeLanguage(selectedLanguage.code);
+                    }
+                });
+            } else {
+                setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
+                setSelectedLanguageDropdown(selectedLanguage.value);
+                setCodeLanguage(selectedLanguage.code);
+            }
         } else {
-            setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
             setSelectedLanguageDropdown(selectedLanguage.value);
             setCodeLanguage(selectedLanguage.code);
         }
@@ -229,7 +233,7 @@ const DropdownTemplate = ({
                         options={listLanguages}
                         optionLabel="value"
                         placeholder="Idioma"
-                        disabled={listLanguages.length === 0} />
+                        disabled={listLanguages?.length === 0} />
                 </div>
                 {visibleContexts && (
                     <div className="card mb-3 mr-3">
@@ -240,7 +244,7 @@ const DropdownTemplate = ({
                             optionLabel="code"
                             optionValue="code"
                             placeholder="Contextos"
-                            disabled={contexts.length === 0}
+                            disabled={contexts?.length === 0}
                         />
                     </div>
                 )}

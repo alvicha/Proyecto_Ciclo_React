@@ -27,42 +27,30 @@ const FiltersTemplateList = () => {
 
     const filterDataTemplates = async () => {
         let filtered = [];
-        /*
         let data;
-        if (optionContext && optionContext.code) {
-            data = {
-                nameTemplate: nameTemplate,
-                context: optionContext.code,
-                page: currentPage,
-                rows: rows
-            }
-        } else {
-            data = {
-                nameTemplate: nameTemplate,
-                context: null,
-                page: currentPage,
-                rows: rows
-            };
-        }
 
         try {
+            if (optionContext && optionContext.code) {
+                data = {
+                    nameTemplate: nameTemplate,
+                    context: optionContext.code,
+                    page: currentPage,
+                    rows: rows
+                }
+            } else {
+                data = {
+                    nameTemplate: nameTemplate,
+                    context: null,
+                    page: currentPage,
+                    rows: rows
+                };
+            }
+
             const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
             console.log(response);
         } catch (error) {
-            console.error("Error fetching contexts API:", error);
+            console.error("Error al filtrar plantillas:", error);
         }
-*/
-
-        if (optionContext) {
-            filtered = templates.filter(template => template.context === optionContext.code);
-        }
-
-        if (nameTemplate !== "") {
-            filtered = templates.filter(template => template.contentText === nameTemplate.toUpperCase() ||
-                template.code === nameTemplate.toUpperCase()
-            );
-        }
-        setFilteredTemplates(filtered);
     }
 
     useEffect(() => {

@@ -6,7 +6,7 @@ import ScreensContext from '../screens/ScreensContext';
 import { Dropdown } from 'primereact/dropdown';
 import { createTemplate, getDataApi } from '../services/services';
 
-const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, setVisibleSuccessDialog }) => {
+const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, getContextsTemplates, setVisibleSuccessDialog }) => {
     const [nameTemplate, setNameTemplate] = useState("");
     const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);
     const [selectedContextTemplate, setSelectedContextTemplate] = useState("");
@@ -46,8 +46,9 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
 
             const response = await createTemplate(body, setAlert, setVisibleAlert);
             if (response) {
-                setVisibleSuccessDialog(true);
                 setvisibleModalCreateTemplate(false);
+                setVisibleSuccessDialog(true);
+                await getContextsTemplates();
             }
         } catch (error) {
             setAlert("Error al crear la plantilla: " + error.message);
