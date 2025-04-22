@@ -59,7 +59,7 @@ const FiltersTemplateList = () => {
         } else {
             setIsDisabled(true);
         }
-    }, [optionContext]);
+    }, [optionContext, nameTemplate, isDisabled]);
 
     useEffect(() => {
         filterDataTemplates();
