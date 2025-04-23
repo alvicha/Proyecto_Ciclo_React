@@ -8,7 +8,7 @@ import { Dialog } from "primereact/dialog";
 import { filterInfoTemplate } from "../services/services";
 
 const FiltersTemplateList = () => {
-    const { contextsList, templates, setTemplates, filteredTemplates, setFilteredTemplates, currentPage, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { contextsList, setTemplates, setCurrentPage, currentPage, setTotalPages, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [optionContext, setOptionContext] = useState(null);
@@ -26,10 +26,9 @@ const FiltersTemplateList = () => {
     }
 
     const filterDataTemplates = async () => {
-        let filtered = [];
         let data;
-
         try {
+            console.log(currentPage);
             if (optionContext && optionContext.code) {
                 data = {
                     nameTemplate: nameTemplate,
@@ -47,7 +46,13 @@ const FiltersTemplateList = () => {
             }
 
             const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
-            console.log(response);
+
+            const cleanTemplates = response.map(template => ({
+                ...template,
+                contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '')
+            }));
+            setTemplates(cleanTemplates);
+            setTotalPages(response.total);
         } catch (error) {
             console.error("Error al filtrar plantillas:", error);
         }
@@ -63,7 +68,8 @@ const FiltersTemplateList = () => {
 
     useEffect(() => {
         filterDataTemplates();
-    }, [nameTemplate, optionContext, templates, currentPage, rows]);
+        console.log(currentPage);
+    }, [nameTemplate, optionContext, currentPage, rows]);
 
     return (
         <div className="mb-4 border ml-1">

@@ -12,7 +12,6 @@ import ConfirmDialogChangeTemplate from './ConfirmDialogChangeTemplate';
 import { Dialog } from 'primereact/dialog';
 
 const DropdownTemplate = ({
-    contexts,
     templates,
     setTemplates,
     selectedTemplate,
@@ -37,7 +36,7 @@ const DropdownTemplate = ({
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
     const [previousTemplateName, setPreviousTemplateName] = useState("");
-    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages } = useContext(ScreensContext);
+    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const [visibleWarningVariables, setVisibleWarningVariables] = useState(false);
@@ -81,7 +80,8 @@ const DropdownTemplate = ({
 
     const handleContextChange = (selectedCodeContext) => {
         const currentContentSummernote = $(context.current).summernote('code');
-        let selectedContext = contexts.find(context => context.code === selectedCodeContext);
+        let selectedContext = contextsList.find(context => context.code === selectedCodeContext);
+
         if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
             setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
@@ -240,11 +240,11 @@ const DropdownTemplate = ({
                         <Dropdown
                             value={contextDropDown}
                             onChange={(e) => handleContextChange(e.value)}
-                            options={contexts}
+                            options={contextsList}
                             optionLabel="code"
                             optionValue="code"
                             placeholder="Contextos"
-                            disabled={contexts?.length === 0}
+                            disabled={contextsList.length === 0}
                         />
                     </div>
                 )}

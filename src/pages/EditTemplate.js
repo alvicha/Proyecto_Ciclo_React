@@ -25,8 +25,7 @@ const EditTemplate = () => {
     const [visibleModalUpdate, setVisibleModalUpdate] = useState(null);
     const [currentContent, setCurrentContent] = useState("");
 
-
-    const { setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList, placeholdersList,
+    const { setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, setListLanguages
     } = useContext(ScreensContext);
     const idTemplate = useParams();
@@ -116,7 +115,7 @@ const EditTemplate = () => {
      */
     const getPlaceholdersApi = async (idContext) => {
         try {
-            const response = await getPlaceholdersContexts(idContext);
+            const response = await getPlaceholdersContexts(idContext, setAlert, setVisibleAlert);
             if (response) {
                 setPlaceholdersList(response);
             } else {
@@ -230,7 +229,6 @@ const EditTemplate = () => {
 
                 <div className="w-100 filters mt-5 p-1 rounded">
                     <DropDownTemplate
-                        contexts={contextsList}
                         templates={templates}
                         setTemplates={setTemplates}
                         selectedTemplate={selectedTemplate}

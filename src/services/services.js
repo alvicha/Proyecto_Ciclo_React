@@ -7,6 +7,7 @@ const endPointPostTemplate = process.env.REACT_APP_CREATE_TEMPLATE;
 const endPointUpdateTemplate = process.env.REACT_APP_UPDATE_TEMPLATE;
 const endPointDeleteTemplate = process.env.REACT_APP_DELETE_TEMPLATE;
 const endPointShowTemplateById = process.env.REACT_APP_SHOW_TEMPLATE;
+const endPointFilterInfoTemplates = process.env.REACT_APP_FILTER_TEMPLATE;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -51,6 +52,7 @@ export const getTemplatesContexts = async (id, setAlert, setVisibleAlert) => {
   try {
     if (endPointListTemplatesByContext) {
       const response = await fetch(`${endPointListTemplatesByContext}/${id}`);
+      console.log(response);
       if (response.ok) return await response.json();
     }
   } catch (error) {
@@ -88,8 +90,7 @@ export const listTemplateById = async (id, setAlert, setVisibleAlert) => {
 
 export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
   try {
-    let response = [];
-    response = [
+    const payload = [
       {
         "pageModel":
         {
@@ -108,7 +109,16 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
         }
       }
     ];
-    return response;
+
+    const response = await fetch(`${endPointFilterInfoTemplates}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Error al realizar el filtrado: " + error.message);
     setVisibleAlert(true);

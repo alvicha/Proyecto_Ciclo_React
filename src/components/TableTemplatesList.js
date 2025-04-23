@@ -14,8 +14,7 @@ import { Dialog } from "primereact/dialog";
 
 const TableTemplatesList = () => {
     const navigate = useNavigate();
-    const { setContextsList, filteredTemplates, templates, setTemplates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
-    const [pageTable, setPageTable] = useState(false);
+    const { setContextsList, totalPages, currentPage, templates, setTemplates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -74,13 +73,13 @@ const TableTemplatesList = () => {
                 for (const template of context.templates) {
                     updatedTemplates.push({
                         ...template,
-                        context: context?.code || "No hay contexto",
-                        contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '') || "No hay contenido",
+                        context: context?.code,
+                        contentText: template.data?.es?.content?.replace(/<[^>]+>/g, ''),
                     });
                 }
-                setTemplates(updatedTemplates);
             }
-
+            console.log("Plantillas actualkizadas: ", updatedTemplates);
+            setTemplates(updatedTemplates);
         } catch (error) {
             setAlert("Ha habido un error: " + error.message);
             setVisibleAlert(true);
@@ -98,19 +97,18 @@ const TableTemplatesList = () => {
     }
 
     useEffect(() => {
-        if (filteredTemplates.length === 0) {
-            getContextsTemplates();
-        }
+        getContextsTemplates();
     }, []);
 
     const handlePageChange = (event) => {
-        setPageTable(event.first)
+        console.log("hdieuhude", event);
         setRows(event.rows);
         const currentPage = event.first / event.rows;
         setCurrentPage(currentPage);
     };
 
-    const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
+    //const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
+    console.log(templates);
 
     return (
         <div className="card mb-3 ml-1">
@@ -120,20 +118,28 @@ const TableTemplatesList = () => {
 
             <Toast ref={toast} />
             <ConfirmDialog />
-            <DataTable value={templatesToDisplay} first={pageTable} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
-                paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} emptyMessage="No se han encontrado registros">
+            <DataTable
+                value={templates} first={currentPage * rows} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
+                paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                totalRecords={totalPages} emptyMessage="No se han encontrado registros">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
-                <Column field="context" header="Contexto" sortable style={{ width: '5%' }}></Column>
-                <Column field="name" header="Nombre" sortable style={{ width: '5%' }}></Column>
+                <Column
+                    body={(rowData) => rowData.context || "No hay contexto"}
+                    header="Contexto"
+                    sortable
+                    style={{ width: '5%' }}>
+                </Column>
+                <Column header="Nombre" body={(rowData) => rowData.code || "No hay nombre"} sortable style={{ width: '5%' }}></Column>
                 <Column
                     header="Asunto"
                     style={{ width: '20%' }}
                     body={(rowData) => rowData.data.es.subject || "No hay asunto"}
                 />
                 <Column
-                    field="contentText"
                     header="Contenido"
-                    style={{ width: '30%' }} />
+                    body={(rowData) => rowData.contentText || "No hay contenido"}
+                    style={{ width: '30%' }}
+                />
                 <Column header="Acciones" style={{ width: '20%' }} body={(rowData) => (
                     <div className="d-flex w-100 h-25">
                         <Button icon="pi pi-eye" className="rounded-pill mr-1" outlined severity="help" aria-label="Visualización" onClick={() => onShowDataTemplate(rowData)} />
@@ -145,17 +151,23 @@ const TableTemplatesList = () => {
                 )} />
             </DataTable>
 
-            {showModalDataTemplate && (
-                <ModalShowTemplate selectedTemplate={selectedTemplate} showModalDataTemplate={showModalDataTemplate} setShowModalDataTemplate={setShowModalDataTemplate} />
-            )}
+            {
+                showModalDataTemplate && (
+                    <ModalShowTemplate selectedTemplate={selectedTemplate} showModalDataTemplate={showModalDataTemplate} setShowModalDataTemplate={setShowModalDataTemplate} />
+                )
+            }
 
-            {visibleModalCreateTemplate && (
-                <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} getContextsTemplates={getContextsTemplates} setVisibleSuccessDialog={setVisibleSuccessDialog} />
-            )}
+            {
+                visibleModalCreateTemplate && (
+                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} getContextsTemplates={getContextsTemplates} setVisibleSuccessDialog={setVisibleSuccessDialog} />
+                )
+            }
 
-            {visibleAlert && (
-                <ModalError />
-            )}
+            {
+                visibleAlert && (
+                    <ModalError />
+                )
+            }
 
             <Dialog
                 header="Información"
@@ -166,7 +178,7 @@ const TableTemplatesList = () => {
             >
                 <p className="m-0">¡La plantilla se ha creado con éxito!</p>
             </Dialog>
-        </div>
+        </div >
     );
 };
 
