@@ -28,7 +28,6 @@ const FiltersTemplateList = () => {
     const filterDataTemplates = async () => {
         let data;
         try {
-            console.log(currentPage);
             if (optionContext && optionContext.code) {
                 data = {
                     nameTemplate: nameTemplate,
@@ -68,7 +67,6 @@ const FiltersTemplateList = () => {
 
     useEffect(() => {
         filterDataTemplates();
-        console.log(currentPage);
     }, [nameTemplate, optionContext, currentPage, rows]);
 
     return (
