@@ -52,7 +52,6 @@ export const getTemplatesContexts = async (id, setAlert, setVisibleAlert) => {
   try {
     if (endPointListTemplatesByContext) {
       const response = await fetch(`${endPointListTemplatesByContext}/${id}`);
-      console.log(response);
       if (response.ok) return await response.json();
     }
   } catch (error) {

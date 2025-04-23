@@ -78,7 +78,6 @@ const TableTemplatesList = () => {
                     });
                 }
             }
-            console.log("Plantillas actualkizadas: ", updatedTemplates);
             setTemplates(updatedTemplates);
         } catch (error) {
             setAlert("Ha habido un error: " + error.message);
