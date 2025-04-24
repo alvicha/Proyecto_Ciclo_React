@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router";
-import { deleteTemplateDB, getDataContexts } from "../services/services";
+import { deleteTemplateDB } from "../services/services";
 import ScreensContext from "../screens/ScreensContext";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -12,9 +12,9 @@ import { Toast } from "primereact/toast";
 import ModalError from "./ModalError";
 import { Dialog } from "primereact/dialog";
 
-const TableTemplatesList = () => {
+const TableTemplatesList = ({ getContextsTemplates }) => {
     const navigate = useNavigate();
-    const { setContextsList, totalPages, currentPage, templates, setTemplates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const { totalPages, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -59,33 +59,6 @@ const TableTemplatesList = () => {
         });
     };
 
-    const getContextsTemplates = async () => {
-        let updatedTemplates = [];
-        try {
-            const response = await getDataContexts(setAlert, setVisibleAlert);
-            if (!response || response.length === 0) {
-                setContextsList([]);
-                return;
-            }
-            setContextsList(response);
-
-            for (const context of response) {
-                for (const template of context.templates) {
-                    updatedTemplates.push({
-                        ...template,
-                        context: context?.code,
-                        contentText: template.data?.es?.content?.replace(/<[^>]+>/g, ''),
-                    });
-                }
-            }
-            setTemplates(updatedTemplates);
-        } catch (error) {
-            setAlert("Ha habido un error: " + error.message);
-            setVisibleAlert(true);
-            console.error("Error fetching contexts API:", error);
-        }
-    };
-
     const onShowDataTemplate = async (template) => {
         setSelectedTemplate(template);
         setShowModalDataTemplate(true);
@@ -95,12 +68,7 @@ const TableTemplatesList = () => {
         setvisibleModalCreateTemplate(true);
     }
 
-    useEffect(() => {
-        getContextsTemplates();
-    }, []);
-
     const handlePageChange = (event) => {
-        console.log("hdieuhude", event);
         setRows(event.rows);
         const currentPage = event.first / event.rows;
         setCurrentPage(currentPage);

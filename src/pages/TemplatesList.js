@@ -6,8 +6,41 @@ import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
 import FiltersTemplateList from '../components/FiltersTemplateList';
 import TableTemplatesList from '../components/TableTemplatesList';
+import { useContext } from 'react';
+import ScreensContext from '../screens/ScreensContext';
+import { getDataContexts } from '../services/services';
 
 const TemplatesList = () => {
+    const { setTemplates, setContextsList, setAlert, setVisibleAlert } = useContext(ScreensContext);
+
+    const getContextsTemplates = async () => {
+        let updatedTemplates = [];
+        try {
+            const response = await getDataContexts(setAlert, setVisibleAlert);
+            if (!response || response.length === 0) {
+                setContextsList([]);
+                return;
+            }
+
+            setContextsList(response);
+
+            for (const context of response) {
+                for (const template of context.templates) {
+                    updatedTemplates.push({
+                        ...template,
+                        context: context?.code,
+                        contentText: template.data?.es?.content?.replace(/<[^>]+>/g, ''),
+                    });
+                }
+            }
+            setTemplates(updatedTemplates);
+        } catch (error) {
+            setAlert("Ha habido un error: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error fetching contexts API:", error);
+        }
+    };
+
     return (
         <div>
             <h1 style={{
@@ -38,8 +71,8 @@ const TemplatesList = () => {
             }} />
 
             <div className='mt-5 m-1'>
-                <FiltersTemplateList />
-                <TableTemplatesList />
+                <FiltersTemplateList getContextsTemplates={getContextsTemplates} />
+                <TableTemplatesList getContextsTemplates={getContextsTemplates} />
             </div>
 
         </div>

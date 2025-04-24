@@ -5,9 +5,9 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import '../pages/summernote.css'
 import { Dialog } from "primereact/dialog";
-import { filterInfoTemplate } from "../services/services";
+import { filterInfoTemplate, getDataContexts } from "../services/services";
 
-const FiltersTemplateList = () => {
+const FiltersTemplateList = ({ getContextsTemplates }) => {
     const { contextsList, setTemplates, setCurrentPage, currentPage, setTotalPages, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -26,6 +26,11 @@ const FiltersTemplateList = () => {
     }
 
     const filterDataTemplates = async () => {
+        if (!nameTemplate && (!optionContext || optionContext.code === "Todos")) {
+            await getContextsTemplates();
+            return;
+        }
+
         let data;
         try {
             if (optionContext && optionContext.code) {
@@ -66,7 +71,11 @@ const FiltersTemplateList = () => {
     }, [optionContext, nameTemplate, isDisabled]);
 
     useEffect(() => {
-        filterDataTemplates();
+        if (nameTemplate || optionContext) {
+            filterDataTemplates();
+        } else {
+            getContextsTemplates();
+        }
     }, [nameTemplate, optionContext, currentPage, rows]);
 
     return (
