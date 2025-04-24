@@ -83,13 +83,11 @@ const DropdownTemplate = ({
         let selectedContext = contextsList.find(context => context.code === selectedCodeContext);
 
         if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
-            setPreviousTemplateName(nameTemplate);
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
             setTextButton("Cambiar contexto");
             setVisibleModalWarning(true);
 
             setConfirmAction(() => () => {
-                resetData();
                 onClickContextTemplate(selectedContext);
             });
         } else {
@@ -100,7 +98,7 @@ const DropdownTemplate = ({
 
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
-        if (selectedTemplateContent) {
+        if (selectedTemplateContent || nameTemplate !== "") {
             $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
         } else {
             setVisibleWarningVariables(true)
@@ -141,7 +139,6 @@ const DropdownTemplate = ({
 
         if (selectedTemplate !== null) {
             if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
-                setPreviousTemplateName(nameTemplate);
                 setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
                 setTextButton("Cambiar idioma");
                 setVisibleModalWarning(true);
@@ -176,8 +173,8 @@ const DropdownTemplate = ({
     };
 
     const onCancelChange = () => {
-        setNameTemplate(previousTemplateName);
         setVisibleModalWarning(false);
+        console.log(nameTemplate);
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
@@ -186,17 +183,14 @@ const DropdownTemplate = ({
         setShowVariables(true);
 
         if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
-            if (selectedTemplateContent !== currentContentSummernote || nameTemplate !== selectedCodeTemplate) {
-                setPreviousTemplateName(nameTemplate);
+            if (selectedTemplateContent !== currentContentSummernote) {
                 setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
                 setTextButton("Cambiar plantilla");
                 setVisibleModalWarning(true);
 
                 setConfirmAction(() => () => {
                     onClickContentTemplate(templateSelected);
-                    setTimeout(() => {
-                        $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
-                    }, 0);
+                    setNameTemplate(selectedCodeTemplate);
                 });
             }
         } else {

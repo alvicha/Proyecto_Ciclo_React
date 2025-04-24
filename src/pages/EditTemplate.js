@@ -148,7 +148,6 @@ const EditTemplate = () => {
                 code: nameTemplate,
                 data: updatedData
             };
-            console.log("Mi cuerpo es: ", body);
 
             const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
             if (response) {
@@ -168,6 +167,15 @@ const EditTemplate = () => {
     const onChangeNameTemplate = (event) => {
         setNameTemplate(event.target.value);
     };
+
+    useEffect(() => {
+        if (selectedContextDropdown) {
+            setNameTemplate("");
+            setSelectedTemplate("");
+            setSelectedTemplateContent("");
+            $(editorRef.current).summernote("code", "");
+        }
+    }, [selectedContextDropdown]);
 
     /**
      * Llama a las APIs de idiomas y contextos una vez al montar el componente.

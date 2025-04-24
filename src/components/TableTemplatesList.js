@@ -75,7 +75,6 @@ const TableTemplatesList = ({ getContextsTemplates }) => {
     };
 
     //const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
-    console.log(templates);
 
     return (
         <div className="card mb-3 ml-1">
