@@ -5,10 +5,10 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import '../pages/summernote.css'
 import { Dialog } from "primereact/dialog";
-import { filterInfoTemplate, getDataContexts } from "../services/services";
+import { filterInfoTemplate } from "../services/services";
 
 const FiltersTemplateList = ({ getContextsTemplates }) => {
-    const { contextsList, setTemplates, setCurrentPage, currentPage, setTotalPages, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { contextsList, setTemplates, currentPage, totalPages, setTotalPages, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [optionContext, setOptionContext] = useState(null);
@@ -26,11 +26,6 @@ const FiltersTemplateList = ({ getContextsTemplates }) => {
     }
 
     const filterDataTemplates = async () => {
-        if (!nameTemplate && (!optionContext || optionContext.code === "Todos")) {
-            await getContextsTemplates();
-            return;
-        }
-
         let data;
         try {
             if (optionContext && optionContext.code) {
@@ -48,15 +43,16 @@ const FiltersTemplateList = ({ getContextsTemplates }) => {
                     rows: rows
                 };
             }
-
+            
             const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
+            console.log(response);
 
             const cleanTemplates = response.map(template => ({
                 ...template,
                 contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '')
             }));
             setTemplates(cleanTemplates);
-            setTotalPages(response.total);
+            setTotalPages(response.total);            
         } catch (error) {
             console.error("Error al filtrar plantillas:", error);
         }

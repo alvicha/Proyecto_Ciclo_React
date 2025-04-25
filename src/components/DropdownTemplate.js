@@ -35,7 +35,6 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const [previousTemplateName, setPreviousTemplateName] = useState("");
     const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
@@ -63,7 +62,7 @@ const DropdownTemplate = ({
 
     const resetData = () => {
         setSelectedTemplate(null);
-        setSelectedTemplateContent("");
+        setSelectedTemplateContent(null);
         setNameTemplate("");
     };
 
@@ -137,7 +136,7 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
         setVisibleContexts(true);
 
-        if (selectedTemplate !== null) {
+        if (selectedTemplate) {
             if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
                 setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
                 setTextButton("Cambiar idioma");
@@ -174,7 +173,6 @@ const DropdownTemplate = ({
 
     const onCancelChange = () => {
         setVisibleModalWarning(false);
-        console.log(nameTemplate);
     };
 
     const handleTemplateChange = (selectedCodeTemplate) => {
@@ -189,7 +187,9 @@ const DropdownTemplate = ({
                 setVisibleModalWarning(true);
 
                 setConfirmAction(() => () => {
-                    onClickContentTemplate(templateSelected);
+                    setSelectedTemplate(templateSelected);
+                    setSelectedTemplateContent(templateSelected.data[codeLanguage].content); 
+                    $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
                     setNameTemplate(selectedCodeTemplate);
                 });
             }

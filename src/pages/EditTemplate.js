@@ -18,7 +18,7 @@ const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
-    const [selectedTemplate, setSelectedTemplate] = useState("");
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [selectedTemplateContent, setSelectedTemplateContent] = useState("");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
@@ -191,7 +191,7 @@ const EditTemplate = () => {
      */
     useEffect(() => {
         changeSummernoteLanguage(codeLanguage);
-    }, [codeLanguage, changeSummernoteLanguage]);
+    }, [codeLanguage, selectedTemplateContent]);
 
     useEffect(() => {
         if (selectedTemplateContent !== currentContent) {

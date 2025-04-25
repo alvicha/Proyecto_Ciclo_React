@@ -70,8 +70,8 @@ const TableTemplatesList = ({ getContextsTemplates }) => {
 
     const handlePageChange = (event) => {
         setRows(event.rows);
-        const currentPage = event.first / event.rows;
-        setCurrentPage(currentPage);
+        const newPage = event.first / event.rows;
+        setCurrentPage(newPage);
     };
 
     //const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
