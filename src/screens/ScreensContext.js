@@ -13,13 +13,13 @@ export const ScreensProvider = ({ children }) => {
   const [templates, setTemplates] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [rows, setRows] = useState(5);
-  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecordsTemplates, setTotalRecordsTemplates] = useState(0);
 
   return (
     <ScreensContext.Provider value={{
       context, setContext, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList,
       placeholdersList, setPlaceholdersList, templates, setTemplates, currentPage, setCurrentPage, rows, setRows, 
-      listLanguages, setListLanguages, totalPages, setTotalPages
+      listLanguages, setListLanguages, totalRecordsTemplates, setTotalRecordsTemplates
     }}>
       {children}
     </ScreensContext.Provider>

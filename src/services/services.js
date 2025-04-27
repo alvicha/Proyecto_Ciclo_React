@@ -1,6 +1,5 @@
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 const endPointContexts = process.env.REACT_APP_CONTEXTS;
-const endPointContextsById = process.env.REACT_APP_CONTEXTS_BY_ID;
 const endPointVariables = process.env.REACT_APP_VARIABLES;
 const endPointListTemplatesByContext = process.env.REACT_APP_TEMPLATES;
 const endPointPostTemplate = process.env.REACT_APP_CREATE_TEMPLATE;
@@ -61,19 +60,6 @@ export const getTemplatesContexts = async (id, setAlert, setVisibleAlert) => {
   }
 };
 
-export const listContextById = async (id, setAlert, setVisibleAlert) => {
-  try {
-    if (endPointContextsById) {
-      const response = await fetch(`${endPointContextsById}/${id}`);
-      if (response.ok) return await response.json();
-    }
-  } catch (error) {
-    setAlert("Error al obtener el contexto indicado: " + error);
-    setVisibleAlert(true);
-    return console.log(error);
-  }
-};
-
 export const listTemplateById = async (id, setAlert, setVisibleAlert) => {
   try {
     if (endPointShowTemplateById) {
@@ -93,7 +79,7 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
       {
         "pageModel":
         {
-          "page": data.page,
+          "page": data.page + 1,
           "size": data.rows,
           "orderBy": "id",
           "orientation": "desc"

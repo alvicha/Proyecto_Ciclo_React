@@ -6,40 +6,58 @@ import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
 import FiltersTemplateList from '../components/FiltersTemplateList';
 import TableTemplatesList from '../components/TableTemplatesList';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { filterInfoTemplate, getDataContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
-import { getDataContexts } from '../services/services';
 
 const TemplatesList = () => {
-    const { setTemplates, setContextsList, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { setContextsList, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
 
-    const getContextsTemplates = async () => {
-        let updatedTemplates = [];
+    const [optionContext, setOptionContext] = useState(null);
+    const [nameTemplateSearch, setNameTemplateSearch] = useState("");
+
+    const filterDataTemplates = async () => {
+        let data;
+        try {
+            data = {
+                nameTemplateSearch: nameTemplateSearch || null,
+                context: optionContext?.code || null,
+                page: currentPage,
+                rows: rows
+            }
+            await contextsApi();
+
+            const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
+
+            if (response) {
+                const cleanTemplates = response.templates.map(template => ({
+                    ...template,
+                    contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '')
+                }));
+                setTemplates(cleanTemplates);
+                setTotalRecordsTemplates(response.total);
+            }
+        } catch (error) {
+            console.error("Error al filtrar plantillas:", error);
+        }
+    }
+
+    const contextsApi = async () => {
         try {
             const response = await getDataContexts(setAlert, setVisibleAlert);
-            if (!response || response.length === 0) {
+            if (response) {
+                setContextsList(response);
+            } else {
                 setContextsList([]);
-                return;
             }
-
-            setContextsList(response);
-
-            for (const context of response) {
-                for (const template of context.templates) {
-                    updatedTemplates.push({
-                        ...template,
-                        context: context?.code,
-                        contentText: template.data?.es?.content?.replace(/<[^>]+>/g, ''),
-                    });
-                }
-            }
-            setTemplates(updatedTemplates);
         } catch (error) {
-            setAlert("Ha habido un error: " + error.message);
-            setVisibleAlert(true);
             console.error("Error fetching contexts API:", error);
         }
     };
+
+    useEffect(() => {
+        filterDataTemplates();
+    }, [nameTemplateSearch, optionContext, currentPage, rows]);
 
     return (
         <div>
@@ -71,8 +89,13 @@ const TemplatesList = () => {
             }} />
 
             <div className='mt-5 m-1'>
-                <FiltersTemplateList getContextsTemplates={getContextsTemplates} />
-                <TableTemplatesList getContextsTemplates={getContextsTemplates} />
+                <FiltersTemplateList nameTemplateSearch={nameTemplateSearch}
+                    setNameTemplateSearch={setNameTemplateSearch}
+                    optionContext={optionContext}
+                    setOptionContext={setOptionContext}
+                    filterDataTemplates={filterDataTemplates}
+                />
+                <TableTemplatesList filterDataTemplates={filterDataTemplates} />
             </div>
 
         </div>

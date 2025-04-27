@@ -10,40 +10,35 @@ import ModalCreateTemplate from "./ModalCreateTemplate";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import { Toast } from "primereact/toast";
 import ModalError from "./ModalError";
-import { Dialog } from "primereact/dialog";
 
-const TableTemplatesList = ({ getContextsTemplates }) => {
+const TableTemplatesList = ({ filterDataTemplates }) => {
     const navigate = useNavigate();
-    const { totalPages, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const { totalRecordsTemplates, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
-    const [visibleSuccessDialog, setVisibleSuccessDialog] = useState(false);
 
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
     const paginatorRight = <Button type="button" icon="pi pi-download" text />;
-
     const toast = useRef(null);
 
     const accept = async (idTemplate) => {
         try {
-            await deleteTemplateDB(idTemplate, setAlert, setVisibleAlert);
-            await getContextsTemplates();
-            toast.current.show({ severity: 'info', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
+            const response = await deleteTemplateDB(idTemplate, setAlert, setVisibleAlert);
+            await filterDataTemplates();
+
+            if (response) {
+                toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
+                console.log("deuidgyuegdyueg", toast)
+            }
         } catch (error) {
-            console.error("Error fetching contexts API:", error);
+            console.error("Error deleting templates API:", error);
         }
     }
 
     const reject = () => {
-        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Operación cancelada', life: 3000 });
+        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'No se ha eliminado', life: 3000 });
     }
-
-    const footerContent = (
-        <div>
-            <Button label="Aceptar" className='rounded-pill buttons mt-3' icon="pi pi-check" onClick={() => setVisibleSuccessDialog(false)} autoFocus />
-        </div>
-    );
 
     const onDeleteTemplate = (idTemplate) => {
         confirmDialog({
@@ -86,8 +81,8 @@ const TableTemplatesList = ({ getContextsTemplates }) => {
             <ConfirmDialog />
             <DataTable
                 value={templates} first={currentPage * rows} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
-                paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                totalRecords={totalPages} emptyMessage="No se han encontrado registros">
+                lazy paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                totalRecords={totalRecordsTemplates} emptyMessage="No se han encontrado registros">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
                 <Column
                     body={(rowData) => rowData.context || "No hay contexto"}
@@ -125,7 +120,7 @@ const TableTemplatesList = ({ getContextsTemplates }) => {
 
             {
                 visibleModalCreateTemplate && (
-                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} getContextsTemplates={getContextsTemplates} setVisibleSuccessDialog={setVisibleSuccessDialog} />
+                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} filterDataTemplates={filterDataTemplates} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} toast={toast}/>
                 )
             }
 
@@ -134,16 +129,6 @@ const TableTemplatesList = ({ getContextsTemplates }) => {
                     <ModalError />
                 )
             }
-
-            <Dialog
-                header="Información"
-                footer={footerContent}
-                visible={visibleSuccessDialog}
-                style={{ width: '50vw' }}
-                onHide={() => setVisibleSuccessDialog(false)}
-            >
-                <p className="m-0">¡La plantilla se ha creado con éxito!</p>
-            </Dialog>
         </div >
     );
 };

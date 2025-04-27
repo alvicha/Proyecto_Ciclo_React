@@ -5,14 +5,11 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import '../pages/summernote.css'
 import { Dialog } from "primereact/dialog";
-import { filterInfoTemplate } from "../services/services";
 
-const FiltersTemplateList = ({ getContextsTemplates }) => {
-    const { contextsList, setTemplates, currentPage, totalPages, setTotalPages, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
+const FiltersTemplateList = ({nameTemplate, setNameTemplateSearch, optionContext, setOptionContext}) => {
+    const { contextsList } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [optionContext, setOptionContext] = useState(null);
-    const [nameTemplate, setNameTemplate] = useState("");
     const [visibleWarning, setVisibleWarning] = useState(false);
 
     const onHandleButton = () => {
@@ -21,41 +18,8 @@ const FiltersTemplateList = ({ getContextsTemplates }) => {
     }
 
     const handleClearData = () => {
-        setNameTemplate("");
+        setNameTemplateSearch("");
         setOptionContext(null);
-    }
-
-    const filterDataTemplates = async () => {
-        let data;
-        try {
-            if (optionContext && optionContext.code) {
-                data = {
-                    nameTemplate: nameTemplate,
-                    context: optionContext.code,
-                    page: currentPage,
-                    rows: rows
-                }
-            } else {
-                data = {
-                    nameTemplate: nameTemplate,
-                    context: null,
-                    page: currentPage,
-                    rows: rows
-                };
-            }
-            
-            const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
-            console.log(response);
-
-            const cleanTemplates = response.map(template => ({
-                ...template,
-                contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '')
-            }));
-            setTemplates(cleanTemplates);
-            setTotalPages(response.total);            
-        } catch (error) {
-            console.error("Error al filtrar plantillas:", error);
-        }
     }
 
     useEffect(() => {
@@ -65,14 +29,6 @@ const FiltersTemplateList = ({ getContextsTemplates }) => {
             setIsDisabled(true);
         }
     }, [optionContext, nameTemplate, isDisabled]);
-
-    useEffect(() => {
-        if (nameTemplate || optionContext) {
-            filterDataTemplates();
-        } else {
-            getContextsTemplates();
-        }
-    }, [nameTemplate, optionContext, currentPage, rows]);
 
     return (
         <div className="mb-4 border ml-1">
@@ -99,7 +55,7 @@ const FiltersTemplateList = ({ getContextsTemplates }) => {
                         )}
                         <div>
                             <p className="font-weight-bold text-left">Buscar</p>
-                            <InputText value={nameTemplate} placeholder="Nombre" onChange={(e) => setNameTemplate(e.target.value)} style={{ width: "450px" }} />
+                            <InputText value={nameTemplate} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "450px" }} />
                         </div>
                     </div>
                     <div className="text-left mt-2">

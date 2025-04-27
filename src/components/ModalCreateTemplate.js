@@ -5,10 +5,11 @@ import { useContext, useEffect, useState } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 import { Dropdown } from 'primereact/dropdown';
 import { createTemplate, getDataApi } from '../services/services';
+import { Toast } from "primereact/toast";
 
-const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, getContextsTemplates, setVisibleSuccessDialog }) => {
-    const [nameTemplate, setNameTemplate] = useState("");
+const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, filterDataTemplates, toast }) => {
     const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);
+    const [nameTemplate, setNameTemplate] = useState("");
     const [selectedContextTemplate, setSelectedContextTemplate] = useState("");
 
     const handleContextTemplateChange = (event) => {
@@ -46,9 +47,9 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
 
             const response = await createTemplate(body, setAlert, setVisibleAlert);
             if (response) {
+                toast.current.show({ severity: 'success', summary: 'Éxito', detail: 'Plantilla creada con éxito' });
                 setvisibleModalCreateTemplate(false);
-                setVisibleSuccessDialog(true);
-                await getContextsTemplates();
+                await filterDataTemplates();
             }
         } catch (error) {
             setAlert("Error al crear la plantilla: " + error.message);
@@ -93,7 +94,8 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 </div>
             </Dialog>
         </div>
-    )
+    );
+
 };
 
 export default ModalCreateTemplate;
