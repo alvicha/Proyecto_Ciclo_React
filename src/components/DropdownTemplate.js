@@ -27,7 +27,11 @@ const DropdownTemplate = ({
     placeholdersList,
     getPlaceholdersApi,
     nameTemplate,
-    setNameTemplate }) => {
+    setNameTemplate,
+    subjectTemplate,
+    setSubjectTemplate,
+    originalSubjectTemplate,
+    setOriginalSubjectTemplate }) => {
 
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
@@ -62,8 +66,10 @@ const DropdownTemplate = ({
 
     const resetData = () => {
         setSelectedTemplate(null);
-        setSelectedTemplateContent(null);
+        setSelectedTemplateContent("");
         setNameTemplate("");
+        setSubjectTemplate("");
+        setOriginalSubjectTemplate("");
     };
 
     const onClickContextTemplate = (selectedContext) => {
@@ -75,13 +81,15 @@ const DropdownTemplate = ({
     const onClickContentTemplate = (templateSelected) => {
         setSelectedTemplate(templateSelected);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
+        setSubjectTemplate(templateSelected.data[codeLanguage].subject);
+        setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
     };
 
     const handleContextChange = (selectedCodeContext) => {
         const currentContentSummernote = $(context.current).summernote('code');
         let selectedContext = contextsList.find(context => context.code === selectedCodeContext);
 
-        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
+        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
             setTextButton("Cambiar contexto");
             setVisibleModalWarning(true);
@@ -137,7 +145,7 @@ const DropdownTemplate = ({
         setVisibleContexts(true);
 
         if (selectedTemplate) {
-            if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
+            if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
                 setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
                 setTextButton("Cambiar idioma");
                 setVisibleModalWarning(true);
@@ -146,6 +154,8 @@ const DropdownTemplate = ({
                     if (selectedTemplate) {
                         setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
                         setNameTemplate(selectedTemplate.code);
+                        setSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
+                        setOriginalSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
                         setSelectedLanguageDropdown(selectedLanguage.value);
                         setCodeLanguage(selectedLanguage.code);
                     } else {
@@ -156,6 +166,8 @@ const DropdownTemplate = ({
                 });
             } else {
                 setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
+                setSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
+                setOriginalSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
                 setSelectedLanguageDropdown(selectedLanguage.value);
                 setCodeLanguage(selectedLanguage.code);
             }
@@ -180,22 +192,24 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
         setShowVariables(true);
 
-        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote)) {
-            if (selectedTemplateContent !== currentContentSummernote) {
-                setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
-                setTextButton("Cambiar plantilla");
-                setVisibleModalWarning(true);
+        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || originalSubjectTemplate !== subjectTemplate) {
+            setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
+            setTextButton("Cambiar plantilla");
+            setVisibleModalWarning(true);
 
-                setConfirmAction(() => () => {
-                    setSelectedTemplate(templateSelected);
-                    setSelectedTemplateContent(templateSelected.data[codeLanguage].content); 
-                    $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
-                    setNameTemplate(selectedCodeTemplate);
-                });
-            }
+            setConfirmAction(() => () => {
+                setSelectedTemplate(templateSelected);
+                setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
+                $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
+                setNameTemplate(selectedCodeTemplate);
+                setSubjectTemplate(templateSelected.data[codeLanguage].subject);
+                setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
+            });
         } else {
             onClickContentTemplate(templateSelected);
             setNameTemplate(selectedCodeTemplate);
+            setSubjectTemplate(templateSelected.data[codeLanguage].subject);
+            setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
         }
     };
 

@@ -25,6 +25,7 @@ const EditTemplate = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [visibleModalUpdate, setVisibleModalUpdate] = useState(null);
     const [currentContent, setCurrentContent] = useState("");
+    const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
 
     const { setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, setListLanguages
@@ -85,10 +86,11 @@ const EditTemplate = () => {
     const getSelectedTemplateEditor = async () => {
         try {
             const response = await listTemplateById(idTemplate.id, setAlert, setVisibleAlert);
-            console.log(response);
             setSelectedTemplate(response);
             setNameTemplate(response.code);
-            setSelectedTemplateContent(response.data?.es?.content);
+            setSubjectTemplate(response.data[codeLanguage].subject);
+            setOriginalSubjectTemplate(response.data[codeLanguage].subject);
+            setSelectedTemplateContent(response.data[codeLanguage].content);
         } catch (error) {
             console.log(error);
         }
@@ -138,6 +140,7 @@ const EditTemplate = () => {
             event.preventDefault();
             const currentContent = $(editorRef.current).summernote('code');
             setSelectedTemplateContent(currentContent);
+            setOriginalSubjectTemplate(subjectTemplate);
 
             const updatedData = { ...selectedTemplate.data };
 
@@ -175,9 +178,18 @@ const EditTemplate = () => {
         setSubjectTemplate(event.target.value);
     };
 
+    const cleanHTML = (html) => {
+        return html.replace(/<br\s*\/?>/gi, '')
+            .replace(/&nbsp;/gi, '')
+            .replace(/\s+/g, '')
+            .replace(/<[^>]*>/g, '')
+            .trim();
+    };
+
     useEffect(() => {
         if (selectedContextDropdown) {
             setNameTemplate("");
+            setSubjectTemplate("")
             setSelectedTemplate("");
             setSelectedTemplateContent("");
             $(editorRef.current).summernote("code", "");
@@ -201,12 +213,15 @@ const EditTemplate = () => {
     }, [codeLanguage, selectedTemplateContent]);
 
     useEffect(() => {
-        if (selectedTemplateContent !== currentContent) {
+        const cleanedCurrentContent = cleanHTML(currentContent);
+        const cleanedOriginalContent = cleanHTML(selectedTemplateContent);
+
+        if (cleanedOriginalContent !== cleanedCurrentContent || subjectTemplate !== originalSubjectTemplate) {
             setVisibleActionButton(true);
         } else {
             setVisibleActionButton(false);
         }
-    }, [selectedTemplateContent, currentContent]);
+    }, [selectedTemplateContent, currentContent, subjectTemplate, originalSubjectTemplate]);
 
     const footerContentModalUpdate = (
         <div>
@@ -260,16 +275,20 @@ const EditTemplate = () => {
                         getPlaceholdersApi={getPlaceholdersApi}
                         nameTemplate={nameTemplate}
                         setNameTemplate={setNameTemplate}
+                        subjectTemplate={subjectTemplate}
+                        setSubjectTemplate={setSubjectTemplate}
+                        originalSubjectTemplate={originalSubjectTemplate}
+                        setOriginalSubjectTemplate={setOriginalSubjectTemplate}
                     />
                 </div>
 
-                <div className="d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
+                <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
                     <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
                     <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
-                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
+                        className="form-control w-25" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
                 </div>
 
-                <div className="d-flex justify-content-center mt-3 mb-3 p-2 rounded">
+                <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
                     <label for="subjectTemplate" className="font-weight-bold m-2">Asunto:</label>
                     <input type="text" value={subjectTemplate} onChange={onChangeSubjectTemplate}
                         className="form-control w-50" id="subject" aria-describedby="subject" placeholder="Introduce asunto de plantilla" />
