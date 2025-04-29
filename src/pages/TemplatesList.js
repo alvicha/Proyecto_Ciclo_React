@@ -20,7 +20,7 @@ const TemplatesList = () => {
         let data;
         try {
             data = {
-                nameTemplateSearch: nameTemplateSearch || null,
+                search: nameTemplateSearch || null,
                 context: optionContext?.code || null,
                 page: currentPage,
                 rows: rows
@@ -28,6 +28,7 @@ const TemplatesList = () => {
             await contextsApi();
 
             const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
+            console.log("Respuesta: ", response);
 
             if (response) {
                 const cleanTemplates = response.templates.map(template => ({

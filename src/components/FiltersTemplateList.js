@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import '../pages/summernote.css'
 import { Dialog } from "primereact/dialog";
 
-const FiltersTemplateList = ({nameTemplate, setNameTemplateSearch, optionContext, setOptionContext}) => {
+const FiltersTemplateList = ({nameTemplateSearch, setNameTemplateSearch, optionContext, setOptionContext}) => {
     const { contextsList } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -23,12 +23,12 @@ const FiltersTemplateList = ({nameTemplate, setNameTemplateSearch, optionContext
     }
 
     useEffect(() => {
-        if (nameTemplate !== "" || optionContext !== null) {
+        if (nameTemplateSearch !== "" || optionContext !== null) {
             setIsDisabled(false);
         } else {
             setIsDisabled(true);
         }
-    }, [optionContext, nameTemplate, isDisabled]);
+    }, [optionContext, nameTemplateSearch, isDisabled]);
 
     return (
         <div className="mb-4 border ml-1">
@@ -55,7 +55,7 @@ const FiltersTemplateList = ({nameTemplate, setNameTemplateSearch, optionContext
                         )}
                         <div>
                             <p className="font-weight-bold text-left">Buscar</p>
-                            <InputText value={nameTemplate} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "450px" }} />
+                            <InputText value={nameTemplateSearch} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "450px" }} />
                         </div>
                     </div>
                     <div className="text-left mt-2">

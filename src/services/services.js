@@ -86,7 +86,7 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
         },
         "filter":
         {
-          "search": data.nameTemplate,
+          "search": data.search,
           "context": data.context,
           "department": null,
           "assignedWorker": null,
