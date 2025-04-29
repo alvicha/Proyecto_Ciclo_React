@@ -16,6 +16,7 @@ import { Dialog } from 'primereact/dialog';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
+    const [subjectTemplate, setSubjectTemplate] = useState(null);
     const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -84,6 +85,7 @@ const EditTemplate = () => {
     const getSelectedTemplateEditor = async () => {
         try {
             const response = await listTemplateById(idTemplate.id, setAlert, setVisibleAlert);
+            console.log(response);
             setSelectedTemplate(response);
             setNameTemplate(response.code);
             setSelectedTemplateContent(response.data?.es?.content);
@@ -142,7 +144,7 @@ const EditTemplate = () => {
             //se actualizara solamente el contenido del idioma que hayamos seleccionado
             updatedData[codeLanguage] = {
                 content: currentContent,
-                subject: selectedTemplate?.data?.[codeLanguage]?.subject
+                subject: subjectTemplate
             };
 
             let body = {
@@ -167,6 +169,10 @@ const EditTemplate = () => {
      */
     const onChangeNameTemplate = (event) => {
         setNameTemplate(event.target.value);
+    };
+
+    const onChangeSubjectTemplate = (event) => {
+        setSubjectTemplate(event.target.value);
     };
 
     useEffect(() => {
@@ -257,13 +263,19 @@ const EditTemplate = () => {
                     />
                 </div>
 
-                <div className="form-group d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
+                <div className="d-flex justify-content-center border border-success mt-2 mb-2 p-2 rounded">
                     <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
                     <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
                         className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
                 </div>
 
-                <div className="form-group mb-3">
+                <div className="d-flex justify-content-center mt-3 mb-3 p-2 rounded">
+                    <label for="subjectTemplate" className="font-weight-bold m-2">Asunto:</label>
+                    <input type="text" value={subjectTemplate} onChange={onChangeSubjectTemplate}
+                        className="form-control w-50" id="subject" aria-describedby="subject" placeholder="Introduce asunto de plantilla" />
+                </div>
+
+                <div className="mb-3">
                     <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                 </div>
                 <div className="text-center mt-4">

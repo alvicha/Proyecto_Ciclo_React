@@ -11,7 +11,7 @@ import { filterInfoTemplate, getDataContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
 
 const TemplatesList = () => {
-    const { setContextsList, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
 
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplateSearch, setNameTemplateSearch] = useState("");
@@ -19,11 +19,15 @@ const TemplatesList = () => {
     const filterDataTemplates = async () => {
         let data;
         try {
+            setLoading(true);
+
             data = {
                 search: nameTemplateSearch || null,
                 context: optionContext?.code || null,
                 page: currentPage,
-                rows: rows
+                rows: rows,
+                column: selectedColumnTable,
+                orientation: selectedSortOrder === 1 ? "asc" : "desc"
             }
             await contextsApi();
 
@@ -37,9 +41,12 @@ const TemplatesList = () => {
                 }));
                 setTemplates(cleanTemplates);
                 setTotalRecordsTemplates(response.total);
+                setLoading(false);
             }
         } catch (error) {
             console.error("Error al filtrar plantillas:", error);
+        } finally {
+            setLoading(false);
         }
     }
 

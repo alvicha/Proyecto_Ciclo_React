@@ -81,8 +81,8 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
         {
           "page": data.page + 1,
           "size": data.rows,
-          "orderBy": "id",
-          "orientation": "desc"
+          "orderBy": data.column,
+          "orientation": data.orientation
         },
         "filter":
         {

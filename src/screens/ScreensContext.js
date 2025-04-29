@@ -14,12 +14,16 @@ export const ScreensProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [rows, setRows] = useState(5);
   const [totalRecordsTemplates, setTotalRecordsTemplates] = useState(0);
+  const [selectedColumnTable, setSelectedColumnTable] = useState(null);
+  const [selectedSortOrder, setSelectedSortOrder] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   return (
     <ScreensContext.Provider value={{
       context, setContext, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList,
-      placeholdersList, setPlaceholdersList, templates, setTemplates, currentPage, setCurrentPage, rows, setRows, 
-      listLanguages, setListLanguages, totalRecordsTemplates, setTotalRecordsTemplates
+      placeholdersList, setPlaceholdersList, templates, setTemplates, currentPage, setCurrentPage, rows, setRows,
+      listLanguages, setListLanguages, totalRecordsTemplates, setTotalRecordsTemplates, selectedColumnTable, setSelectedColumnTable, loading,
+      setLoading, selectedSortOrder, setSelectedSortOrder
     }}>
       {children}
     </ScreensContext.Provider>

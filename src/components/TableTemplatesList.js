@@ -13,7 +13,7 @@ import ModalError from "./ModalError";
 
 const TableTemplatesList = ({ filterDataTemplates }) => {
     const navigate = useNavigate();
-    const { totalRecordsTemplates, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const { totalRecordsTemplates, loading, selectedSortOrder, setSelectedSortOrder, selectedColumnTable, setSelectedColumnTable, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -63,11 +63,13 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
         setvisibleModalCreateTemplate(true);
     }
 
-    const handlePageChange = (event) => {
+    const onPage = (event) => {
         setRows(event.rows);
         const newPage = event.first / event.rows;
         setCurrentPage(newPage);
     };
+
+    console.log(selectedColumnTable);
 
     //const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
 
@@ -80,23 +82,31 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
             <Toast ref={toast} />
             <ConfirmDialog />
             <DataTable
-                value={templates} first={currentPage * rows} showGridlines paginator rows={rows} onPage={handlePageChange} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
-                lazy paginatorLeft={paginatorLeft} paginatorRight={paginatorRight} paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                totalRecords={totalRecordsTemplates} emptyMessage="No se han encontrado registros">
+                value={templates} first={currentPage * rows} showGridlines paginator rows={rows} onPage={onPage} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
+                lazy paginatorLeft={paginatorLeft} loading={loading} paginatorRight={paginatorRight} paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                totalRecords={totalRecordsTemplates} sortField={selectedColumnTable} sortOrder={selectedSortOrder}
+                onSort={(e) => {
+                    setSelectedColumnTable(e.sortField);
+                    setSelectedSortOrder(e.sortOrder);
+                    filterDataTemplates();
+                }}
+                emptyMessage="No se han encontrado registros">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>
-                <Column
+                <Column field="context"
                     body={(rowData) => rowData.context || "No hay contexto"}
                     header="Contexto"
                     sortable
                     style={{ width: '5%' }}>
                 </Column>
-                <Column header="Nombre" body={(rowData) => rowData.code || "No hay nombre"} sortable style={{ width: '5%' }}></Column>
+                <Column field="code" header="Nombre" body={(rowData) => rowData.code || "No hay nombre"} sortable style={{ width: '5%' }}></Column>
                 <Column
+                    field="subject"
                     header="Asunto"
                     style={{ width: '20%' }}
                     body={(rowData) => rowData.data.es.subject || "No hay asunto"}
                 />
                 <Column
+                    field="content"
                     header="Contenido"
                     body={(rowData) => rowData.contentText || "No hay contenido"}
                     style={{ width: '30%' }}
@@ -120,7 +130,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
 
             {
                 visibleModalCreateTemplate && (
-                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} filterDataTemplates={filterDataTemplates} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} toast={toast}/>
+                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} filterDataTemplates={filterDataTemplates} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} toast={toast} />
                 )
             }
 
