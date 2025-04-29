@@ -285,7 +285,7 @@ const EditTemplate = () => {
                 <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
                     <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
                     <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
-                        className="form-control w-25" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
+                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
                 </div>
 
                 <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
