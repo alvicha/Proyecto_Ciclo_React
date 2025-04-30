@@ -203,6 +203,32 @@ const EditTemplate = () => {
             .trim();
     };
 
+    const isTemplateModified = () => {
+        const currentContentSummernote = $(editorRef.current).summernote('code');
+
+        const cleanHtml = (html) => {
+            const $html = $('<div>').html(html);
+
+            // Elimina <br>, espacios vacíos y etiquetas sin texto
+            $html.find('br').remove();
+            $html.find('*').each(function () {
+                if ($(this).text().trim() === '' && $(this).children().length === 0 && !$(this).is('img')) {
+                    $(this).remove();
+                }
+            });
+
+            return $html.html().trim();
+        };
+
+        const cleanedInitial = cleanHtml(selectedTemplateContent);
+        const cleanedCurrent = cleanHtml(currentContentSummernote);
+
+        return (
+            cleanedInitial !== cleanedCurrent ||
+            (subjectTemplate ?? "").trim() !== (originalSubjectTemplate ?? "").trim()
+        );
+    };
+
     useEffect(() => {
         if (selectedContextDropdown) {
             setNameTemplate("");
@@ -241,10 +267,7 @@ const EditTemplate = () => {
     }, [codeLanguage, selectedTemplateContent]);
 
     useEffect(() => {
-        const cleanedCurrentContent = cleanHTML(currentContent);
-        const cleanedOriginalContent = cleanHTML(selectedTemplateContent);
-
-        if (cleanedOriginalContent !== cleanedCurrentContent || subjectTemplate !== originalSubjectTemplate) {
+        if (isTemplateModified()) {
             setVisibleActionButton(true);
         } else {
             setVisibleActionButton(false);
@@ -303,6 +326,7 @@ const EditTemplate = () => {
                         originalSubjectTemplate={originalSubjectTemplate}
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
                         cleanHTML={cleanHTML}
+                        isTemplateModified={isTemplateModified}
                     />
                 </div>
 

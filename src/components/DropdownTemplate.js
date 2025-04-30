@@ -31,7 +31,8 @@ const DropdownTemplate = ({
     setSubjectTemplate,
     originalSubjectTemplate,
     setOriginalSubjectTemplate,
-    cleanHTML }) => {
+    cleanHTML,
+    isTemplateModified }) => {
 
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
@@ -86,15 +87,9 @@ const DropdownTemplate = ({
     };
 
     const handleContextChange = (selectedCodeContext) => {
-        const currentContentSummernote = $(context.current).summernote('code');
         let selectedContext = contextsList.find(context => context.code === selectedCodeContext);
 
-        if (normalizeHtmlContentWithoutPhoto(selectedTemplateContent) !== normalizeHtmlContentWithoutPhoto(currentContentSummernote) || normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
-            console.log(normalizeHtml(selectedTemplateContent));
-            console.log(normalizeHtml(currentContentSummernote));
-            console.log(originalSubjectTemplate);
-            console.log(subjectTemplate);
-
+        if (isTemplateModified()) {
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
             setTextButton("Cambiar contexto");
             setVisibleModalWarning(true);
@@ -140,22 +135,12 @@ const DropdownTemplate = ({
         }
     };
 
-    const normalizeHtml = (html) => {
-        return $('<div>').html(html).text(); // Elimina escapes como \", &quot;, etc.
-    };
-
-    const normalizeHtmlContentWithoutPhoto = (html) => {
-        let $html = $('<div>').html(html);
-        return $html.html();
-    };
-
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
-        const currentContentSummernote = $(context.current).summernote('code');
         setVisibleContexts(true);
 
         if (selectedTemplate) {
-            if (normalizeHtmlContentWithoutPhoto(selectedTemplateContent) !== normalizeHtmlContentWithoutPhoto(currentContentSummernote) || normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
+            if (isTemplateModified()) {
                 setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
                 setTextButton("Cambiar idioma");
                 setVisibleModalWarning(true);
@@ -199,10 +184,9 @@ const DropdownTemplate = ({
 
     const handleTemplateChange = (selectedCodeTemplate) => {
         const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
-        const currentContentSummernote = $(context.current).summernote('code');
         setShowVariables(true);
 
-        if (normalizeHtmlContentWithoutPhoto(selectedTemplateContent) !== normalizeHtmlContentWithoutPhoto(currentContentSummernote) || normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || originalSubjectTemplate !== subjectTemplate) {
+        if (isTemplateModified()) {
             setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
             setTextButton("Cambiar plantilla");
             setVisibleModalWarning(true);
