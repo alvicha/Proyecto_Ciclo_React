@@ -232,7 +232,7 @@ const EditTemplate = () => {
         if (listLanguages.length > 0 && !codeLanguage) {
             setCodeLanguage("es");
         }
-    }, [listLanguages]);
+    }, [listLanguages, codeLanguage]);
 
     /**
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
