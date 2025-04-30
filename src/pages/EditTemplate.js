@@ -23,11 +23,10 @@ const EditTemplate = () => {
     const [selectedTemplateContent, setSelectedTemplateContent] = useState("");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
-    const [currentContent, setCurrentContent] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
     const toast = useRef(null);
 
-    const { setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
+    const { currentContent, setCurrentContent, setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages
     } = useContext(ScreensContext);
     const idTemplate = useParams();
@@ -156,15 +155,15 @@ const EditTemplate = () => {
     const onUpdateTemplate = async (event) => {
         try {
             event.preventDefault();
-            const currentContent = $(editorRef.current).summernote('code');
-            setSelectedTemplateContent(currentContent);
+            const currentContentSummernote = $(editorRef.current).summernote('code');
+            setSelectedTemplateContent(currentContentSummernote);
             setOriginalSubjectTemplate(subjectTemplate);
 
             const updatedData = { ...selectedTemplate.data };
 
             //se actualizara solamente el contenido del idioma que hayamos seleccionado
             updatedData[codeLanguage] = {
-                content: currentContent,
+                content: currentContentSummernote,
                 subject: subjectTemplate
             };
 
@@ -303,6 +302,7 @@ const EditTemplate = () => {
                         setSubjectTemplate={setSubjectTemplate}
                         originalSubjectTemplate={originalSubjectTemplate}
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
+                        cleanHTML={cleanHTML}
                     />
                 </div>
 

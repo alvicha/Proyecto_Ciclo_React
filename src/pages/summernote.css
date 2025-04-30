@@ -121,7 +121,7 @@ header {
 }
 
 .p-paginator .p-paginator-page:hover {
-    background-color: #f0f0f0;
+    background-color: #ebe8e8;
     transform: scale(1.05);
 }
 

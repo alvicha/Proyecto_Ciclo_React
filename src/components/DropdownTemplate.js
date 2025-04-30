@@ -30,7 +30,8 @@ const DropdownTemplate = ({
     subjectTemplate,
     setSubjectTemplate,
     originalSubjectTemplate,
-    setOriginalSubjectTemplate }) => {
+    setOriginalSubjectTemplate,
+    cleanHTML }) => {
 
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
@@ -38,7 +39,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
+    const { currentContent, context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -74,6 +75,7 @@ const DropdownTemplate = ({
         setContextDropDown(selectedContext.code);
         getTemplatesApi(selectedContext.id);
         getPlaceholdersApi(selectedContext.id);
+        setOriginalSubjectTemplate("");
     };
 
     const onClickContentTemplate = (templateSelected) => {
@@ -87,7 +89,12 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
         let selectedContext = contextsList.find(context => context.code === selectedCodeContext);
 
-        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
+        if (normalizeHtmlContentWithoutPhoto(selectedTemplateContent) !== normalizeHtmlContentWithoutPhoto(currentContentSummernote) || normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
+            console.log(normalizeHtml(selectedTemplateContent));
+            console.log(normalizeHtml(currentContentSummernote));
+            console.log(originalSubjectTemplate);
+            console.log(subjectTemplate);
+
             setWarningMessage("¿Estás seguro de que deseas cambiar de contexto? Se perderán los cambios.");
             setTextButton("Cambiar contexto");
             setVisibleModalWarning(true);
@@ -137,13 +144,18 @@ const DropdownTemplate = ({
         return $('<div>').html(html).text(); // Elimina escapes como \", &quot;, etc.
     };
 
+    const normalizeHtmlContentWithoutPhoto = (html) => {
+        let $html = $('<div>').html(html);
+        return $html.html();
+    };
+
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
         const currentContentSummernote = $(context.current).summernote('code');
         setVisibleContexts(true);
 
         if (selectedTemplate) {
-            if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
+            if (normalizeHtmlContentWithoutPhoto(selectedTemplateContent) !== normalizeHtmlContentWithoutPhoto(currentContentSummernote) || normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || subjectTemplate !== originalSubjectTemplate) {
                 setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
                 setTextButton("Cambiar idioma");
                 setVisibleModalWarning(true);
@@ -190,7 +202,7 @@ const DropdownTemplate = ({
         const currentContentSummernote = $(context.current).summernote('code');
         setShowVariables(true);
 
-        if (normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || originalSubjectTemplate !== subjectTemplate) {
+        if (normalizeHtmlContentWithoutPhoto(selectedTemplateContent) !== normalizeHtmlContentWithoutPhoto(currentContentSummernote) || normalizeHtml(selectedTemplateContent) !== normalizeHtml(currentContentSummernote) || originalSubjectTemplate !== subjectTemplate) {
             setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
             setTextButton("Cambiar plantilla");
             setVisibleModalWarning(true);
@@ -212,13 +224,14 @@ const DropdownTemplate = ({
     };
 
     const onShowModal = () => {
-        if (selectedTemplateContent !== "") {
+        if (cleanHTML(currentContent) !== "") {
             setVisible(true);
         }
     }
 
     const handleConfirmDelete = () => {
         $(context.current).summernote("code", "");
+        setSelectedTemplateContent("");
         setVisible(false);
     };
 
@@ -279,14 +292,12 @@ const DropdownTemplate = ({
                     <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" onClick={onShowModal} />
                 </div>
 
-                {selectedTemplateContent !== "" && (
-                    <ConfirmDialogContent
-                        visible={visible}
-                        setVisible={setVisible}
-                        acceptModalAcceptContent={acceptModalAcceptContent}
-                        rejectModalDeleteContent={rejectModalDeleteContent}
-                    />
-                )}
+                <ConfirmDialogContent
+                    visible={visible}
+                    setVisible={setVisible}
+                    acceptModalAcceptContent={acceptModalAcceptContent}
+                    rejectModalDeleteContent={rejectModalDeleteContent}
+                />
 
                 <ConfirmDialogChangeTemplate
                     visibleModalWarning={visibleModalWarning}
