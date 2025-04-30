@@ -18,9 +18,8 @@ const TemplatesList = () => {
 
     const filterDataTemplates = async () => {
         let data;
+        setLoading(true);
         try {
-            setLoading(true);
-
             data = {
                 search: nameTemplateSearch || null,
                 context: optionContext?.code || null,
@@ -65,7 +64,7 @@ const TemplatesList = () => {
 
     useEffect(() => {
         filterDataTemplates();
-    }, [nameTemplateSearch, optionContext, currentPage, rows]);
+    }, [nameTemplateSearch, optionContext, currentPage, rows, selectedColumnTable, selectedSortOrder]);
 
     return (
         <div>

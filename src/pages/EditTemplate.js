@@ -12,23 +12,23 @@ import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
 import { useParams } from 'react-router-dom';
-import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
     const [subjectTemplate, setSubjectTemplate] = useState(null);
-    const [codeLanguage, setCodeLanguage] = useState("es");
     const editorRef = useRef(null);
+    const [codeLanguage, setCodeLanguage] = useState("");
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [selectedTemplateContent, setSelectedTemplateContent] = useState("");
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
-    const [visibleModalUpdate, setVisibleModalUpdate] = useState(null);
     const [currentContent, setCurrentContent] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
+    const toast = useRef(null);
 
     const { setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
-        setPlaceholdersList, templates, setTemplates, setListLanguages
+        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages
     } = useContext(ScreensContext);
     const idTemplate = useParams();
 
@@ -79,19 +79,33 @@ const EditTemplate = () => {
                 setListLanguages([]);
             }
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.log(error);
         }
     };
 
     const getSelectedTemplateEditor = async () => {
         try {
+            const selectedLanguage = listLanguages.find(lang => lang.code === codeLanguage);
             const response = await listTemplateById(idTemplate.id, setAlert, setVisibleAlert);
-            setSelectedTemplate(response);
-            setNameTemplate(response.code);
-            setSubjectTemplate(response.data[codeLanguage].subject);
-            setOriginalSubjectTemplate(response.data[codeLanguage].subject);
-            setSelectedTemplateContent(response.data[codeLanguage].content);
+
+            if (codeLanguage) {
+                setSelectedTemplate(response);
+                setNameTemplate(response.code);
+                setSubjectTemplate(response.data[codeLanguage].subject);
+                setOriginalSubjectTemplate(response.data[codeLanguage].subject);
+                setSelectedTemplateContent(response.data[codeLanguage].content);
+
+                if (!selectedLanguageDropdown) {
+                    setSelectedLanguageDropdown(selectedLanguage.value);
+                }
+            } else {
+                setCodeLanguage("es");
+            }
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.log(error);
         }
     }
@@ -109,6 +123,8 @@ const EditTemplate = () => {
                 setContextsList([]);
             }
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error fetching contexts API:", error);
         }
     };
@@ -127,6 +143,8 @@ const EditTemplate = () => {
                 setPlaceholdersList([]);
             }
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error fetching languages:", error);
         }
     };
@@ -157,7 +175,7 @@ const EditTemplate = () => {
 
             const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
             if (response) {
-                setVisibleModalUpdate(true);
+                toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla actualizada con éxito', life: 3000 });
             }
         } catch (error) {
             setAlert("Ha ocurrido un error: " + error.message);
@@ -200,10 +218,21 @@ const EditTemplate = () => {
      * Llama a las APIs de idiomas y contextos una vez al montar el componente.
      */
     useEffect(() => {
-        getSelectedTemplateEditor();
         languagesApi();
         contextsApi();
     }, []);
+
+    useEffect(() => {
+        if (listLanguages.length > 0) {
+            getSelectedTemplateEditor();
+        }
+    }, [listLanguages]);
+
+    useEffect(() => {
+        if (listLanguages.length > 0 && !codeLanguage) {
+            setCodeLanguage("es");
+        }
+    }, [listLanguages]);
 
     /**
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
@@ -223,14 +252,9 @@ const EditTemplate = () => {
         }
     }, [selectedTemplateContent, currentContent, subjectTemplate, originalSubjectTemplate]);
 
-    const footerContentModalUpdate = (
-        <div>
-            <Button label="Aceptar" className="buttons rounded-pill" icon="pi pi-check" onClick={() => setVisibleModalUpdate(false)} autoFocus />
-        </div>
-    );
-
     return (
         <>
+            <Toast ref={toast} />
             <div className="container mt-5 mb-5">
                 <h1 className="mb-5" style={{
                     fontSize: '40px',
@@ -305,13 +329,6 @@ const EditTemplate = () => {
                 {visibleAlert && (
                     <ModalError />
                 )}
-
-                <Dialog visible={visibleModalUpdate} modal header="Información" footer={footerContentModalUpdate} style={{ width: '50rem' }} onHide={() => { if (!visibleModalUpdate) return; setVisibleModalUpdate(false); }}>
-                    <p className="m-0">
-                        Plantilla actualizada con éxito
-                    </p>
-                </Dialog>
-
             </div>
         </>
     );

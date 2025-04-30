@@ -9,7 +9,6 @@ import { Dropdown } from 'primereact/dropdown';
 import ModalError from './ModalError';
 import ConfirmDialogContent from './ConfirmDialogContent';
 import ConfirmDialogChangeTemplate from './ConfirmDialogChangeTemplate';
-import { Dialog } from 'primereact/dialog';
 
 const DropdownTemplate = ({
     templates,
@@ -20,14 +19,14 @@ const DropdownTemplate = ({
     setSelectedTemplateContent,
     contextDropDown,
     setContextDropDown,
-    codeLanguage,
-    setCodeLanguage,
     selectedLanguageDropdown,
     setSelectedLanguageDropdown,
     placeholdersList,
     getPlaceholdersApi,
     nameTemplate,
     setNameTemplate,
+    codeLanguage,
+    setCodeLanguage,
     subjectTemplate,
     setSubjectTemplate,
     originalSubjectTemplate,
@@ -42,7 +41,6 @@ const DropdownTemplate = ({
     const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
-    const [visibleWarningVariables, setVisibleWarningVariables] = useState(false);
     const toast = useRef(null);
 
     const acceptModalAcceptContent = () => {
@@ -108,7 +106,7 @@ const DropdownTemplate = ({
         if (selectedTemplateContent || nameTemplate !== "") {
             $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
         } else {
-            setVisibleWarningVariables(true)
+            toast.current.show({ severity: 'warn', summary: 'Advertencia', detail: 'No puedes añadir variables sin una plantilla seleccionada', life: 3000 });
         }
     };
 
@@ -224,12 +222,6 @@ const DropdownTemplate = ({
         setVisible(false);
     };
 
-    const footerContent = (
-        <div>
-            <Button label="Ok" icon="pi pi-check" className='rounded-pill buttons' onClick={() => setVisibleWarningVariables(false)} autoFocus />
-        </div>
-    );
-
     return (
         <>
             <Toast ref={toast} />
@@ -308,12 +300,6 @@ const DropdownTemplate = ({
                 {visibleAlert && (
                     <ModalError />
                 )}
-
-                <Dialog modal header="Advertencia" visible={visibleWarningVariables} footer={footerContent} style={{ width: '50vw' }} onHide={() => { if (!visibleWarningVariables) return; setVisibleWarningVariables(false); }}>
-                    <p className="m-0">
-                        No puedes añadir variables sin una plantilla seleccionada
-                    </p>
-                </Dialog>
             </div>
         </>
     );

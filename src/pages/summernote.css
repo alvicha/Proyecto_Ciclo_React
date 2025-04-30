@@ -113,6 +113,18 @@ header {
     border: none;
 }
 
+.p-paginator .p-paginator-page {
+    padding: 20px;
+    margin: 0 3px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.p-paginator .p-paginator-page:hover {
+    background-color: #f0f0f0;
+    transform: scale(1.05);
+}
+
 footer {
     background-color: white;
     padding: 20px 40px;

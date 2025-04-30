@@ -29,7 +29,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
 
             if (response) {
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
-                console.log("deuidgyuegdyueg", toast)
             }
         } catch (error) {
             console.error("Error deleting templates API:", error);
@@ -49,6 +48,8 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Sí',
             rejectLabel: 'No',
+            acceptClassName:'rounded-pill buttons mt-3',
+            rejectClassName:'button-reject',
             accept: () => accept(idTemplate),
             reject
         });
@@ -69,8 +70,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
         setCurrentPage(newPage);
     };
 
-    console.log(selectedColumnTable);
-
     //const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
 
     return (
@@ -82,9 +81,8 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
             <Toast ref={toast} />
             <ConfirmDialog />
             <DataTable
-                value={templates} first={currentPage * rows} showGridlines paginator rows={rows} onPage={onPage} rowsPerPageOptions={[5, 10, 25, 50]} tableStyle={{ minWidth: '50rem' }}
-                lazy paginatorLeft={paginatorLeft} loading={loading} paginatorRight={paginatorRight} paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                totalRecords={totalRecordsTemplates} sortField={selectedColumnTable} sortOrder={selectedSortOrder}
+                value={templates} first={currentPage * rows} paginator showGridlines rows={rows} dataKey="id" onPage={onPage} rowsPerPageOptions={[5, 10, 25, 50]}
+                lazy paginatorLeft={paginatorLeft} loading={loading} paginatorRight={paginatorRight} totalRecords={totalRecordsTemplates} sortField={selectedColumnTable} sortOrder={selectedSortOrder}
                 onSort={(e) => {
                     setSelectedColumnTable(e.sortField);
                     setSelectedSortOrder(e.sortOrder);
