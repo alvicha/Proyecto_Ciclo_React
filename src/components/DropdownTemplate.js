@@ -27,11 +27,8 @@ const DropdownTemplate = ({
     setNameTemplate,
     codeLanguage,
     setCodeLanguage,
-    subjectTemplate,
     setSubjectTemplate,
-    originalSubjectTemplate,
     setOriginalSubjectTemplate,
-    cleanHTML,
     isTemplateModified }) => {
 
     const [visible, setVisible] = useState(false);
@@ -40,7 +37,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const { currentContent, context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
+    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -208,9 +205,7 @@ const DropdownTemplate = ({
     };
 
     const onShowModal = () => {
-        if (cleanHTML(currentContent) !== "") {
-            setVisible(true);
-        }
+        setVisible(true);
     }
 
     const handleConfirmDelete = () => {
@@ -273,7 +268,7 @@ const DropdownTemplate = ({
                 )}
 
                 <div className="col-12 col-lg-1 col-md-2 mb-3">
-                    <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" onClick={onShowModal} />
+                    <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" disabled={$(context.current).summernote('isEmpty')} onClick={onShowModal} />
                 </div>
 
                 <ConfirmDialogContent

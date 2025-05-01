@@ -321,11 +321,8 @@ const EditTemplate = () => {
                         getPlaceholdersApi={getPlaceholdersApi}
                         nameTemplate={nameTemplate}
                         setNameTemplate={setNameTemplate}
-                        subjectTemplate={subjectTemplate}
                         setSubjectTemplate={setSubjectTemplate}
-                        originalSubjectTemplate={originalSubjectTemplate}
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
-                        cleanHTML={cleanHTML}
                         isTemplateModified={isTemplateModified}
                     />
                 </div>
