@@ -109,8 +109,6 @@ const DropdownTemplate = ({
         }
     };
 
-    console.log(editorSummernote);
-
     const handleActionChange = (action) => {
         const isEmpty = $(editorSummernote.current).summernote('isEmpty');
 
