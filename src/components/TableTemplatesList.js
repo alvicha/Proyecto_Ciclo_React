@@ -48,8 +48,9 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
             acceptClassName: 'p-button-danger',
             acceptLabel: 'Sí',
             rejectLabel: 'No',
-            acceptClassName:'rounded-pill buttons mt-3',
-            rejectClassName:'button-reject',
+            style: { width: '100vw', maxWidth: '100vw', padding: '1rem' },
+            acceptClassName: 'rounded-pill buttons mt-3',
+            rejectClassName: 'button-reject',
             accept: () => accept(idTemplate),
             reject
         });

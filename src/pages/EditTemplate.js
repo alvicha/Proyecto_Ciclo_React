@@ -13,10 +13,11 @@ import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
 import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
-    const [subjectTemplate, setSubjectTemplate] = useState(null);
+    const [subjectTemplate, setSubjectTemplate] = useState("");
     const editorRef = useRef(null);
     const [codeLanguage, setCodeLanguage] = useState("");
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -24,6 +25,7 @@ const EditTemplate = () => {
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
+    const [loadingEditor, setLoadingEditor] = useState(false);
     const toast = useRef(null);
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
@@ -99,6 +101,7 @@ const EditTemplate = () => {
                 if (!selectedLanguageDropdown) {
                     setSelectedLanguageDropdown(selectedLanguage.value);
                 }
+                setLoadingEditor(false);
             } else {
                 setCodeLanguage("es");
             }
@@ -241,6 +244,7 @@ const EditTemplate = () => {
 
     useEffect(() => {
         if (listLanguages.length > 0) {
+            setLoadingEditor(true);
             getSelectedTemplateEditor();
         }
     }, [listLanguages]);
@@ -268,6 +272,11 @@ const EditTemplate = () => {
 
     return (
         <>
+            {loadingEditor && (
+                <div className='containerSpinner'>
+                    <ProgressSpinner className='spinnerEditor' />
+                </div >
+            )}
             <Toast ref={toast} />
             <div className="container mt-5 mb-5">
                 <h1 className="mb-5" style={{

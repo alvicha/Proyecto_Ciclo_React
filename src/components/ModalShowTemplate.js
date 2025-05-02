@@ -12,7 +12,8 @@ const ModalShowTemplate = ({ selectedTemplate, showModalDataTemplate, setShowMod
 
     return (
         <div className="card flex justify-content-center">
-            <Dialog header={selectedTemplate.code} footer={footerContent} visible={showModalDataTemplate} style={{ width: '50vw' }} onHide={() => { if (!showModalDataTemplate) return; setShowModalDataTemplate(false); }}>
+            <Dialog style={{ width: '100vw', maxWidth: '100vw', padding: '1rem' }}
+                header={selectedTemplate.code} footer={footerContent} visible={showModalDataTemplate} onHide={() => { if (!showModalDataTemplate) return; setShowModalDataTemplate(false); }}>
                 <ul className="list-unstyled m-2">
                     <li className="mb-3">
                         <strong><img src="./images/context.jpg" alt="Icono de contexto" width="30" className='mr-3 my-2' />Contexto: </strong>{selectedTemplate?.context || "No hay contexto"}

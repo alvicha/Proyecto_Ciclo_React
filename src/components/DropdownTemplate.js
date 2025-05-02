@@ -217,80 +217,72 @@ const DropdownTemplate = ({
     return (
         <>
             <Toast ref={toast} />
-            <div className='row m-2 d-flex align-items-center'>
-                <div className="card mb-3 mr-3">
-                    <Dropdown
-                        value={selectedLanguageDropdown}
-                        onChange={(e) => handleLanguageChange(e.value)}
-                        options={listLanguages}
-                        optionLabel="value"
-                        placeholder="Idioma"
-                        disabled={listLanguages?.length === 0} />
+            <div className="container-fluid">
+                <div className="row justify-content-lg-start justify-content-md-start justify-content-center p-2">
+                    <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                        <div className="card">
+                            <Dropdown
+                                value={selectedLanguageDropdown}
+                                onChange={(e) => handleLanguageChange(e.value)}
+                                options={listLanguages}
+                                optionLabel="value"
+                                placeholder="Idioma"
+                                disabled={listLanguages?.length === 0} />
+                        </div>
+                    </div>
+
+                    {visibleContexts && (
+                        <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                            <div className="card">
+                                <Dropdown
+                                    value={contextDropDown}
+                                    onChange={(e) => handleContextChange(e.value)}
+                                    options={contextsList}
+                                    optionLabel="code"
+                                    optionValue="code"
+                                    placeholder="Contextos"
+                                    disabled={contextsList.length === 0}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {visibleTemplates && templates.length > 0 && (
+                        <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                            <div className="card">
+                                <Dropdown
+                                    onChange={(e) => handleTemplateChange(e.value)}
+                                    options={templates}
+                                    optionLabel="code"
+                                    optionValue="code"
+                                    placeholder="Plantillas"
+                                    disabled={templates.length === 0}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {showVariables && (
+                        <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                            <div className="card">
+                                <Dropdown
+                                    onChange={(e) => handleActionChange(e.value)}
+                                    options={placeholdersList}
+                                    optionLabel="dataVariable.code"
+                                    optionValue="dataVariable.code"
+                                    placeholder="Variables"
+                                    disabled={placeholdersList.length === 0}
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="col-12 col-lg-1 mb-3 d-flex justify-content-center align-items-center">
+                        <Button icon="pi pi-trash" className="rounded-pill" rounded severity="danger" aria-label="Eliminacion" disabled={$(editorSummernote.current).summernote('isEmpty')} onClick={onShowModal} />
+                    </div>
                 </div>
-                {visibleContexts && (
-                    <div className="card mb-3 mr-3">
-                        <Dropdown
-                            value={contextDropDown}
-                            onChange={(e) => handleContextChange(e.value)}
-                            options={contextsList}
-                            optionLabel="code"
-                            optionValue="code"
-                            placeholder="Contextos"
-                            disabled={contextsList.length === 0}
-                        />
-                    </div>
-                )}
-
-                {visibleTemplates && templates.length > 0 && (
-                    <div className="card mb-3 mr-3">
-                        <Dropdown
-                            onChange={(e) => handleTemplateChange(e.value)}
-                            options={templates}
-                            optionLabel="code"
-                            optionValue="code"
-                            placeholder="Plantillas"
-                            disabled={templates.length === 0}
-                        />
-                    </div>
-                )}
-
-                {showVariables && (
-                    <div className="card mb-3">
-                        <Dropdown
-                            onChange={(e) => handleActionChange(e.value)}
-                            options={placeholdersList}
-                            optionLabel="dataVariable.code"
-                            optionValue="dataVariable.code"
-                            placeholder="Variables"
-                            disabled={placeholdersList.length === 0}
-                        />
-                    </div>
-                )}
-
-                <div className="col-12 col-lg-1 col-md-2 mb-3">
-                    <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" disabled={$(editorSummernote.current).summernote('isEmpty')} onClick={onShowModal} />
-                </div>
-
-                <ConfirmDialogContent
-                    visible={visible}
-                    setVisible={setVisible}
-                    acceptModalAcceptContent={acceptModalAcceptContent}
-                    rejectModalDeleteContent={rejectModalDeleteContent}
-                />
-
-                <ConfirmDialogChangeTemplate
-                    visibleModalWarning={visibleModalWarning}
-                    onCancelChange={onCancelChange}
-                    textButton={textButton}
-                    message={warningMessage}
-                    acceptModalWarning={acceptModalWarning}
-                    rejectModalWarning={rejectModalWarning}
-                />
-
-                {visibleAlert && (
-                    <ModalError />
-                )}
             </div>
+
         </>
     );
 };

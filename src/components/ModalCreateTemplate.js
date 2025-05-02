@@ -5,7 +5,6 @@ import { useContext, useEffect, useState } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 import { Dropdown } from 'primereact/dropdown';
 import { createTemplate, getDataApi } from '../services/services';
-import { Toast } from "primereact/toast";
 
 const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, filterDataTemplates, toast }) => {
     const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);

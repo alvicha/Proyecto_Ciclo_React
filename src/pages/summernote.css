@@ -6,18 +6,13 @@ body {
     font-family: "Roboto";
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 header {
     border-bottom: 3px solid rgb(1, 149, 186);
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     width: 100%;
-}
-
-.navegacion {
-    display: flex;
-    justify-content: end;
-    align-items: end;
 }
 
 .navegacion .nav-item {
@@ -80,6 +75,10 @@ header {
     text-align: left;
 }
 
+.texto-aplicacion {
+    font-size: 35px;
+}
+
 .page-item :hover {
     background-color: lightblue;
     opacity: 0.7;
@@ -120,9 +119,68 @@ header {
     transition: all 0.3s ease;
 }
 
-.p-paginator .p-paginator-page:hover {
-    background-color: #ebe8e8;
-    transform: scale(1.05);
+.p-paginator .p-paginator-page.p-highlight {
+    background-color: #C8F3E5;
+}
+
+.p-sortable-column.p-highlight {
+    background-color: #C8F3E5 !important;
+    color: #18787F;
+}
+
+.containerSpinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.spinnerEditor {
+    width: 80px;
+    height: 80px;
+}
+
+@media (max-width:768px) {
+    .spinnerEditor {
+        width: 120px;
+        height: 120px;
+    }
+
+    .texto-aplicacion {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .texto-aplicacion {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 575px) {
+
+    /* Alinea las opciones debajo del logo y el texto */
+    .navbar .navegacion {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .navbar .navegacion {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
 }
 
 footer {

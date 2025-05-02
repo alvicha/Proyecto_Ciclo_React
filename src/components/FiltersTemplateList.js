@@ -6,7 +6,7 @@ import { Button } from "primereact/button";
 import '../pages/summernote.css'
 import { Dialog } from "primereact/dialog";
 
-const FiltersTemplateList = ({nameTemplateSearch, setNameTemplateSearch, optionContext, setOptionContext}) => {
+const FiltersTemplateList = ({ nameTemplateSearch, setNameTemplateSearch, optionContext, setOptionContext }) => {
     const { contextsList } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
@@ -39,9 +39,9 @@ const FiltersTemplateList = ({nameTemplateSearch, setNameTemplateSearch, optionC
 
             {visibleDropDown && (
                 <div className="bg-white border shadow-sm p-3">
-                    <div className="d-flex">
+                    <div className="row w-100">
                         {Array.isArray(contextsList) && contextsList.length > 0 && (
-                            <div className="mr-5">
+                            <div className="col-12 col-md-6 col-lg-6">
                                 <p className="font-weight-bold text-left">Contextos</p>
                                 <Dropdown
                                     value={optionContext}
@@ -49,13 +49,13 @@ const FiltersTemplateList = ({nameTemplateSearch, setNameTemplateSearch, optionC
                                     options={[{ code: 'Todos' }, ...contextsList]}
                                     optionLabel="code"
                                     placeholder="Seleccionar..."
-                                    style={{ width: "500px", marginBottom: '15px', textAlign: "left" }}
+                                    style={{ width: "100%", marginBottom: '15px', textAlign: "left" }}
                                 />
                             </div>
                         )}
-                        <div>
+                        <div className="col-12 col-md-6 col-lg-6">
                             <p className="font-weight-bold text-left">Buscar</p>
-                            <InputText value={nameTemplateSearch} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "450px" }} />
+                            <InputText value={nameTemplateSearch} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "100%" }} />
                         </div>
                     </div>
                     <div className="text-left mt-2">
