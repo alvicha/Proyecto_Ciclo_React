@@ -37,7 +37,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const { context, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
+    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -103,19 +103,21 @@ const DropdownTemplate = ({
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
         if (selectedTemplateContent || nameTemplate !== "") {
-            $(context.current).summernote('invoke', 'editor.insertText', placeholderText);
+            $(editorSummernote.current).summernote('invoke', 'editor.insertText', placeholderText);
         } else {
             toast.current.show({ severity: 'warn', summary: 'Advertencia', detail: 'No puedes añadir variables sin una plantilla seleccionada', life: 3000 });
         }
     };
 
+    console.log(editorSummernote);
+
     const handleActionChange = (action) => {
-        const isEmpty = $(context.current).summernote('isEmpty');
+        const isEmpty = $(editorSummernote.current).summernote('isEmpty');
 
         if (isEmpty) {
             insertVariablesText(action);
         } else {
-            $(context.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
+            $(editorSummernote.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
             insertVariablesText(action);
         }
     };
@@ -191,7 +193,7 @@ const DropdownTemplate = ({
             setConfirmAction(() => () => {
                 setSelectedTemplate(templateSelected);
                 setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
-                $(context.current).summernote('code', templateSelected.data[codeLanguage].content);
+                $(editorSummernote.current).summernote('code', templateSelected.data[codeLanguage].content);
                 setNameTemplate(selectedCodeTemplate);
                 setSubjectTemplate(templateSelected.data[codeLanguage].subject);
                 setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
@@ -209,7 +211,7 @@ const DropdownTemplate = ({
     }
 
     const handleConfirmDelete = () => {
-        $(context.current).summernote("code", "");
+        $(editorSummernote.current).summernote("code", "");
         setSelectedTemplateContent("");
         setVisible(false);
     };
@@ -268,7 +270,7 @@ const DropdownTemplate = ({
                 )}
 
                 <div className="col-12 col-lg-1 col-md-2 mb-3">
-                    <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" disabled={$(context.current).summernote('isEmpty')} onClick={onShowModal} />
+                    <Button icon="pi pi-trash" className="rounded-pill mr-1" rounded severity="danger" aria-label="Eliminacion" disabled={$(editorSummernote.current).summernote('isEmpty')} onClick={onShowModal} />
                 </div>
 
                 <ConfirmDialogContent

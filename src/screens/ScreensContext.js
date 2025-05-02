@@ -1,9 +1,9 @@
-import { createContext, useState } from 'react';
+import { createContext, useRef, useState } from 'react';
 
 const ScreensContext = createContext();
 
 export const ScreensProvider = ({ children }) => {
-  const [context, setContext] = useState(null);
+  const editorSummernote = useRef(null);
   const [alert, setAlert] = useState(null);
   const [visibleAlert, setVisibleAlert] = useState(false);
   const [visibleActionButton, setVisibleActionButton] = useState(false);
@@ -21,7 +21,7 @@ export const ScreensProvider = ({ children }) => {
 
   return (
     <ScreensContext.Provider value={{
-      context, setContext, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList,
+      editorSummernote, alert, setAlert, visibleAlert, setVisibleAlert, visibleActionButton, setVisibleActionButton, contextsList, setContextsList,
       placeholdersList, setPlaceholdersList, templates, setTemplates, currentPage, setCurrentPage, rows, setRows,
       listLanguages, setListLanguages, totalRecordsTemplates, setTotalRecordsTemplates, selectedColumnTable, setSelectedColumnTable, loading,
       setLoading, selectedSortOrder, setSelectedSortOrder, currentContent, setCurrentContent

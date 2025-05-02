@@ -26,7 +26,7 @@ const EditTemplate = () => {
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
     const toast = useRef(null);
 
-    const { currentContent, setCurrentContent, setContext, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
+    const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages
     } = useContext(ScreensContext);
     const idTemplate = useParams();
@@ -35,7 +35,7 @@ const EditTemplate = () => {
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
     */
     const changeSummernoteLanguage = useCallback((lang) => {
-        setContext(editorRef);
+        editorSummernote.current = editorRef.current;
         setCurrentContent($(editorRef.current).summernote('code'));
 
         $(editorRef.current).summernote("destroy");
@@ -64,7 +64,7 @@ const EditTemplate = () => {
                 }
             }
         }).summernote("code", selectedTemplateContent);
-    }, [selectedTemplateContent, setContext]);
+    }, [selectedTemplateContent]);
 
     /**
      * Función para que me devuelva la lista de idiomas que hay en la base de datos
@@ -193,14 +193,6 @@ const EditTemplate = () => {
 
     const onChangeSubjectTemplate = (event) => {
         setSubjectTemplate(event.target.value);
-    };
-
-    const cleanHTML = (html) => {
-        return html.replace(/<br\s*\/?>/gi, '')
-            .replace(/&nbsp;/gi, '')
-            .replace(/\s+/g, '')
-            .replace(/<[^>]*>/g, '')
-            .trim();
     };
 
     const isTemplateModified = () => {
