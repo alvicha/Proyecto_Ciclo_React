@@ -82,7 +82,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 header="Creación Plantilla"
                 footer={footerContent}
                 visible={visibleModalCreateTemplate}
-                style={{ width: '90vw', maxWidth: '800px', padding: '1rem' }}
+                style={{ width: '90vw', maxWidth: '800px' }}
                 onHide={() => setvisibleModalCreateTemplate(false)}
             >
                 <div className="mt-3">

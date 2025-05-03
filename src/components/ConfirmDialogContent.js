@@ -15,7 +15,7 @@ const ConfirmDialogContent = ({ visible, setVisible, acceptModalAcceptContent, r
             rejectClassName='button-reject'
             accept={acceptModalAcceptContent}
             reject={rejectModalDeleteContent}
-            breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
+            style={{ width: '90vw', maxWidth: '800px' }}
         />
     )
 };

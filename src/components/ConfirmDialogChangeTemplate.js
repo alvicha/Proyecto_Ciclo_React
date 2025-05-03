@@ -13,8 +13,7 @@ const ConfirmDialogChangeTemplate = ({ visibleModalWarning, onCancelChange, mess
             rejectLabel='Cancelar'
             accept={acceptModalWarning}
             reject={rejectModalWarning}
-            style={{ width: '50vw' }}
-            breakpoints={{ '1100px': '75vw', '960px': '100vw' }}
+            style={{ width: '90vw', maxWidth: '800px' }}
             acceptClassName='buttons rounded-pill'
             rejectClassName='button-reject'
         />
