@@ -71,6 +71,35 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.title-templates {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 40px;
+    font-weight: 600;
+    color: #333;
+    letter-spacing: 0.5px;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    padding-bottom: 40px;
+    padding-top: 40px;
+}
+
+.text-name {
+    font-size: 16px;
+}
+
+.text-subject {
+    font-size: 16px;
+}
+
+.title-edit {
+    font-size: 40px;
+    text-align: center;
+    font-weight: 600;
+    color: black;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    padding-top: 25px;
+}
+
 .title {
     text-align: left;
 }
@@ -153,33 +182,56 @@ header {
     }
 
     .texto-aplicacion {
-        font-size: 30px;
-    }
-}
-
-@media (max-width: 576px) {
-    .texto-aplicacion {
         font-size: 25px;
     }
+
+    .title-edit {
+        font-size: 34px;
+        margin-top: 0;
+    }
 }
 
-@media (max-width: 575px) {
-
-    /* Alinea las opciones debajo del logo y el texto */
-    .navbar .navegacion {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+@media (max-width:691px) {
+    .spinnerEditor {
+        width: 120px;
+        height: 120px;
     }
 
-    .navbar .navegacion {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        margin-top: 10px;
+    .title-templates {
+        margin-top: 12px;
+        font-size: 32px;
+    }
+
+    .nav-link {
+        padding: 5px;
+        font-size: 15px;
+    }
+
+    .container-edit {
+        margin-top: 2px;
+    }
+}
+
+@media (max-width: 565px) {
+    .title-templates {
+        margin-top: 12px;
+        font-size: 32px;
+    }
+
+    .title-edit {
+        font-size: 30px;
+    }
+
+    .text-name {
+        font-size: 15px;
+    }
+    
+    .text-subject {
+        font-size: 15px;
+    }
+
+    .nav-link {
+        padding: 8px;
     }
 }
 

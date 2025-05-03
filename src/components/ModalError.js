@@ -14,7 +14,7 @@ const ModalError = () => {
 
     return (
         <div className="card flex justify-content-center">
-            <Dialog style={{ width: '100vw', maxWidth: '100vw', padding: '1rem' }}
+            <Dialog style={{ width: '90vw', maxWidth: '800px', padding: '1rem' }}
                 visible={visibleAlert} modal header="Error" footer={footerContent} onHide={() => { if (!visibleAlert) return; setVisibleAlert(false); }}>
                 <p className="m-0">
                     {alert}

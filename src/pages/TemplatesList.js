@@ -68,17 +68,7 @@ const TemplatesList = () => {
 
     return (
         <div>
-            <h1 style={{
-                textAlign: 'center',
-                marginTop: '20px',
-                fontSize: '40px',
-                fontWeight: '600',
-                color: '#333',
-                letterSpacing: '0.5px',
-                transition: 'border-color 0.3s ease, color 0.3s ease',
-                paddingBottom: '40px',
-                paddingTop: '40px',
-            }}
+            <h1 className="title-templates"
                 onMouseOver={(e) => {
                     e.target.style.color = '#007bff';
                 }}

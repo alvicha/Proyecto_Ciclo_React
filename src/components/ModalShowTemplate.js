@@ -12,7 +12,7 @@ const ModalShowTemplate = ({ selectedTemplate, showModalDataTemplate, setShowMod
 
     return (
         <div className="card flex justify-content-center">
-            <Dialog style={{ width: '100vw', maxWidth: '100vw', padding: '1rem' }}
+            <Dialog style={{ width: '90vw', maxWidth: '800px', padding: '1rem' }}
                 header={selectedTemplate.code} footer={footerContent} visible={showModalDataTemplate} onHide={() => { if (!showModalDataTemplate) return; setShowModalDataTemplate(false); }}>
                 <ul className="list-unstyled m-2">
                     <li className="mb-3">

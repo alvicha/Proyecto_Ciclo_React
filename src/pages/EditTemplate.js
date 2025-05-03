@@ -59,7 +59,7 @@ const EditTemplate = () => {
             addDefaultFonts: false,
             callbacks: {
                 onInit: function () {
-                    $(".note-editable").css("font-size", "12px");
+                    $(".note-editable").css("font-size", "16px");
                 },
                 onChange: function (contents) {
                     setCurrentContent(contents);
@@ -278,15 +278,8 @@ const EditTemplate = () => {
                 </div >
             )}
             <Toast ref={toast} />
-            <div className="container mt-5 mb-5">
-                <h1 className="mb-5" style={{
-                    fontSize: '40px',
-                    textAlign: 'center',
-                    fontWeight: '600',
-                    color: '#333',
-                    transition: 'border-color 0.3s ease, color 0.3s ease',
-                    paddingTop: '40px',
-                }}
+            <div className="container-edit container mt-5 mb-5">
+                <h1 className="title-edit mb-5"
                     onMouseOver={(e) => {
                         e.target.style.color = '#007bff';
                     }}
@@ -301,10 +294,9 @@ const EditTemplate = () => {
                     height: "2px",
                     backgroundColor: "#007bff",
                     border: "none",
-                    margin: "0 auto",
                 }} />
 
-                <div className="w-100 filters mt-5 p-1 rounded">
+                <div className="filters mt-5 p-1 rounded">
                     <DropDownTemplate
                         templates={templates}
                         setTemplates={setTemplates}
@@ -329,15 +321,15 @@ const EditTemplate = () => {
                 </div>
 
                 <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
-                    <label for="nameTemplate" className="font-weight-bold m-2">Nombre Plantilla:</label>
+                    <label for="nameTemplate" className="text-name font-weight-bold m-2">Nombre Plantilla:</label>
                     <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
                         className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
                 </div>
 
                 <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
-                    <label for="subjectTemplate" className="font-weight-bold m-2">Asunto:</label>
+                    <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
                     <input type="text" value={subjectTemplate} onChange={onChangeSubjectTemplate}
-                        className="form-control w-50" id="subject" aria-describedby="subject" placeholder="Introduce asunto de plantilla" />
+                        className="form-control w-100 w-sm-50" id="subject" aria-describedby="subject" placeholder="Introduce asunto de plantilla" />
                 </div>
 
                 <div className="mb-3">
