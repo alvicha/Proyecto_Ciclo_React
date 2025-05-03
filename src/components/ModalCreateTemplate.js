@@ -9,6 +9,7 @@ import { createTemplate, getDataApi } from '../services/services';
 const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, filterDataTemplates, toast }) => {
     const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);
     const [nameTemplate, setNameTemplate] = useState("");
+    const [isDisabledAddTemplate, setIsDisabledAddTemplate] = useState(false);
     const [selectedContextTemplate, setSelectedContextTemplate] = useState("");
 
     const handleContextTemplateChange = (event) => {
@@ -26,7 +27,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
         } catch (error) {
             console.log(error);
         }
-    };
+    }
 
     const createTemplateDB = async () => {
         try {
@@ -61,9 +62,17 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
         languagesApi();
     }, []);
 
+    useEffect(() => {
+        if (nameTemplate !== "" && selectedContextTemplate !== "") {
+            setIsDisabledAddTemplate(false);
+        } else {
+            setIsDisabledAddTemplate(true);
+        }
+    }, [nameTemplate, selectedContextTemplate]);
+
     const footerContent = (
         <div>
-            <Button label="Añadir" icon="pi pi-plus" className='rounded-pill buttons mt-3' onClick={createTemplateDB} autoFocus />
+            <Button label="Añadir" icon="pi pi-plus" className='rounded-pill buttons mt-3' disabled={isDisabledAddTemplate} onClick={createTemplateDB} autoFocus />
         </div>
     );
 
@@ -94,7 +103,6 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
             </Dialog>
         </div>
     );
-
-};
+}
 
 export default ModalCreateTemplate;

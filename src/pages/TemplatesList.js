@@ -12,7 +12,6 @@ import ScreensContext from '../screens/ScreensContext';
 
 const TemplatesList = () => {
     const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
-
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplateSearch, setNameTemplateSearch] = useState("");
 
@@ -90,7 +89,6 @@ const TemplatesList = () => {
                     setNameTemplateSearch={setNameTemplateSearch}
                     optionContext={optionContext}
                     setOptionContext={setOptionContext}
-                    filterDataTemplates={filterDataTemplates}
                 />
                 <TableTemplatesList filterDataTemplates={filterDataTemplates} />
             </div>

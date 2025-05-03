@@ -281,8 +281,27 @@ const DropdownTemplate = ({
                         <Button icon="pi pi-trash" className="rounded-pill" rounded severity="danger" aria-label="Eliminacion" disabled={$(editorSummernote.current).summernote('isEmpty')} onClick={onShowModal} />
                     </div>
                 </div>
-            </div>
 
+                <ConfirmDialogContent
+                    visible={visible}
+                    setVisible={setVisible}
+                    acceptModalAcceptContent={acceptModalAcceptContent}
+                    rejectModalDeleteContent={rejectModalDeleteContent}
+                />
+
+                <ConfirmDialogChangeTemplate
+                    visibleModalWarning={visibleModalWarning}
+                    onCancelChange={onCancelChange}
+                    textButton={textButton}
+                    message={warningMessage}
+                    acceptModalWarning={acceptModalWarning}
+                    rejectModalWarning={rejectModalWarning}
+                />
+
+                {visibleAlert && (
+                    <ModalError />
+                )}
+            </div>
         </>
     );
 };

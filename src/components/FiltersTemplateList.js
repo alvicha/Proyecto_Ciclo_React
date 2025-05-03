@@ -4,13 +4,11 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import '../pages/summernote.css'
-import { Dialog } from "primereact/dialog";
 
 const FiltersTemplateList = ({ nameTemplateSearch, setNameTemplateSearch, optionContext, setOptionContext }) => {
     const { contextsList } = useContext(ScreensContext);
     const [visibleDropDown, setVisibleDropDown] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [visibleWarning, setVisibleWarning] = useState(false);
 
     const onHandleButton = () => {
         const dropDownState = !visibleDropDown;
@@ -62,14 +60,6 @@ const FiltersTemplateList = ({ nameTemplateSearch, setNameTemplateSearch, option
                         <Button label="Limpiar" icon="pi pi-times-circle" aria-label="Limpiar" disabled={isDisabled} className="rounded-pill buttons" onClick={handleClearData} />
                     </div>
                 </div>
-            )}
-
-            {visibleWarning && (
-                <Dialog header="Información" visible={visibleWarning} style={{ width: '50vw' }} onHide={() => { if (!visibleWarning) return; setVisibleWarning(false); }}>
-                    <p className="m-0">
-                        No ha habido resultados con este resultado
-                    </p>
-                </Dialog>
             )}
         </div >
     );
