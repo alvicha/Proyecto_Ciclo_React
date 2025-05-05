@@ -36,7 +36,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     }
 
     const reject = () => {
-        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'No se ha eliminado', life: 3000 });
+        toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Se ha cancelado la eliminación de la plantilla', life: 3000 });
     }
 
     const onDeleteTemplate = (idTemplate) => {
