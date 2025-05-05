@@ -218,8 +218,8 @@ const DropdownTemplate = ({
         <>
             <Toast ref={toast} />
             <div className="container-fluid">
-                <div className="row justify-content-lg-start justify-content-md-start justify-content-center p-2">
-                    <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                <div className="row justify-content-center p-2">
+                    <div className="col-12 col-md-6 col-lg-auto mb-3">
                         <div className="card">
                             <Dropdown
                                 value={selectedLanguageDropdown}
@@ -232,7 +232,7 @@ const DropdownTemplate = ({
                     </div>
 
                     {visibleContexts && (
-                        <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                        <div className="col-12 col-md-6 col-lg-auto mb-3">
                             <div className="card">
                                 <Dropdown
                                     value={contextDropDown}
@@ -248,7 +248,7 @@ const DropdownTemplate = ({
                     )}
 
                     {visibleTemplates && templates.length > 0 && (
-                        <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                        <div className="col-12 col-md-6 col-lg-auto mb-3">
                             <div className="card">
                                 <Dropdown
                                     onChange={(e) => handleTemplateChange(e.value)}
@@ -263,7 +263,7 @@ const DropdownTemplate = ({
                     )}
 
                     {showVariables && (
-                        <div className="col-12 col-sm-6 col-lg-auto mb-3">
+                        <div className="col-12 col-md-6 col-lg-auto mb-3">
                             <div className="card">
                                 <Dropdown
                                     onChange={(e) => handleActionChange(e.value)}
@@ -277,7 +277,7 @@ const DropdownTemplate = ({
                         </div>
                     )}
 
-                    <div className="col-12 col-lg-1 mb-3 d-flex justify-content-center align-items-center">
+                    <div className="col-12 col-lg-auto d-flex justify-content-center mb-2">
                         <Button icon="pi pi-trash" className="rounded-pill" rounded severity="danger" aria-label="Eliminacion" disabled={$(editorSummernote.current).summernote('isEmpty')} onClick={onShowModal} />
                     </div>
                 </div>

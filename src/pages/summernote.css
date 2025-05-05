@@ -185,6 +185,11 @@ header {
         font-size: 25px;
     }
 
+    .title-templates {
+        margin-top: 12px;
+        font-size: 32px;
+    }
+
     .title-edit {
         font-size: 34px;
         margin-top: 0;
@@ -197,11 +202,6 @@ header {
         height: 120px;
     }
 
-    .title-templates {
-        margin-top: 12px;
-        font-size: 32px;
-    }
-
     .nav-link {
         font-size: 15px;
     }
@@ -212,11 +212,6 @@ header {
 }
 
 @media (max-width: 565px) {
-    .title-templates {
-        margin-top: 12px;
-        font-size: 32px;
-    }
-
     .title-edit {
         font-size: 30px;
     }
@@ -224,7 +219,7 @@ header {
     .text-name {
         font-size: 15px;
     }
-    
+
     .text-subject {
         font-size: 15px;
     }
