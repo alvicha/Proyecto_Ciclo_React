@@ -175,6 +175,10 @@ header {
     height: 80px;
 }
 
+.custom-spinner .p-progress-spinner-circle {
+    stroke: #18787F;
+  }
+
 @media (max-width:768px) {
     .spinnerEditor {
         width: 120px;

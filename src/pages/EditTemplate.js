@@ -14,6 +14,7 @@ import { Button } from 'primereact/button';
 import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { ProgressSpinner } from 'primereact/progressspinner';
+import { InputText } from 'primereact/inputtext';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
@@ -243,8 +244,8 @@ const EditTemplate = () => {
     }, []);
 
     useEffect(() => {
+        setLoadingEditor(true);
         if (listLanguages.length > 0) {
-            setLoadingEditor(true);
             getSelectedTemplateEditor();
         }
     }, [listLanguages]);
@@ -322,14 +323,12 @@ const EditTemplate = () => {
 
                 <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
                     <label for="nameTemplate" className="text-name font-weight-bold m-2">Nombre Plantilla:</label>
-                    <input type="text" value={nameTemplate} onChange={onChangeNameTemplate}
-                        className="form-control w-50" id="nameTemplate" aria-describedby="nameTemplate" placeholder="Introduce nombre de plantilla" readOnly />
+                    <InputText id="nameTemplate" keyfilter="alpha" className="form-control w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={onChangeNameTemplate} aria-label="NameTemplate" aria-describedby="name-template" readOnly />
                 </div>
 
                 <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
                     <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
-                    <input type="text" value={subjectTemplate} onChange={onChangeSubjectTemplate}
-                        className="form-control w-100 w-sm-50" id="subject" aria-describedby="subject" placeholder="Introduce asunto de plantilla" />
+                    <InputText id="subject" keyfilter="alpha" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate} aria-describedby="subject" aria-label="Subject" />
                 </div>
 
                 <div className="mb-3">

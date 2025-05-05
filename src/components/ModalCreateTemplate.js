@@ -4,13 +4,14 @@ import { InputText } from 'primereact/inputtext';
 import { useContext, useEffect, useState } from 'react';
 import ScreensContext from '../screens/ScreensContext';
 import { Dropdown } from 'primereact/dropdown';
-import { createTemplate, getDataApi } from '../services/services';
+import { createTemplate, getAllListTemplatesDB, getDataApi } from '../services/services';
 
 const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, filterDataTemplates, toast }) => {
     const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);
     const [nameTemplate, setNameTemplate] = useState("");
     const [isDisabledAddTemplate, setIsDisabledAddTemplate] = useState(false);
     const [selectedContextTemplate, setSelectedContextTemplate] = useState("");
+    const [allTemplates, setAllTemplates] = useState([]);
 
     const handleContextTemplateChange = (event) => {
         setSelectedContextTemplate(event);
@@ -25,6 +26,24 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 setListLanguages([]);
             }
         } catch (error) {
+            setAlert("Error al obtener los idiomas: " + error.message);
+            setVisibleAlert(true);
+            console.log(error);
+        }
+    }
+
+    const getAllTemplatesDB = async () => {
+        try {
+            const response = await getAllListTemplatesDB(setAlert, setVisibleAlert);
+            if (response) {
+                setAllTemplates(response.templates);
+            } else {
+                setAllTemplates([]);
+            }
+        } catch (error) {
+            setAlert("Error al obtener la lista de plantillas: " + error.message);
+            setVisibleAlert(true);
+            setvisibleModalCreateTemplate(false);
             console.log(error);
         }
     }
@@ -45,11 +64,20 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 idContext: selectedContextTemplate.id
             };
 
-            const response = await createTemplate(body, setAlert, setVisibleAlert);
-            if (response) {
-                toast.current.show({ severity: 'success', summary: 'Éxito', detail: 'Plantilla creada con éxito' });
-                setvisibleModalCreateTemplate(false);
-                await filterDataTemplates();
+            const existsNameTemplatesDB = allTemplates.find(template => template.code.toLowerCase() === nameTemplate.trim().toLowerCase());
+            if (existsNameTemplatesDB) {
+                toast.current.show({
+                    severity: 'warn',
+                    summary: 'Advertencia',
+                    detail: 'Ya existe una plantilla con ese nombre.'
+                });
+            } else {
+                const response = await createTemplate(body, setAlert, setVisibleAlert);
+                if (response) {
+                    toast.current.show({ severity: 'success', summary: 'Éxito', detail: 'Plantilla creada con éxito' });
+                    setvisibleModalCreateTemplate(false);
+                    await filterDataTemplates();
+                }
             }
         } catch (error) {
             setAlert("Error al crear la plantilla: " + error.message);
@@ -59,8 +87,11 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
     };
 
     useEffect(() => {
-        languagesApi();
-    }, []);
+        if (visibleModalCreateTemplate) {
+            languagesApi();
+            getAllTemplatesDB();
+        }
+    }, [visibleModalCreateTemplate]);
 
     useEffect(() => {
         if (nameTemplate !== "" && selectedContextTemplate !== "") {
@@ -87,7 +118,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
             >
                 <div className="mt-3">
                     <label className='mr-3' htmlFor="firstname">Nombre Plantilla: </label>
-                    <InputText className="mb-2 w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} />
+                    <InputText keyfilter="alpha" className="mb-2 w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} aria-labelledby="name"/>
                 </div>
                 <div className="mt-3">
                     <label className='mr-3' htmlFor="firstname">Lista Contextos: </label>

@@ -1,12 +1,13 @@
 const endPointLanguage = process.env.REACT_APP_LANGUAGES;
 const endPointContexts = process.env.REACT_APP_CONTEXTS;
 const endPointVariables = process.env.REACT_APP_VARIABLES;
-const endPointListTemplatesByContext = process.env.REACT_APP_TEMPLATES;
+const endPointListTemplatesByContext = process.env.REACT_APP_TEMPLATES_BY_CONTEXT;
 const endPointPostTemplate = process.env.REACT_APP_CREATE_TEMPLATE;
 const endPointUpdateTemplate = process.env.REACT_APP_UPDATE_TEMPLATE;
 const endPointDeleteTemplate = process.env.REACT_APP_DELETE_TEMPLATE;
 const endPointShowTemplateById = process.env.REACT_APP_SHOW_TEMPLATE;
 const endPointFilterInfoTemplates = process.env.REACT_APP_FILTER_TEMPLATE;
+const endPointGetAllTemplates = process.env.REACT_APP_TEMPLATES;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -106,6 +107,19 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
     if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Error al realizar el filtrado: " + error.message);
+    setVisibleAlert(true);
+    return console.log(error);
+  }
+};
+
+export const getAllListTemplatesDB = async (setAlert, setVisibleAlert) => {
+  try {
+    if (endPointGetAllTemplates) {
+      const response = await fetch(`${endPointGetAllTemplates}`);
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al realizar la petición: " + error);
     setVisibleAlert(true);
     return console.log(error);
   }
