@@ -277,7 +277,7 @@ const DropdownTemplate = ({
                         </div>
                     )}
 
-                    <div className="col-12 col-lg-auto d-flex justify-content-center mb-2">
+                    <div className="col-12 col-lg-auto d-flex justify-content-center mt-1">
                         <Button icon="pi pi-trash" className="rounded-pill" rounded severity="danger" aria-label="Eliminacion" disabled={$(editorSummernote.current).summernote('isEmpty')} onClick={onShowModal} />
                     </div>
                 </div>
