@@ -27,11 +27,10 @@ const EditTemplate = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
     const [loadingEditor, setLoadingEditor] = useState(false);
-    const [fieldsDisabled, setFieldsDisabled] = useState(false);
     const toast = useRef(null);
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
-        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages
+        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, setFieldsDisabled
     } = useContext(ScreensContext);
     const idTemplate = useParams();
 
@@ -152,6 +151,16 @@ const EditTemplate = () => {
         }
     };
 
+    useEffect(() => {
+        if (selectedTemplate === "") {
+            setFieldsDisabled(true);  // ❌ Sin plantilla → editor desactivado
+        } else {
+            setFieldsDisabled(false); // ✅ Con plantilla → editor activado
+        }
+        console.log(selectedTemplate);
+        console.log("Buenas: ", fieldsDisabled);
+    }, [selectedTemplate]);
+
     /**
      * Función para actualizar una plantilla en la base de datos con llamada a la API
      * @param {*} event Evento del clic en el botón de actualizar plantilla
@@ -239,13 +248,17 @@ const EditTemplate = () => {
     }, [selectedContextDropdown]);
 
     useEffect(() => {
-        if (editorRef.current) {
-            if (fieldsDisabled) {
-                $(editorRef.current).summernote('disable');
-            } else {
-                $(editorRef.current).summernote('enable');
-                setCurrentContent($(editorRef.current).summernote('code'));
-            }
+        if (selectedTemplate) {
+            setFieldsDisabled(false);
+        }
+    }, [selectedTemplate]);
+
+    useEffect(() => {
+        if (fieldsDisabled) {
+            $(editorRef.current).summernote('disable');
+        } else {
+            $(editorRef.current).summernote('enable');
+            setCurrentContent($(editorRef.current).summernote('code'));
         }
     }, [fieldsDisabled]);
 
@@ -341,7 +354,6 @@ const EditTemplate = () => {
                         setSubjectTemplate={setSubjectTemplate}
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
                         isTemplateModified={isTemplateModified}
-                        setFieldsDisabled={setFieldsDisabled}
                     />
                 </div>
 
