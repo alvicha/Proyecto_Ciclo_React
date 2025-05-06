@@ -14,7 +14,7 @@ import { Button } from 'primereact/button';
 import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
-import { ClipLoader, TailSpin } from 'react-loader-spinner';
+import { TailSpin } from 'react-loader-spinner';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");

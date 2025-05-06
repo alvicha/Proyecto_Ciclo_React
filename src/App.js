@@ -1,4 +1,4 @@
-import { Route, Router, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import { ScreensProvider } from './screens/ScreensContext';
 import TemplatesList from './pages/TemplatesList';

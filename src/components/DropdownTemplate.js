@@ -199,8 +199,6 @@ const DropdownTemplate = ({
         } else {
             onClickContentTemplate(templateSelected);
             setNameTemplate(selectedCodeTemplate);
-            setSubjectTemplate(templateSelected.data[codeLanguage].subject);
-            setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
         }
     };
 

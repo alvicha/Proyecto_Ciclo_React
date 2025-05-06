@@ -45,7 +45,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
             header: 'Eliminación Plantilla',
             icon: 'pi pi-info-circle',
             defaultFocus: 'reject',
-            acceptClassName: 'p-button-danger',
             acceptLabel: 'Sí',
             rejectLabel: 'No',
             style: { width: '90vw', maxWidth: '800px' },
