@@ -8,9 +8,7 @@ const HeaderComponent = () => {
                 <div className="container-fluid">
                     <div className="d-flex justify-content-sm-between justify-content-around align-items-sm-center w-100">
                         <div className="d-flex flex-column flex-sm-row justify-content-start align-items-center">
-                            <a className="navbar-brand" href="#">
-                                <Link to="/templatesList"><img src="/images/logo.png" alt="Logo de la aplicación" width="100" height="90" /> </Link>
-                            </a>
+                            <Link to="/templatesList"><img src="/images/logo.png" alt="Logo de la aplicación" width="100" height="90" /> </Link>
                             <h2 className="texto-aplicacion font-weight-bold mb-3 mb-lg-0 mb-md-0 mb-sm-0 ml-md-3 text-center text-md-left">
                                 Demo Hotels
                             </h2>

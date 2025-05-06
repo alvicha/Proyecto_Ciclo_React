@@ -27,6 +27,7 @@ const EditTemplate = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
     const [loadingEditor, setLoadingEditor] = useState(false);
+    const [fieldsDisabled, setFieldsDisabled] = useState(false);
     const toast = useRef(null);
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
@@ -39,7 +40,6 @@ const EditTemplate = () => {
     */
     const changeSummernoteLanguage = useCallback((lang) => {
         editorSummernote.current = editorRef.current;
-        setCurrentContent($(editorRef.current).summernote('code'));
 
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
@@ -229,6 +229,7 @@ const EditTemplate = () => {
 
     useEffect(() => {
         if (selectedContextDropdown) {
+            setFieldsDisabled(true);
             setNameTemplate("");
             setSubjectTemplate("")
             setSelectedTemplate("");
@@ -236,6 +237,17 @@ const EditTemplate = () => {
             $(editorRef.current).summernote("code", "");
         }
     }, [selectedContextDropdown]);
+
+    useEffect(() => {
+        if (editorRef.current) {
+            if (fieldsDisabled) {
+                $(editorRef.current).summernote('disable');
+            } else {
+                $(editorRef.current).summernote('enable');
+                setCurrentContent($(editorRef.current).summernote('code'));
+            }
+        }
+    }, [fieldsDisabled]);
 
     /**
      * Llama a las APIs de idiomas y contextos una vez al montar el componente.
@@ -329,6 +341,7 @@ const EditTemplate = () => {
                         setSubjectTemplate={setSubjectTemplate}
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
                         isTemplateModified={isTemplateModified}
+                        setFieldsDisabled={setFieldsDisabled}
                     />
                 </div>
 
@@ -339,7 +352,8 @@ const EditTemplate = () => {
 
                 <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
                     <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
-                    <InputText id="subject" keyfilter="alpha" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate} aria-describedby="subject" aria-label="Subject" />
+                    <InputText id="subject" keyfilter="alpha" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate} disabled={fieldsDisabled}
+                        aria-describedby="subject" aria-label="Subject" />
                 </div>
 
                 <div className="mb-3">

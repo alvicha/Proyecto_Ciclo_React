@@ -29,7 +29,8 @@ const DropdownTemplate = ({
     setCodeLanguage,
     setSubjectTemplate,
     setOriginalSubjectTemplate,
-    isTemplateModified }) => {
+    isTemplateModified,
+    setFieldsDisabled }) => {
 
     const [visible, setVisible] = useState(false);
     const [visibleModalWarning, setVisibleModalWarning] = useState(false);
@@ -182,6 +183,7 @@ const DropdownTemplate = ({
     const handleTemplateChange = (selectedCodeTemplate) => {
         const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
         setShowVariables(true);
+        setFieldsDisabled(false);
 
         if (isTemplateModified()) {
             setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
