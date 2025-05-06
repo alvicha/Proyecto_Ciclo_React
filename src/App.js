@@ -12,11 +12,12 @@ function App() {
   return (
     <ScreensProvider>
       <HeaderComponent />
-        <Routes>
-          <Route path="/" element={<TemplatesList />} />
-          <Route path="/template/:id" element={<EditTemplate />} />
-          <Route path="*" element={<TemplatesList />} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={<TemplatesList />} /> {/* Ruta que no sea definido */}
+        <Route path="/templatesList" element={<TemplatesList />} />
+        <Route path="/template/:id" element={<EditTemplate />} />
+        <Route path="*" element={<TemplatesList />} />
+      </Routes>
       <FooterComponent />
     </ScreensProvider>
   );
