@@ -13,8 +13,8 @@ import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
 import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
-import { ProgressSpinner } from 'primereact/progressspinner';
 import { InputText } from 'primereact/inputtext';
+import { ClipLoader, TailSpin } from 'react-loader-spinner';
 
 const EditTemplate = () => {
     const [nameTemplate, setNameTemplate] = useState("");
@@ -157,6 +157,7 @@ const EditTemplate = () => {
      * @param {*} event Evento del clic en el botón de actualizar plantilla
      */
     const onUpdateTemplate = async (event) => {
+        setLoadingEditor(true);
         try {
             event.preventDefault();
             const currentContentSummernote = $(editorRef.current).summernote('code');
@@ -178,6 +179,7 @@ const EditTemplate = () => {
 
             const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
             if (response) {
+                setLoadingEditor(false);
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla actualizada con éxito', life: 3000 });
             }
         } catch (error) {
@@ -275,7 +277,16 @@ const EditTemplate = () => {
         <>
             {loadingEditor && (
                 <div className='containerSpinner'>
-                    <ProgressSpinner className='spinnerEditor' />
+                    <TailSpin
+                        visible={true}
+                        height="80"
+                        width="80"
+                        color="#18787F"
+                        ariaLabel="tail-spin-loading"
+                        radius="1"
+                        wrapperStyle={{}}
+                        wrapperClass=""
+                    />
                 </div >
             )}
             <Toast ref={toast} />

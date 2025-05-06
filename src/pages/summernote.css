@@ -170,21 +170,7 @@ header {
     align-items: center
 }
 
-.spinnerEditor {
-    width: 80px;
-    height: 80px;
-}
-
-.custom-spinner .p-progress-spinner-circle {
-    stroke: #18787F;
-  }
-
 @media (max-width:768px) {
-    .spinnerEditor {
-        width: 120px;
-        height: 120px;
-    }
-
     .texto-aplicacion {
         font-size: 25px;
     }
@@ -201,11 +187,6 @@ header {
 }
 
 @media (max-width:691px) {
-    .spinnerEditor {
-        width: 120px;
-        height: 120px;
-    }
-
     .nav-link {
         font-size: 15px;
     }
