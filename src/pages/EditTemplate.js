@@ -66,7 +66,11 @@ const EditTemplate = () => {
                 }
             }
         }).summernote("code", selectedTemplateContent);
-    }, [selectedTemplateContent]);
+
+        if (fieldsDisabled) {
+            $(editorRef.current).summernote("disable");
+        }
+    }, [selectedTemplateContent, fieldsDisabled]);
 
     /**
      * Función para que me devuelva la lista de idiomas que hay en la base de datos
@@ -153,12 +157,10 @@ const EditTemplate = () => {
 
     useEffect(() => {
         if (selectedTemplate === "") {
-            setFieldsDisabled(true);  // ❌ Sin plantilla → editor desactivado
+            setFieldsDisabled(true);
         } else {
-            setFieldsDisabled(false); // ✅ Con plantilla → editor activado
+            setFieldsDisabled(false);
         }
-        console.log(selectedTemplate);
-        console.log("Buenas: ", fieldsDisabled);
     }, [selectedTemplate]);
 
     /**
@@ -246,12 +248,6 @@ const EditTemplate = () => {
             $(editorRef.current).summernote("code", "");
         }
     }, [selectedContextDropdown]);
-
-    useEffect(() => {
-        if (selectedTemplate) {
-            setFieldsDisabled(false);
-        }
-    }, [selectedTemplate]);
 
     useEffect(() => {
         if (fieldsDisabled) {

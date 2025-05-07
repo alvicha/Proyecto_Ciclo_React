@@ -13,9 +13,9 @@ import ModalError from "./ModalError";
 
 const TableTemplatesList = ({ filterDataTemplates }) => {
     const navigate = useNavigate();
-    const { totalRecordsTemplates, loading, selectedSortOrder, setSelectedSortOrder, selectedColumnTable, setSelectedColumnTable, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+    const { totalRecordsTemplates, loading, setLoading, selectedSortOrder, setSelectedSortOrder, selectedColumnTable, setSelectedColumnTable, currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
-    const [visibleModalCreateTemplate, setvisibleModalCreateTemplate] = useState(false);
+    const [visibleModalCreateTemplate, setVisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
 
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
@@ -23,11 +23,13 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     const toast = useRef(null);
 
     const accept = async (idTemplate) => {
+        setLoading(true);
         try {
             const response = await deleteTemplateDB(idTemplate, setAlert, setVisibleAlert);
             await filterDataTemplates();
 
             if (response) {
+                setLoading(false);
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
             }
         } catch (error) {
@@ -61,7 +63,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     }
 
     const onCreateModalTemplate = () => {
-        setvisibleModalCreateTemplate(true);
+        setVisibleModalCreateTemplate(true);
     }
 
     const onPage = (event) => {
@@ -128,7 +130,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
 
             {
                 visibleModalCreateTemplate && (
-                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} filterDataTemplates={filterDataTemplates} setvisibleModalCreateTemplate={setvisibleModalCreateTemplate} toast={toast} />
+                    <ModalCreateTemplate visibleModalCreateTemplate={visibleModalCreateTemplate} filterDataTemplates={filterDataTemplates} setVisibleModalCreateTemplate={setVisibleModalCreateTemplate} toast={toast} />
                 )
             }
 

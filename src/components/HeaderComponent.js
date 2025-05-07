@@ -36,7 +36,6 @@ const HeaderComponent = () => {
                     </div>
                 </div>
             </nav>
-
         </header>
     );
 };

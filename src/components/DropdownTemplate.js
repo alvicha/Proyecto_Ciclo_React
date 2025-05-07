@@ -135,7 +135,6 @@ const DropdownTemplate = ({
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
         setVisibleContexts(true);
-        console.log(selectedTemplate);
 
         if (selectedTemplate) {
             if (isTemplateModified()) {
@@ -217,7 +216,7 @@ const DropdownTemplate = ({
         <>
             <Toast ref={toast} />
             <div className="container-fluid">
-                <div className="row justify-content-center p-2">
+                <div className="row justify-content-lg-start justify-content-center p-2">
                     <div className="col-12 col-md-6 col-lg-auto mb-3">
                         <div className="card">
                             <Dropdown

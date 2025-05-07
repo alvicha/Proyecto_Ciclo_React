@@ -6,7 +6,7 @@ import ScreensContext from '../screens/ScreensContext';
 import { Dropdown } from 'primereact/dropdown';
 import { createTemplate, getAllListTemplatesDB, getDataApi } from '../services/services';
 
-const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreateTemplate, filterDataTemplates, toast }) => {
+const ModalCreateTemplate = ({ visibleModalCreateTemplate, setVisibleModalCreateTemplate, filterDataTemplates, toast }) => {
     const { contextsList, setAlert, setVisibleAlert, listLanguages, setListLanguages } = useContext(ScreensContext);
     const [nameTemplate, setNameTemplate] = useState("");
     const [isDisabledAddTemplate, setIsDisabledAddTemplate] = useState(false);
@@ -43,7 +43,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
         } catch (error) {
             setAlert("Error al obtener la lista de plantillas: " + error.message);
             setVisibleAlert(true);
-            setvisibleModalCreateTemplate(false);
+            setVisibleModalCreateTemplate(false);
             console.log(error);
         }
     }
@@ -75,7 +75,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 const response = await createTemplate(body, setAlert, setVisibleAlert);
                 if (response) {
                     toast.current.show({ severity: 'success', summary: 'Éxito', detail: 'Plantilla creada con éxito' });
-                    setvisibleModalCreateTemplate(false);
+                    setVisibleModalCreateTemplate(false);
                     await filterDataTemplates();
                 }
             }
@@ -114,11 +114,11 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setvisibleModalCreate
                 footer={footerContent}
                 visible={visibleModalCreateTemplate}
                 style={{ width: '90vw', maxWidth: '800px' }}
-                onHide={() => setvisibleModalCreateTemplate(false)}
+                onHide={() => setVisibleModalCreateTemplate(false)}
             >
                 <div className="mt-3">
                     <label className='mr-3' htmlFor="firstname">Nombre Plantilla: </label>
-                    <InputText keyfilter="alpha" className="mb-2 w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} aria-labelledby="name"/>
+                    <InputText keyfilter="alpha" className="mb-2 w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} aria-labelledby="name" />
                 </div>
                 <div className="mt-3">
                     <label className='mr-3' htmlFor="firstname">Lista Contextos: </label>
