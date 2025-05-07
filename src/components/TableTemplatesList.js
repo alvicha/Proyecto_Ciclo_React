@@ -17,10 +17,19 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setVisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
-
-    const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
-    const paginatorRight = <Button type="button" icon="pi pi-download" text />;
     const toast = useRef(null);
+
+    const paginatorLeft = "Mostrando " + totalRecordsTemplates + " plantillas en total";
+
+    const refreshData = async () => {
+        try {
+            await filterDataTemplates();
+        } catch (error) {
+            setAlert("Error al filtrar plantillas: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error al filtrar plantillas desde la API:", error);
+        }
+    };
 
     const accept = async (idTemplate) => {
         setLoading(true);
@@ -33,7 +42,9 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla eliminada con éxito', life: 3000 });
             }
         } catch (error) {
-            console.error("Error deleting templates API:", error);
+            setAlert("Error al eliminar plantilla: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error al eliminar plantilla API:", error);
         }
     }
 
@@ -76,15 +87,18 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
 
     return (
         <div className="card mb-3 ml-1">
-            <div className="d-flex align-items-center text-left bg-white border p-2">
+            <div className="d-flex justify-content-between align-items-center text-left bg-white border p-2">
                 <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill buttons" onClick={onCreateModalTemplate} />
+                <div className="d-flex justify-content-end align-items-end">
+                    <Button icon="pi pi-refresh" className="rounded-pill buttons" aria-label="Refrescar" onClick={refreshData} />
+                </div>
             </div>
 
             <Toast ref={toast} />
             <ConfirmDialog />
             <DataTable
                 value={templates} first={currentPage * rows} paginator showGridlines rows={rows} dataKey="id" onPage={onPage} rowsPerPageOptions={[5, 10, 25, 50]}
-                lazy paginatorLeft={paginatorLeft} loading={loading} paginatorRight={paginatorRight} totalRecords={totalRecordsTemplates} sortField={selectedColumnTable} sortOrder={selectedSortOrder}
+                lazy paginatorLeft={paginatorLeft} loading={loading} totalRecords={totalRecordsTemplates} sortField={selectedColumnTable} sortOrder={selectedSortOrder}
                 onSort={(e) => {
                     setSelectedColumnTable(e.sortField);
                     setSelectedSortOrder(e.sortOrder);
