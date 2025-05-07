@@ -40,7 +40,7 @@ const FiltersTemplateList = ({ nameTemplateSearch, setNameTemplateSearch, option
                     <div className="row w-100">
                         {Array.isArray(contextsList) && contextsList.length > 0 && (
                             <div className="col-12 col-md-6 col-lg-6">
-                                <p className="font-weight-bold text-left">Contextos</p>
+                                <p className="text-context font-weight-bold text-left">Contextos</p>
                                 <Dropdown
                                     value={optionContext}
                                     onChange={(e) => setOptionContext(e.value)}
@@ -52,7 +52,7 @@ const FiltersTemplateList = ({ nameTemplateSearch, setNameTemplateSearch, option
                             </div>
                         )}
                         <div className="col-12 col-md-6 col-lg-6">
-                            <p className="font-weight-bold text-left">Buscar</p>
+                            <p className="text-filter font-weight-bold text-left">Buscar</p>
                             <InputText value={nameTemplateSearch} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "100%" }} />
                         </div>
                     </div>

@@ -100,17 +100,16 @@ header {
     padding-top: 25px;
 }
 
-.title {
-    text-align: left;
+.text-filter {
+    font-size: 16px;
+}
+
+.text-context {
+    font-size: 16px;
 }
 
 .texto-aplicacion {
     font-size: 35px;
-}
-
-.page-item :hover {
-    background-color: lightblue;
-    opacity: 0.7;
 }
 
 .filters {
