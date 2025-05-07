@@ -90,7 +90,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
             <div className="d-flex justify-content-between align-items-center text-left bg-white border p-2">
                 <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill buttons" onClick={onCreateModalTemplate} />
                 <div className="d-flex justify-content-end align-items-end">
-                    <Button icon="pi pi-refresh" className="rounded-pill buttons" aria-label="Refrescar" onClick={refreshData} />
+                    <Button icon="pi pi-sync" className="rounded-pill buttons" aria-label="Refrescar" onClick={refreshData} />
                 </div>
             </div>
 
