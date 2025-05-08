@@ -305,8 +305,6 @@ const EditTemplate = () => {
                         color="#18787F"
                         ariaLabel="tail-spin-loading"
                         radius="1"
-                        wrapperStyle={{}}
-                        wrapperClass=""
                     />
                 </div >
             )}
