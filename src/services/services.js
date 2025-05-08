@@ -178,6 +178,6 @@ export const deleteTemplateDB = async (idTemplate, setAlert, setVisibleAlert) =>
   } catch (error) {
     setAlert("Error al eliminar la plantilla: " + error.message);
     setVisibleAlert(true);
-    console.error('Ha habido un problema para actualizar:', error);
+    console.error('Ha habido un problema para eliminar:', error);
   }
 };
