@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
-import PreviewFinalTemplate from './pages/PreviewFinalTemplate';
+import PreviewFinalTemplate from './components/PreviewFinalTemplate';
 
 function App() {
   return (
