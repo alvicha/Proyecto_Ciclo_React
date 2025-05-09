@@ -118,7 +118,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setVisibleModalCreate
             >
                 <div className="mt-3">
                     <label className='mr-3' htmlFor="firstname">Nombre Plantilla: </label>
-                    <InputText keyfilter="alpha" className="mb-2 w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} aria-labelledby="name" />
+                    <InputText className="mb-2 w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={(e) => setNameTemplate(e.target.value)} aria-labelledby="name" />
                 </div>
                 <div className="mt-3">
                     <label className='mr-3' htmlFor="firstname">Lista Contextos: </label>

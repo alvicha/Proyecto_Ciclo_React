@@ -53,6 +53,7 @@ const EditTemplate = () => {
                 ["color", ["color"]],
                 ["para", ["ul", "ol", "paragraph"]],
                 ['insert', ['picture']],
+                ['view', ['codeview']]
             ],
             fontNames: ['Sans Serif', 'Serif', 'Monospace'],
             fontNamesIgnoreCheck: ['Sans Serif', 'Serif', 'Monospace'],
@@ -358,7 +359,7 @@ const EditTemplate = () => {
 
                 <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
                     <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
-                    <InputText id="subject" keyfilter="alpha" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate} disabled={fieldsDisabled}
+                    <InputText id="subject" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate} disabled={fieldsDisabled}
                         aria-describedby="subject" aria-label="Subject" />
                 </div>
 
