@@ -172,15 +172,14 @@ const EditTemplate = () => {
         setLoadingEditor(true);
         try {
             event.preventDefault();
-            const currentContentSummernote = $(editorRef.current).summernote('code');
-            setSelectedTemplateContent(currentContentSummernote);
+            setSelectedTemplateContent(currentContent);
             setOriginalSubjectTemplate(subjectTemplate);
 
             const updatedData = { ...selectedTemplate.data };
 
             //se actualizara solamente el contenido del idioma que hayamos seleccionado
             updatedData[codeLanguage] = {
-                content: currentContentSummernote,
+                content: currentContent,
                 subject: subjectTemplate
             };
 
@@ -190,6 +189,7 @@ const EditTemplate = () => {
             };
 
             const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
+            
             if (response) {
                 setLoadingEditor(false);
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla actualizada con éxito', life: 3000 });

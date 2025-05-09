@@ -42,6 +42,8 @@ const TemplatesList = () => {
                 setLoading(false);
             }
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error al filtrar plantillas:", error);
         } finally {
             setLoading(false);
@@ -57,6 +59,8 @@ const TemplatesList = () => {
                 setContextsList([]);
             }
         } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
             console.error("Error fetching contexts API:", error);
         }
     };

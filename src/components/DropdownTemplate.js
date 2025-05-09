@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
 import { getTemplatesContexts } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
@@ -132,6 +132,12 @@ const DropdownTemplate = ({
         }
     };
 
+    useEffect(() => {
+        if (selectedTemplateContent) {
+            $(editorSummernote.current).summernote('code', selectedTemplateContent);
+        }
+    }, [selectedTemplateContent]); 
+
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
         setVisibleContexts(true);
@@ -254,7 +260,7 @@ const DropdownTemplate = ({
                                     optionLabel="code"
                                     optionValue="code"
                                     placeholder="Plantillas"
-                                    disabled={templates.length === 0}
+                                    disabled={!templates || templates.length === 0}
                                 />
                             </div>
                         </div>
