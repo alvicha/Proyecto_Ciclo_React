@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import HeaderComponent from './components/HeaderComponent';
 import FooterComponent from './components/FooterComponent';
+import PreviewFinalTemplate from './pages/PreviewFinalTemplate';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<TemplatesList />} /> {/* Ruta que no sea definido */}
         <Route path="/templatesList" element={<TemplatesList />} />
         <Route path="/template/:id" element={<EditTemplate />} />
+        <Route path="/previewFinalTemplate" element={<PreviewFinalTemplate />} />
         <Route path="*" element={<TemplatesList />} />
       </Routes>
       <FooterComponent />

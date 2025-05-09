@@ -8,6 +8,7 @@ const endPointDeleteTemplate = process.env.REACT_APP_DELETE_TEMPLATE;
 const endPointShowTemplateById = process.env.REACT_APP_SHOW_TEMPLATE;
 const endPointFilterInfoTemplates = process.env.REACT_APP_FILTER_TEMPLATE;
 const endPointGetAllTemplates = process.env.REACT_APP_TEMPLATES;
+const endPointRenderTemplate = process.env.REACT_APP_RENDER_TEMPLATE;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -111,6 +112,32 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
     return console.log(error);
   }
 };
+
+export const renderTemplatesFinal = async (idTemplate, codeLanguage, data, setAlert, setVisibleAlert) => {
+  try {
+    const payload =
+    {
+      templateId: idTemplate,
+      languageCode: codeLanguage,
+      data: data
+    };
+
+    if (endPointRenderTemplate) {
+      const response = await fetch(`${endPointRenderTemplate}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al realizar la petición: " + error);
+    setVisibleAlert(true);
+    return console.log(error);
+  }
+}
 
 export const getAllListTemplatesDB = async (setAlert, setVisibleAlert) => {
   try {

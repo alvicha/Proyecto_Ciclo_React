@@ -260,13 +260,13 @@ const DropdownTemplate = ({
                                     optionLabel="code"
                                     optionValue="code"
                                     placeholder="Plantillas"
-                                    disabled={!templates || templates.length === 0}
+                                    disabled={templates.length === 0}
                                 />
                             </div>
                         </div>
                     )}
 
-                    {showVariables && (
+                    {showVariables && placeholdersList.length > 0 && (
                         <div className="col-12 col-md-6 col-lg-auto mb-3">
                             <div className="card">
                                 <Dropdown

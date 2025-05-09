@@ -6,12 +6,12 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById, renderTemplatesFinal } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { TailSpin } from 'react-loader-spinner';
@@ -28,9 +28,10 @@ const EditTemplate = () => {
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
     const [loadingEditor, setLoadingEditor] = useState(false);
     const toast = useRef(null);
+    const navigate = useNavigate();
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
-        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, setFieldsDisabled
+        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, setFieldsDisabled, setPreviewFinalTemplate
     } = useContext(ScreensContext);
     const idTemplate = useParams();
 
@@ -164,6 +165,32 @@ const EditTemplate = () => {
         }
     }, [selectedTemplate]);
 
+
+    const viewTemplateVariables = async (idTemplate) => {
+        const data = {
+            'GUEST_NAME': 'Juan',
+            'GUEST_SURNAME': 'Pérez',
+            'HOTEL_NAME': 'Hotel XYZ',
+            'CHECKIN_DATE': '2025-05-01',
+            'CHECKOUT_DATE': '2025-05-05',
+            'INCIDENT_DESCRIPTION': 'Se ha detectado un problema con el sistema de climatización en su habitación.',
+            'CONTACT_PHONE': '+34 912 345 678',
+            'CONTACT_EMAIL': 'contacto@hotelxyz.com'
+        };
+
+        try {
+            const response = await renderTemplatesFinal(idTemplate, codeLanguage, data, setAlert, setVisibleAlert);
+            if (response) {
+                setPreviewFinalTemplate(response);
+                navigate("/previewFinalTemplate");
+            }
+        } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error de red:", error);
+        }
+    }
+
     /**
      * Función para actualizar una plantilla en la base de datos con llamada a la API
      * @param {*} event Evento del clic en el botón de actualizar plantilla
@@ -189,7 +216,7 @@ const EditTemplate = () => {
             };
 
             const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
-            
+
             if (response) {
                 setLoadingEditor(false);
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla actualizada con éxito', life: 3000 });
@@ -350,6 +377,10 @@ const EditTemplate = () => {
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
                         isTemplateModified={isTemplateModified}
                     />
+                </div>
+
+                <div className="text-right mt-4 mb-3">
+                    <Button label="Previsualizacion final" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} />
                 </div>
 
                 <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
