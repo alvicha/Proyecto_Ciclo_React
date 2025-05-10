@@ -11,7 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { TailSpin } from 'react-loader-spinner';
@@ -29,10 +29,11 @@ const EditTemplate = () => {
     const [loadingEditor, setLoadingEditor] = useState(false);
     const toast = useRef(null);
     const navigate = useNavigate();
+    const idTemplateParams = useParams();
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled,
-        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, setIsEditorFocused, idTemplate
+        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, isEditorFocused, setIsEditorFocused
     } = useContext(ScreensContext);
 
     /**
@@ -66,7 +67,9 @@ const EditTemplate = () => {
                 onChange: function (contents) {
                     setCurrentContent(contents);
                 },
-                onFocus: () => setIsEditorFocused(true),
+                onFocus: () => {
+                    setIsEditorFocused(true);
+                }
             }
         }).summernote("code", selectedTemplateContent);
 
@@ -96,7 +99,7 @@ const EditTemplate = () => {
     const getSelectedTemplateEditor = async () => {
         try {
             const selectedLanguage = listLanguages.find(lang => lang.code === codeLanguage);
-            const response = await listTemplateById(idTemplate, setAlert, setVisibleAlert);
+            const response = await listTemplateById(idTemplateParams.id, setAlert, setVisibleAlert);
 
             if (codeLanguage) {
                 setSelectedTemplate(response);
@@ -181,6 +184,8 @@ const EditTemplate = () => {
             'CONTACT_PHONE': '+34 912 345 678',
             'CONTACT_EMAIL': 'contacto@hotelxyz.com'
         };
+        console.log(isEditorFocused);
+
 
         try {
             const response = await renderTemplatesFinal(idTemplate, codeLanguage, data, setAlert, setVisibleAlert);
@@ -403,8 +408,8 @@ const EditTemplate = () => {
 
                 <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
                     <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
-                    <InputText id="subject" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate} disabled={fieldsDisabled}
-                        aria-describedby="subject" aria-label="Subject" />
+                    <InputText id="subject" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate}
+                        onFocus={() => setIsEditorFocused(false)} disabled={fieldsDisabled} aria-describedby="subject" aria-label="Subject" />
                 </div>
 
                 <div className="mb-3">

@@ -14,7 +14,7 @@ import ModalError from "./ModalError";
 const TableTemplatesList = ({ filterDataTemplates }) => {
     const navigate = useNavigate();
     const { totalRecordsTemplates, loading, setLoading, selectedSortOrder, setSelectedSortOrder, selectedColumnTable, setSelectedColumnTable,
-        currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows, setIdTemplate } = useContext(ScreensContext);
+        currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setVisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -52,11 +52,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     const reject = () => {
         toast.current.show({ severity: 'warn', summary: 'Cancelado', detail: 'Se ha cancelado la eliminación de la plantilla', life: 3000 });
     }
-
-    const onEditTemplate = (selectedIdTemplate) => {
-        setIdTemplate(selectedIdTemplate);
-        navigate(`/template/${selectedIdTemplate}`);
-    };
 
     const onDeleteTemplate = (idTemplate) => {
         confirmDialog({
@@ -134,7 +129,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
                 <Column header="Acciones" style={{ width: '20%' }} body={(rowData) => (
                     <div className="d-flex w-100 h-25">
                         <Button icon="pi pi-eye" className="rounded-pill mr-1" outlined severity="help" aria-label="Visualización" onClick={() => onShowDataTemplate(rowData)} />
-                        <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => onEditTemplate(rowData.id)} />
+                        <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => navigate(`/template/${rowData.id}`)} />
                         <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={() => onDeleteTemplate(rowData.id)} />
                     </div>
                 )} />

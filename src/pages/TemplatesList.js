@@ -30,8 +30,6 @@ const TemplatesList = () => {
             await contextsApi();
 
             const response = await filterInfoTemplate(setAlert, setVisibleAlert, data);
-            console.log("Respuesta: ", response);
-
             if (response) {
                 const cleanTemplates = response.templates.map(template => ({
                     ...template,

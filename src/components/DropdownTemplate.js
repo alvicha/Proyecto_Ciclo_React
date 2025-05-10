@@ -103,31 +103,26 @@ const DropdownTemplate = ({
 
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
-        if (selectedTemplateContent || nameTemplate !== "") {
-            $(editorSummernote.current).summernote('invoke', 'editor.insertText', placeholderText);
-        } else {
-            toast.current.show({ severity: 'warn', summary: 'Advertencia', detail: 'No puedes añadir variables sin una plantilla seleccionada', life: 3000 });
-        }
-    };
 
-    const insertVariablesSubject = (action) => {
-        const placeholderText = `{{${action}}}`;
         if (selectedTemplateContent || nameTemplate !== "") {
-            setSubjectTemplate(subjectTemplate + placeholderText);
+            if (isEditorFocused) {
+                $(editorSummernote.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
+                $(editorSummernote.current).summernote('invoke', 'editor.insertText', placeholderText);
+            } else {
+                setSubjectTemplate(subjectTemplate + placeholderText);
+            }
         } else {
-            toast.current.show({ severity: 'warn', summary: 'Advertencia', detail: 'No puedes añadir variables sin una plantilla seleccionada', life: 3000 });
+            toast.current.show({
+                severity: 'warn',
+                summary: 'Advertencia',
+                detail: 'No puedes añadir variables sin una plantilla seleccionada',
+                life: 3000
+            });
         }
     };
 
     const handleActionChange = (action) => {
-        const isEmpty = $(editorSummernote.current).summernote('isEmpty');
-
-        if (isEmpty || isEditorFocused) {
-            $(editorSummernote.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
-            insertVariablesText(action);
-        } else {
-            insertVariablesSubject(action);
-        }
+        insertVariablesText(action);
     };
 
     const getTemplatesApi = async (idContext) => {
@@ -143,10 +138,15 @@ const DropdownTemplate = ({
     };
 
     useEffect(() => {
-        if (selectedTemplateContent) {
+        if (selectedTemplateContent && !isEditorFocused) {
             $(editorSummernote.current).summernote('code', selectedTemplateContent);
         }
     }, [selectedTemplateContent]);
+
+
+    useEffect(() => {
+        console.log(isEditorFocused)
+    }, [isEditorFocused]);
 
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
