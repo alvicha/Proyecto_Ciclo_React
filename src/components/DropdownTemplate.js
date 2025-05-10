@@ -27,6 +27,7 @@ const DropdownTemplate = ({
     setNameTemplate,
     codeLanguage,
     setCodeLanguage,
+    subjectTemplate,
     setSubjectTemplate,
     setOriginalSubjectTemplate,
     isTemplateModified }) => {
@@ -37,7 +38,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList } = useContext(ScreensContext);
+    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList, isEditorFocused } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -109,14 +110,23 @@ const DropdownTemplate = ({
         }
     };
 
+    const insertVariablesSubject = (action) => {
+        const placeholderText = `{{${action}}}`;
+        if (selectedTemplateContent || nameTemplate !== "") {
+            setSubjectTemplate(subjectTemplate + placeholderText);
+        } else {
+            toast.current.show({ severity: 'warn', summary: 'Advertencia', detail: 'No puedes añadir variables sin una plantilla seleccionada', life: 3000 });
+        }
+    };
+
     const handleActionChange = (action) => {
         const isEmpty = $(editorSummernote.current).summernote('isEmpty');
 
-        if (isEmpty) {
-            insertVariablesText(action);
-        } else {
+        if (isEmpty || isEditorFocused) {
             $(editorSummernote.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
             insertVariablesText(action);
+        } else {
+            insertVariablesSubject(action);
         }
     };
 
@@ -136,7 +146,7 @@ const DropdownTemplate = ({
         if (selectedTemplateContent) {
             $(editorSummernote.current).summernote('code', selectedTemplateContent);
         }
-    }, [selectedTemplateContent]); 
+    }, [selectedTemplateContent]);
 
     const handleLanguageChange = (langDropdown) => {
         const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);

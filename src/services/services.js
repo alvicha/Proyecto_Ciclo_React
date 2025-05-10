@@ -121,6 +121,7 @@ export const renderTemplatesFinal = async (idTemplate, codeLanguage, data, setAl
       languageCode: codeLanguage,
       data: data
     };
+    console.log(payload);
 
     if (endPointRenderTemplate) {
       const response = await fetch(`${endPointRenderTemplate}`, {

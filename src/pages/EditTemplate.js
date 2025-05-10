@@ -11,7 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { TailSpin } from 'react-loader-spinner';
@@ -31,9 +31,9 @@ const EditTemplate = () => {
     const navigate = useNavigate();
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
-        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, setFieldsDisabled, setPreviewFinalTemplate
+        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled,
+        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, setIsEditorFocused, idTemplate
     } = useContext(ScreensContext);
-    const idTemplate = useParams();
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -65,7 +65,8 @@ const EditTemplate = () => {
                 },
                 onChange: function (contents) {
                     setCurrentContent(contents);
-                }
+                },
+                onFocus: () => setIsEditorFocused(true),
             }
         }).summernote("code", selectedTemplateContent);
 
@@ -95,7 +96,7 @@ const EditTemplate = () => {
     const getSelectedTemplateEditor = async () => {
         try {
             const selectedLanguage = listLanguages.find(lang => lang.code === codeLanguage);
-            const response = await listTemplateById(idTemplate.id, setAlert, setVisibleAlert);
+            const response = await listTemplateById(idTemplate, setAlert, setVisibleAlert);
 
             if (codeLanguage) {
                 setSelectedTemplate(response);
@@ -160,13 +161,16 @@ const EditTemplate = () => {
     useEffect(() => {
         if (selectedTemplate === "") {
             setFieldsDisabled(true);
+            setVisibleButtonPreviewTemplate(false);
         } else {
+            setVisibleButtonPreviewTemplate(true);
             setFieldsDisabled(false);
         }
     }, [selectedTemplate]);
 
 
     const viewTemplateVariables = async (idTemplate) => {
+        setLoadingEditor(true);
         const data = {
             'GUEST_NAME': 'Juan',
             'GUEST_SURNAME': 'Pérez',
@@ -183,7 +187,15 @@ const EditTemplate = () => {
             if (response) {
                 setPreviewFinalTemplate(response);
                 navigate("/previewFinalTemplate");
+            } else {
+                toast.current.show({
+                    severity: 'warn',
+                    summary: 'Idioma no disponible',
+                    detail: 'La plantilla no tiene contenido en el idioma seleccionado.',
+                    life: 4000
+                });
             }
+            setLoadingEditor(false);
         } catch (error) {
             setAlert("Ha ocurrido un error: " + error.message);
             setVisibleAlert(true);
@@ -373,6 +385,7 @@ const EditTemplate = () => {
                         getPlaceholdersApi={getPlaceholdersApi}
                         nameTemplate={nameTemplate}
                         setNameTemplate={setNameTemplate}
+                        subjectTemplate={subjectTemplate}
                         setSubjectTemplate={setSubjectTemplate}
                         setOriginalSubjectTemplate={setOriginalSubjectTemplate}
                         isTemplateModified={isTemplateModified}
@@ -380,7 +393,7 @@ const EditTemplate = () => {
                 </div>
 
                 <div className="text-right mt-4 mb-3">
-                    <Button label="Previsualizacion final" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} />
+                    <Button label="Previsualizacion final" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
                 </div>
 
                 <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
