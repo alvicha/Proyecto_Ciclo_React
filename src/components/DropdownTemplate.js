@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import $ from 'jquery';
-import { getTemplatesContexts } from '../services/services';
+import { getTemplatesContexts, listTemplateById } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
 import "../pages/summernote.css";
 import { Toast } from 'primereact/toast';
@@ -38,7 +38,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList, isEditorFocused } = useContext(ScreensContext);
+    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList, isEditorFocused, setLoadingEditor } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -77,6 +77,7 @@ const DropdownTemplate = ({
         setOriginalSubjectTemplate("");
     };
 
+
     const onClickContentTemplate = (templateSelected) => {
         setSelectedTemplate(templateSelected);
         setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
@@ -101,26 +102,6 @@ const DropdownTemplate = ({
         }
     };
 
-    const insertVariablesText = (action) => {
-        const placeholderText = `{{${action}}}`;
-
-        if (selectedTemplateContent || nameTemplate !== "") {
-            if (isEditorFocused) {
-                $(editorSummernote.current).summernote('invoke', 'editor.restoreRange'); // Restauramos el rango del cursor
-                $(editorSummernote.current).summernote('invoke', 'editor.insertText', placeholderText);
-            } else {
-                setSubjectTemplate(subjectTemplate + placeholderText);
-            }
-        } else {
-            toast.current.show({
-                severity: 'warn',
-                summary: 'Advertencia',
-                detail: 'No puedes añadir variables sin una plantilla seleccionada',
-                life: 3000
-            });
-        }
-    };
-
     const handleActionChange = (action) => {
         insertVariablesText(action);
     };
@@ -139,49 +120,76 @@ const DropdownTemplate = ({
 
     useEffect(() => {
         if (selectedTemplateContent && !isEditorFocused) {
-            $(editorSummernote.current).summernote('code', selectedTemplateContent);
+            const sanitized = $('<div>').html(selectedTemplateContent).text(); // elimina etiquetas rotas
+            $(editorSummernote.current).summernote('code', sanitized);
         }
     }, [selectedTemplateContent]);
 
 
-    useEffect(() => {
-        console.log(isEditorFocused)
-    }, [isEditorFocused]);
+    const insertVariablesText = (action) => {
+        const placeholderText = `{{${action}}}`;
 
-    const handleLanguageChange = (langDropdown) => {
-        const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
-        setVisibleContexts(true);
-
-        if (selectedTemplate) {
-            if (isTemplateModified()) {
-                setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
-                setTextButton("Cambiar idioma");
-                setVisibleModalWarning(true);
-
-                setConfirmAction(() => () => {
-                    if (selectedTemplate) {
-                        setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
-                        setNameTemplate(selectedTemplate.code);
-                        setSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
-                        setOriginalSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
-                        setSelectedLanguageDropdown(selectedLanguage.value);
-                        setCodeLanguage(selectedLanguage.code);
-                    } else {
-                        resetData();
-                        setSelectedLanguageDropdown(selectedLanguage.value);
-                        setCodeLanguage(selectedLanguage.code);
-                    }
-                });
+        if (selectedTemplateContent || nameTemplate !== "") {
+            if (isEditorFocused) {
+                $(editorSummernote.current).summernote('pasteHTML', placeholderText);
             } else {
-                setSelectedTemplateContent(selectedTemplate.data[selectedLanguage.code].content);
-                setSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
-                setOriginalSubjectTemplate(selectedTemplate.data[selectedLanguage.code].subject);
+                setSubjectTemplate(subjectTemplate + placeholderText);
+            }
+        } else {
+            toast.current.show({
+                severity: 'warn',
+                summary: 'Advertencia',
+                detail: 'No puedes añadir variables sin una plantilla seleccionada',
+                life: 3000
+            });
+        }
+    };
+
+
+    const handleLanguageChange = async (langDropdown) => {
+        try {
+            const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
+            setVisibleContexts(true);
+
+            if (selectedTemplate) {
+                setLoadingEditor(true);
+                const response = await listTemplateById(selectedTemplate.id);
+
+                if (isTemplateModified()) {
+                    setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
+                    setTextButton("Cambiar idioma");
+                    setVisibleModalWarning(true);
+
+                    setConfirmAction(() => () => {
+                        if (response) {
+                            setSelectedTemplateContent(response.data[selectedLanguage.code].content);
+                            setNameTemplate(response.code);
+                            setSubjectTemplate(response.data[selectedLanguage.code].subject);
+                            setOriginalSubjectTemplate(response.data[selectedLanguage.code].subject);
+                            setSelectedLanguageDropdown(selectedLanguage.value);
+                            setCodeLanguage(selectedLanguage.code);
+                        } else {
+                            resetData();
+                            setSelectedLanguageDropdown(selectedLanguage.value);
+                            setCodeLanguage(selectedLanguage.code);
+                        }
+                    });
+                } else {
+                    setSelectedTemplateContent(response.data[selectedLanguage.code].content);
+                    setSubjectTemplate(response.data[selectedLanguage.code].subject);
+                    setOriginalSubjectTemplate(response.data[selectedLanguage.code].subject);
+                    setSelectedLanguageDropdown(selectedLanguage.value);
+                    setCodeLanguage(selectedLanguage.code);
+                }
+            } else {
                 setSelectedLanguageDropdown(selectedLanguage.value);
                 setCodeLanguage(selectedLanguage.code);
             }
-        } else {
-            setSelectedLanguageDropdown(selectedLanguage.value);
-            setCodeLanguage(selectedLanguage.code);
+            setLoadingEditor(false);
+        } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error:", error);
         }
     };
 
@@ -195,26 +203,35 @@ const DropdownTemplate = ({
         setVisibleModalWarning(false);
     };
 
-    const handleTemplateChange = (selectedCodeTemplate) => {
-        const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
-        setShowVariables(true);
+    const handleTemplateChange = async (selectedCodeTemplate) => {
+        try {
+            const templateSelected = templates.find(template => template.code === selectedCodeTemplate);
+            setShowVariables(true);
+            setLoadingEditor(true);
 
-        if (isTemplateModified()) {
-            setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
-            setTextButton("Cambiar plantilla");
-            setVisibleModalWarning(true);
+            const response = await listTemplateById(templateSelected.id);
 
-            setConfirmAction(() => () => {
-                setSelectedTemplate(templateSelected);
-                setSelectedTemplateContent(templateSelected.data[codeLanguage].content);
-                $(editorSummernote.current).summernote('code', templateSelected.data[codeLanguage].content);
-                setNameTemplate(selectedCodeTemplate);
-                setSubjectTemplate(templateSelected.data[codeLanguage].subject);
-                setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
-            });
-        } else {
-            onClickContentTemplate(templateSelected);
-            setNameTemplate(selectedCodeTemplate);
+            if (isTemplateModified()) {
+                setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
+                setTextButton("Cambiar plantilla");
+                setVisibleModalWarning(true);
+
+                setConfirmAction(() => () => {
+                    setSelectedTemplate(response);
+                    setSelectedTemplateContent(response.data[codeLanguage].content);
+                    setNameTemplate(selectedCodeTemplate);
+                    setSubjectTemplate(response.data[codeLanguage].subject);
+                    setOriginalSubjectTemplate(response.data[codeLanguage].subject);
+                });
+            } else {
+                onClickContentTemplate(response);
+                setNameTemplate(response.code);
+            }
+            setLoadingEditor(false);
+        } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error:", error);
         }
     };
 

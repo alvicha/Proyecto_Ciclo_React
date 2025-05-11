@@ -22,6 +22,7 @@ export const ScreensProvider = ({ children }) => {
   const [previewFinalTemplate, setPreviewFinalTemplate] = useState(null);
   const [visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate] = useState(false);
   const [isEditorFocused, setIsEditorFocused] = useState(false);
+  const [loadingEditor, setLoadingEditor] = useState(false);
 
   return (
     <ScreensContext.Provider value={{
@@ -30,7 +31,7 @@ export const ScreensProvider = ({ children }) => {
       listLanguages, setListLanguages, totalRecordsTemplates, setTotalRecordsTemplates, selectedColumnTable, setSelectedColumnTable, loading,
       setLoading, selectedSortOrder, setSelectedSortOrder, currentContent, setCurrentContent,
       fieldsDisabled, setFieldsDisabled, previewFinalTemplate, setPreviewFinalTemplate, visibleButtonPreviewTemplate,
-      setVisibleButtonPreviewTemplate, isEditorFocused, setIsEditorFocused
+      setVisibleButtonPreviewTemplate, isEditorFocused, setIsEditorFocused, loadingEditor, setLoadingEditor
     }}>
       {children}
     </ScreensContext.Provider>

@@ -26,13 +26,12 @@ const EditTemplate = () => {
     const [selectedContextDropdown, setSelectedContextDropdown] = useState("");
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
-    const [loadingEditor, setLoadingEditor] = useState(false);
     const toast = useRef(null);
     const navigate = useNavigate();
     const idTemplateParams = useParams();
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
-        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled,
+        setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, loadingEditor, setLoadingEditor,
         setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, isEditorFocused, setIsEditorFocused
     } = useContext(ScreensContext);
 
