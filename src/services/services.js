@@ -113,15 +113,15 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
   }
 };
 
-export const renderTemplatesFinal = async (idTemplate, codeLanguage, data, setAlert, setVisibleAlert) => {
+export const renderTemplatesFinal = async (idTemplate, idUser, codeLanguage, idIncident, setAlert, setVisibleAlert) => {
   try {
     const payload =
     {
       templateId: idTemplate,
+      idUser: idUser,
       languageCode: codeLanguage,
-      data: data
+      idIncident: idIncident
     };
-    console.log(payload);
 
     if (endPointRenderTemplate) {
       const response = await fetch(`${endPointRenderTemplate}`, {

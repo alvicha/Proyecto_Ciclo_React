@@ -32,7 +32,7 @@ const EditTemplate = () => {
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, loadingEditor, setLoadingEditor,
-        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, isEditorFocused, setIsEditorFocused
+        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, setIsEditorFocused
     } = useContext(ScreensContext);
 
     /**
@@ -173,19 +173,11 @@ const EditTemplate = () => {
 
     const viewTemplateVariables = async (idTemplate) => {
         setLoadingEditor(true);
-        const data = {
-            'GUEST_NAME': 'Juan',
-            'GUEST_SURNAME': 'Pérez',
-            'HOTEL_NAME': 'Hotel XYZ',
-            'CHECKIN_DATE': '2025-05-01',
-            'CHECKOUT_DATE': '2025-05-05',
-            'INCIDENT_DESCRIPTION': 'Se ha detectado un problema con el sistema de climatización en su habitación.',
-            'CONTACT_PHONE': '+34 912 345 678',
-            'CONTACT_EMAIL': 'contacto@hotelxyz.com'
-        };
+        const idUser = 1;
+        const idIncident = 1;
 
         try {
-            const response = await renderTemplatesFinal(idTemplate, codeLanguage, data, setAlert, setVisibleAlert);
+            const response = await renderTemplatesFinal(idTemplate, idUser, codeLanguage, idIncident, setAlert, setVisibleAlert);
             if (response) {
                 setPreviewFinalTemplate(response);
                 navigate("/previewFinalTemplate");
