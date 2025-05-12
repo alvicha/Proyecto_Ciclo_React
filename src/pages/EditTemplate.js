@@ -183,8 +183,6 @@ const EditTemplate = () => {
             'CONTACT_PHONE': '+34 912 345 678',
             'CONTACT_EMAIL': 'contacto@hotelxyz.com'
         };
-        console.log(isEditorFocused);
-
 
         try {
             const response = await renderTemplatesFinal(idTemplate, codeLanguage, data, setAlert, setVisibleAlert);
