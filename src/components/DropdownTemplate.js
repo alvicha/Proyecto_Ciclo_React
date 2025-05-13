@@ -120,8 +120,8 @@ const DropdownTemplate = ({
 
     useEffect(() => {
         if (selectedTemplateContent && !isEditorFocused) {
-            const sanitized = $('<div>').html(selectedTemplateContent).text(); // elimina etiquetas rotas
-            $(editorSummernote.current).summernote('code', sanitized);
+            // En lugar de limpiar el HTML con .text(), lo usamos directamente
+            $(editorSummernote.current).summernote('code', selectedTemplateContent);
         }
     }, [selectedTemplateContent]);
 

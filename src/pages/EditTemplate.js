@@ -175,9 +175,10 @@ const EditTemplate = () => {
         setLoadingEditor(true);
         const idUser = 1;
         const idIncident = 1;
+        const idGuest = 1;
 
         try {
-            const response = await renderTemplatesFinal(idTemplate, idUser, codeLanguage, idIncident, setAlert, setVisibleAlert);
+            const response = await renderTemplatesFinal(idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert);
             if (response) {
                 setPreviewFinalTemplate(response);
                 navigate("/previewFinalTemplate");
