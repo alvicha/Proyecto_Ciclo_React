@@ -175,7 +175,7 @@ const EditTemplate = () => {
         setLoadingEditor(true);
         const idUser = 1;
         const idIncident = 1;
-        const idGuest = 1;
+        const idGuest = 2;
 
         try {
             const response = await renderTemplatesFinal(idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert);

@@ -8,7 +8,7 @@ const PreviewFinalTemplate = () => {
         <div className="container-fluid">
             <div className="row my-5">
                 <div className="col-12 d-flex align-items-center justify-content-center">
-                    <div className="card shadow-sm rounded-lg p-1" style={{ maxWidth: '800px', width: '100%' }}>
+                    <div className="card shadow-sm rounded-lg pt-3" style={{ width: '76%' }}>
                         <div className="card-body">
                             <h5 className="card-title font-weight-bold pb-2 text-primary">
                                 {previewFinalTemplate.subject}

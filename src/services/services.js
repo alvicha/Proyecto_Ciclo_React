@@ -115,12 +115,11 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
 
 export const renderTemplatesFinal = async (idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert) => {
   try {
-    console.log(idTemplate);
     const payload =
     {
       templateId: idTemplate,
       idUser: idUser,
-      idHotel: 1,
+      idHotel: 2,
       idBooking: 3,
       guestId: idGuest,
       languageCode: codeLanguage,
