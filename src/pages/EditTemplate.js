@@ -179,14 +179,15 @@ const EditTemplate = () => {
 
         try {
             const response = await renderTemplatesFinal(idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert);
+
             if (response) {
                 setPreviewFinalTemplate(response);
                 navigate("/previewFinalTemplate");
             } else {
                 toast.current.show({
-                    severity: 'warn',
-                    summary: 'Idioma no disponible',
-                    detail: 'La plantilla no tiene contenido en el idioma seleccionado.',
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'No se ha introducido asunto o contenido en la plantilla.',
                     life: 4000
                 });
             }
