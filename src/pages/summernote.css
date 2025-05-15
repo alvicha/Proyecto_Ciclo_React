@@ -158,6 +158,10 @@ header {
     color: #18787F;
 }
 
+.title-subject {
+    font-size: 28px;
+}
+
 .containerSpinner {
     position: fixed;
     top: 0;

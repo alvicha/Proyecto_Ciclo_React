@@ -7,14 +7,14 @@ const PreviewFinalTemplate = ({ setvisiblePreviewFinalTemplate }) => {
 
     return (
         <div className="container-fluid">
-            <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons" onClick={() => setvisiblePreviewFinalTemplate(false)} />
-            <div className="row my-5">
+            <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons mt-4" onClick={() => setvisiblePreviewFinalTemplate(false)} />
+            <div className="row my-4">
                 <div className="col-12 d-flex align-items-center justify-content-center">
                     <div className="card rounded shadow-sm rounded-lg pt-3" style={{ width: '77%' }}>
                         <div className="card-body">
-                            <h5 className="card-title font-weight-bold pb-2 text-primary">
+                            <h3 className="card-title font-weight-bold pb-2 title-subject text-primary">
                                 {previewFinalTemplate.subject}
-                            </h5>
+                            </h3>
                             <hr />
                             <div
                                 className="card-text text-dark mt-4"

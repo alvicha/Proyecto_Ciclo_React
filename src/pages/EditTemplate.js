@@ -11,7 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { TailSpin } from 'react-loader-spinner';
@@ -33,8 +33,7 @@ const EditTemplate = () => {
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, loadingEditor, setLoadingEditor,
-        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, setIsEditorFocused
-    } = useContext(ScreensContext);
+        setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, setSaveRangeEditor } = useContext(ScreensContext);
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -67,8 +66,9 @@ const EditTemplate = () => {
                 onChange: function (contents) {
                     setCurrentContent(contents);
                 },
-                onFocus: () => {
-                    setIsEditorFocused(true);
+                onFocus() {
+                    const range = $(editorRef.current).summernote('createRange');
+                    setSaveRangeEditor(range);
                 }
             }
         }).summernote("code", selectedTemplateContent);
@@ -196,7 +196,7 @@ const EditTemplate = () => {
         } catch (error) {
             setAlert("Ha ocurrido un error: " + error.message);
             setVisibleAlert(true);
-            console.error("Error de red:", error);
+            console.error("Ha ocurrido un error:", error);
         }
     }
 
@@ -319,7 +319,7 @@ const EditTemplate = () => {
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
      */
     useEffect(() => {
-        if (!visiblePreviewFinalTemplate && selectedTemplateContent) {
+        if (!visiblePreviewFinalTemplate || selectedTemplateContent) {
             changeSummernoteLanguage(codeLanguage);
         }
     }, [codeLanguage, selectedTemplateContent, visiblePreviewFinalTemplate]);
@@ -404,7 +404,7 @@ const EditTemplate = () => {
                     <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
                         <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
                         <InputText id="subject" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate}
-                            onFocus={() => setIsEditorFocused(false)} disabled={fieldsDisabled} aria-describedby="subject" aria-label="Subject" />
+                            onFocus={() => setSaveRangeEditor(null)} disabled={fieldsDisabled} aria-describedby="subject" aria-label="Subject" />
                     </div>
 
                     <div className="mb-3">
@@ -414,7 +414,6 @@ const EditTemplate = () => {
                         <Button label="Actualizar Plantilla" aria-label="Actualizar" className="rounded-pill buttons" disabled={!visibleActionButton}
                             onClick={onUpdateTemplate} />
                     </div>
-
                     {visibleAlert && (
                         <ModalError />
                     )}

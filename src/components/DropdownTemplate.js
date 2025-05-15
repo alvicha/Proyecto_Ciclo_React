@@ -38,7 +38,7 @@ const DropdownTemplate = ({
     const [warningMessage, setWarningMessage] = useState(null);
     const [textButton, setTextButton] = useState(null);
     const [confirmAction, setConfirmAction] = useState(null);
-    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList, isEditorFocused, setLoadingEditor } = useContext(ScreensContext);
+    const { editorSummernote, setAlert, visibleAlert, setVisibleAlert, listLanguages, contextsList, setLoadingEditor, saveRangeEditor } = useContext(ScreensContext);
     const [visibleContexts, setVisibleContexts] = useState(false);
     const [visibleTemplates, setVisibleTemplates] = useState(false);
     const toast = useRef(null);
@@ -119,29 +119,53 @@ const DropdownTemplate = ({
     };
 
     useEffect(() => {
-        if (selectedTemplateContent && !isEditorFocused) {
-            // En lugar de limpiar el HTML con .text(), lo usamos directamente
-            $(editorSummernote.current).summernote('code', selectedTemplateContent);
+        if (selectedTemplateContent) {
+            $(editorSummernote.current).summernote("code", selectedTemplateContent);
         }
     }, [selectedTemplateContent]);
 
 
+    useEffect(() => {
+        console.log(saveRangeEditor);
+    }, [saveRangeEditor]);
+
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
-
-        if (selectedTemplateContent || nameTemplate !== "") {
-            if (isEditorFocused) {
-                $(editorSummernote.current).summernote('pasteHTML', placeholderText);
-            } else {
-                setSubjectTemplate(subjectTemplate + placeholderText);
-            }
-        } else {
+        if (!selectedTemplateContent && nameTemplate === "") {
             toast.current.show({
                 severity: 'warn',
                 summary: 'Advertencia',
                 detail: 'No puedes añadir variables sin una plantilla seleccionada',
                 life: 3000
             });
+            return;
+        }
+
+        if (saveRangeEditor) {
+            $(editorSummernote.current).summernote('restoreRange', saveRangeEditor);
+            $(editorSummernote.current).summernote('insertText', placeholderText);
+        } else {
+            const input = document.getElementById('subject');
+            if (!input) {
+                setSubjectTemplate(subjectTemplate + placeholderText);
+                return;
+            }
+
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+
+            // Construimos el nuevo texto con la variable insertada en el cursor
+            const before = subjectTemplate.substring(0, start);
+            const after = subjectTemplate.substring(end);
+            const newValue = before + placeholderText + after;
+            setSubjectTemplate(newValue);
+
+            // Mantenemos el cursor justo después de la inserción
+            setTimeout(() => {
+                input.focus();
+                const cursorPos = start + placeholderText.length;
+                input.setSelectionRange(cursorPos, cursorPos);
+            }, 0);
         }
     };
 
