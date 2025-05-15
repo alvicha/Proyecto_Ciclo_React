@@ -33,7 +33,8 @@ const TemplatesList = () => {
             if (response) {
                 const cleanTemplates = response.templates.map(template => ({
                     ...template,
-                    contentText: template.data?.es?.content?.replace(/<[^>]+>/g, '')
+                    contentText: template.data?.es?.content?.replace(/<[^>]+>/g, ''),
+                    subjectText: template.data?.es?.subject
                 }));
                 setTemplates(cleanTemplates);
                 setTotalRecordsTemplates(response.total);

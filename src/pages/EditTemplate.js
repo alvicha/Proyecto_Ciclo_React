@@ -11,7 +11,7 @@ import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
 import { Button } from 'primereact/button';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import { InputText } from 'primereact/inputtext';
 import { TailSpin } from 'react-loader-spinner';
@@ -34,6 +34,8 @@ const EditTemplate = () => {
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, loadingEditor, setLoadingEditor,
         setFieldsDisabled, setPreviewFinalTemplate, visibleButtonPreviewTemplate, setVisibleButtonPreviewTemplate, setSaveRangeEditor } = useContext(ScreensContext);
+
+    const navigate = useNavigate();
 
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
@@ -349,74 +351,78 @@ const EditTemplate = () => {
 
             <Toast ref={toast} />
             {!visiblePreviewFinalTemplate ? (
-                <div className="container-edit container mt-5 mb-5">
-                    <h1 className="title-edit mb-5"
-                        onMouseOver={(e) => {
-                            e.target.style.color = '#007bff';
-                        }}
-                        onMouseOut={(e) => {
-                            e.target.style.color = '#333';
-                        }} >
-                        EDICIÓN PLANTILLAS
-                    </h1>
+                <div>
+                    <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons mt-4 ml-3" onClick={() => navigate('/templatesList')} />
+                    
+                    <div className="container-edit container mt-4 mb-5">
+                        <h1 className="title-edit mb-5"
+                            onMouseOver={(e) => {
+                                e.target.style.color = '#007bff';
+                            }}
+                            onMouseOut={(e) => {
+                                e.target.style.color = '#333';
+                            }} >
+                            EDICIÓN PLANTILLAS
+                        </h1>
 
-                    <hr style={{
-                        width: "30%",
-                        height: "2px",
-                        backgroundColor: "#007bff",
-                        border: "none",
-                    }} />
+                        <hr style={{
+                            width: "30%",
+                            height: "2px",
+                            backgroundColor: "#007bff",
+                            border: "none",
+                        }} />
 
-                    <div className="filters mt-5 p-1 rounded">
-                        <DropDownTemplate
-                            templates={templates}
-                            setTemplates={setTemplates}
-                            selectedTemplate={selectedTemplate}
-                            setSelectedTemplate={setSelectedTemplate}
-                            selectedTemplateContent={selectedTemplateContent}
-                            setSelectedTemplateContent={setSelectedTemplateContent}
-                            contextDropDown={selectedContextDropdown}
-                            setContextDropDown={setSelectedContextDropdown}
-                            codeLanguage={codeLanguage}
-                            setCodeLanguage={setCodeLanguage}
-                            selectedLanguageDropdown={selectedLanguageDropdown}
-                            setSelectedLanguageDropdown={setSelectedLanguageDropdown}
-                            placeholdersList={placeholdersList}
-                            getPlaceholdersApi={getPlaceholdersApi}
-                            nameTemplate={nameTemplate}
-                            setNameTemplate={setNameTemplate}
-                            subjectTemplate={subjectTemplate}
-                            setSubjectTemplate={setSubjectTemplate}
-                            setOriginalSubjectTemplate={setOriginalSubjectTemplate}
-                            isTemplateModified={isTemplateModified}
-                        />
-                    </div>
+                        <div className="filters mt-5 p-1 rounded">
+                            <DropDownTemplate
+                                templates={templates}
+                                setTemplates={setTemplates}
+                                selectedTemplate={selectedTemplate}
+                                setSelectedTemplate={setSelectedTemplate}
+                                selectedTemplateContent={selectedTemplateContent}
+                                setSelectedTemplateContent={setSelectedTemplateContent}
+                                contextDropDown={selectedContextDropdown}
+                                setContextDropDown={setSelectedContextDropdown}
+                                codeLanguage={codeLanguage}
+                                setCodeLanguage={setCodeLanguage}
+                                selectedLanguageDropdown={selectedLanguageDropdown}
+                                setSelectedLanguageDropdown={setSelectedLanguageDropdown}
+                                placeholdersList={placeholdersList}
+                                getPlaceholdersApi={getPlaceholdersApi}
+                                nameTemplate={nameTemplate}
+                                setNameTemplate={setNameTemplate}
+                                subjectTemplate={subjectTemplate}
+                                setSubjectTemplate={setSubjectTemplate}
+                                setOriginalSubjectTemplate={setOriginalSubjectTemplate}
+                                isTemplateModified={isTemplateModified}
+                            />
+                        </div>
 
-                    <div className="text-right mt-4 mb-3">
-                        <Button label="Previsualizacion final" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
-                    </div>
+                        <div className="text-right mt-4 mb-3">
+                            <Button label="Previsualizacion final" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
+                        </div>
 
-                    <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
-                        <label for="nameTemplate" className="text-name font-weight-bold m-2">Nombre Plantilla:</label>
-                        <InputText id="nameTemplate" keyfilter="alpha" className="form-control w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={onChangeNameTemplate} aria-label="NameTemplate" aria-describedby="name-template" readOnly />
-                    </div>
+                        <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
+                            <label for="nameTemplate" className="text-name font-weight-bold m-2">Nombre Plantilla:</label>
+                            <InputText id="nameTemplate" keyfilter="alpha" className="form-control w-50" placeholder="Introduce nombre de plantilla" value={nameTemplate} onChange={onChangeNameTemplate} aria-label="NameTemplate" aria-describedby="name-template" readOnly />
+                        </div>
 
-                    <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
-                        <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
-                        <InputText id="subject" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate}
-                            onFocus={() => setSaveRangeEditor(null)} disabled={fieldsDisabled} aria-describedby="subject" aria-label="Subject" />
-                    </div>
+                        <div className="d-flex justify-content-start mt-4 mb-3 p-2 rounded">
+                            <label for="subjectTemplate" className="text-subject font-weight-bold m-2">Asunto:</label>
+                            <InputText id="subject" className="form-control w-100 w-sm-50" placeholder="Introduce asunto de plantilla" value={subjectTemplate} onChange={onChangeSubjectTemplate}
+                                onFocus={() => setSaveRangeEditor(null)} disabled={fieldsDisabled} aria-describedby="subject" aria-label="Subject" />
+                        </div>
 
-                    <div className="mb-3">
-                        <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
+                        <div className="mb-3">
+                            <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
+                        </div>
+                        <div className="text-center mt-4">
+                            <Button label="Actualizar Plantilla" aria-label="Actualizar" className="rounded-pill buttons" disabled={!visibleActionButton}
+                                onClick={onUpdateTemplate} />
+                        </div>
+                        {visibleAlert && (
+                            <ModalError />
+                        )}
                     </div>
-                    <div className="text-center mt-4">
-                        <Button label="Actualizar Plantilla" aria-label="Actualizar" className="rounded-pill buttons" disabled={!visibleActionButton}
-                            onClick={onUpdateTemplate} />
-                    </div>
-                    {visibleAlert && (
-                        <ModalError />
-                    )}
                 </div>
             ) : (
                 <PreviewFinalTemplate setvisiblePreviewFinalTemplate={setvisiblePreviewFinalTemplate} />

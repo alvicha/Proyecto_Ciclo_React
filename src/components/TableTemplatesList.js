@@ -118,7 +118,7 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
                     field="subject"
                     header="Asunto"
                     style={{ width: '20%' }}
-                    body={(rowData) => rowData.data.es.subject || "No hay asunto"}
+                    body={(rowData) => rowData.subjectText || "No hay asunto"}
                 />
                 <Column
                     field="content"
