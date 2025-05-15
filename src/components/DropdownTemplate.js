@@ -124,11 +124,6 @@ const DropdownTemplate = ({
         }
     }, [selectedTemplateContent]);
 
-
-    useEffect(() => {
-        console.log(saveRangeEditor);
-    }, [saveRangeEditor]);
-
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
         if (!selectedTemplateContent && nameTemplate === "") {
