@@ -98,6 +98,8 @@ const EditTemplate = () => {
         }
     };
 
+    console.log("Dropdown: ", selectedContextDropdown);
+
     const getSelectedTemplateEditor = async () => {
         try {
             const selectedLanguage = listLanguages.find(lang => lang.code === codeLanguage);
@@ -327,6 +329,12 @@ const EditTemplate = () => {
     }, [codeLanguage, selectedTemplateContent, visiblePreviewFinalTemplate]);
 
     useEffect(() => {
+        if (!visiblePreviewFinalTemplate) {
+            setSelectedContextDropdown("");
+        }
+    }, [visiblePreviewFinalTemplate]);
+
+    useEffect(() => {
         if (isTemplateModified()) {
             setVisibleActionButton(true);
         } else {
@@ -353,7 +361,7 @@ const EditTemplate = () => {
             {!visiblePreviewFinalTemplate ? (
                 <div>
                     <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons mt-4 ml-3" onClick={() => navigate('/templatesList')} />
-                    
+
                     <div className="container-edit container mt-4 mb-5">
                         <h1 className="title-edit mb-5"
                             onMouseOver={(e) => {
