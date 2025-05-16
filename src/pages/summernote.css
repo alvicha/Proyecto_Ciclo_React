@@ -84,6 +84,11 @@ header {
     text-transform: uppercase;
 }
 
+.card-text img {
+    max-width: 100%;
+    display: block;
+}
+
 .text-name {
     font-size: 16px;
 }

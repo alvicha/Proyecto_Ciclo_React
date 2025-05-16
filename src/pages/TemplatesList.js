@@ -70,13 +70,7 @@ const TemplatesList = () => {
 
     return (
         <div>
-            <h1 className="title-templates"
-                onMouseOver={(e) => {
-                    e.target.style.color = '#007bff';
-                }}
-                onMouseOut={(e) => {
-                    e.target.style.color = '#333';
-                }} >
+            <h1 className="title-templates">
                 Listado de Plantillas
             </h1>
             <hr style={{

@@ -9,6 +9,7 @@ const endPointShowTemplateById = process.env.REACT_APP_SHOW_TEMPLATE;
 const endPointFilterInfoTemplates = process.env.REACT_APP_FILTER_TEMPLATE;
 const endPointGetAllTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointRenderTemplate = process.env.REACT_APP_RENDER_TEMPLATE;
+const endPointSendEmailTemplate = process.env.REACT_APP_SEND_EMAIL_TEMPLATE;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -128,6 +129,27 @@ export const renderTemplatesFinal = async (idTemplate, idUser, idGuest, codeLang
 
     if (endPointRenderTemplate) {
       const response = await fetch(`${endPointRenderTemplate}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al realizar la petición: " + error);
+    setVisibleAlert(true);
+    return console.log(error);
+  }
+}
+
+export const sendEmailTemplates = async (payload, setAlert, setVisibleAlert) => {
+  try {
+    if (endPointSendEmailTemplate) {
+      console.log(payload);
+      
+      const response = await fetch(`${endPointSendEmailTemplate}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
