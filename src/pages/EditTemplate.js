@@ -98,8 +98,6 @@ const EditTemplate = () => {
         }
     };
 
-    console.log("Dropdown: ", selectedContextDropdown);
-
     const getSelectedTemplateEditor = async () => {
         try {
             const selectedLanguage = listLanguages.find(lang => lang.code === codeLanguage);
@@ -192,7 +190,7 @@ const EditTemplate = () => {
                 toast.current.show({
                     severity: 'error',
                     summary: 'Error',
-                    detail: 'No se ha introducido asunto o contenido en la plantilla.',
+                    detail: 'Ha ocurrido un error al previsualizar plantilla.',
                     life: 4000
                 });
             }
@@ -228,7 +226,7 @@ const EditTemplate = () => {
                 data: updatedData
             };
 
-            const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert); //Función para actualizar los datos de la plantilla
+            const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert);
 
             if (response) {
                 setLoadingEditor(false);
@@ -256,7 +254,6 @@ const EditTemplate = () => {
     const cleanHtml = (html) => {
         const $html = $('<div>').html(html);
 
-        // Elimina <br>, espacios vacíos y etiquetas sin texto
         $html.find('br').remove();
         $html.find('*').each(function () {
             if ($(this).text().trim() === '' && $(this).children().length === 0 && !$(this).is('img')) {
@@ -406,7 +403,7 @@ const EditTemplate = () => {
                         </div>
 
                         <div className="text-right mt-4 mb-3">
-                            <Button label="Previsualizacion final" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
+                            <Button label="Previsualizacion final" icon="pi pi-eye" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
                         </div>
 
                         <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
@@ -424,7 +421,7 @@ const EditTemplate = () => {
                             <textarea ref={editorRef} id="summernote" className="form-control"></textarea>
                         </div>
                         <div className="text-center mt-4">
-                            <Button label="Actualizar Plantilla" aria-label="Actualizar" className="rounded-pill buttons" disabled={!visibleActionButton}
+                            <Button label="Actualizar Plantilla" icon="pi pi-refresh" aria-label="Actualizar" className="rounded-pill buttons" disabled={!visibleActionButton}
                                 onClick={onUpdateTemplate} />
                         </div>
                         {visibleAlert && (
