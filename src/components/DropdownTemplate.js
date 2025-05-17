@@ -149,13 +149,11 @@ const DropdownTemplate = ({
             const start = input.selectionStart;
             const end = input.selectionEnd;
 
-            // Construimos el nuevo texto con la variable insertada en el cursor
             const before = subjectTemplate.substring(0, start);
             const after = subjectTemplate.substring(end);
             const newValue = before + placeholderText + after;
             setSubjectTemplate(newValue);
 
-            // Mantenemos el cursor justo después de la inserción
             setTimeout(() => {
                 input.focus();
                 const cursorPos = start + placeholderText.length;

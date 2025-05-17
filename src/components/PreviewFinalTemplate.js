@@ -24,7 +24,7 @@ const PreviewFinalTemplate = ({ setvisiblePreviewFinalTemplate }) => {
                 <div className="col-12 d-flex align-items-center justify-content-center">
                     <div className="card rounded shadow-sm rounded-lg pt-3" style={{ width: '77%' }}>
                         <div className="card-body">
-                            <h3 className="card-title font-weight-bold pb-2 title-subject text-primary">
+                            <h3 className="font-weight-bold pb-2 title-subject">
                                 {previewFinalTemplate.subject}
                             </h3>
                             <hr />

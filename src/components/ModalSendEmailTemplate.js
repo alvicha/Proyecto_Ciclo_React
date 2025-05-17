@@ -37,7 +37,6 @@ const ModalSendEmailTemplate = ({ toast, previewFinalTemplate, visibleModalSendE
                 subject: previewFinalTemplate.subject,
                 html: previewFinalTemplate.rendered
             }
-            console.log(previewFinalTemplate.rendered);
 
             const response = await sendEmailTemplates(payload, setAlert, setVisibleAlert);
             if (response) {
@@ -55,7 +54,7 @@ const ModalSendEmailTemplate = ({ toast, previewFinalTemplate, visibleModalSendE
 
     const footerContent = (
         <div>
-            <Button label="Enviar" className='rounded-pill buttons' disabled={isDisabledSendEmail} onClick={sendEmailTemplateDB} autoFocus />
+            <Button label="Enviar" icon="pi pi-send" className='rounded-pill buttons' disabled={isDisabledSendEmail} onClick={sendEmailTemplateDB} autoFocus />
         </div>
     );
 

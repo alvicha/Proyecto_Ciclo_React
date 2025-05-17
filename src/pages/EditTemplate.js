@@ -360,13 +360,7 @@ const EditTemplate = () => {
                     <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons mt-4 ml-3" onClick={() => navigate('/templatesList')} />
 
                     <div className="container-edit container mt-4 mb-5">
-                        <h1 className="title-edit mb-5"
-                            onMouseOver={(e) => {
-                                e.target.style.color = '#007bff';
-                            }}
-                            onMouseOut={(e) => {
-                                e.target.style.color = '#333';
-                            }} >
+                        <h1 className="title-edit mb-5">
                             EDICIÓN PLANTILLAS
                         </h1>
 
