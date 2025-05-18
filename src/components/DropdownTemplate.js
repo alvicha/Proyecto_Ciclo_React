@@ -236,6 +236,7 @@ const DropdownTemplate = ({
                 setConfirmAction(() => () => {
                     setSelectedTemplate(response);
                     setSelectedTemplateContent(response.data[codeLanguage].content);
+                    $(editorSummernote.current).summernote("code", selectedTemplateContent);
                     setNameTemplate(selectedCodeTemplate);
                     setSubjectTemplate(response.data[codeLanguage].subject);
                     setOriginalSubjectTemplate(response.data[codeLanguage].subject);
