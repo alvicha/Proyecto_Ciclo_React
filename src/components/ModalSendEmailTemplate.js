@@ -54,7 +54,8 @@ const ModalSendEmailTemplate = ({ toast, previewFinalTemplate, visibleModalSendE
 
     const footerContent = (
         <div>
-            <Button label="Enviar" icon="pi pi-send" className='rounded-pill buttons' disabled={isDisabledSendEmail} onClick={sendEmailTemplateDB} autoFocus />
+            <Button label="Enviar" icon="pi pi-send" className='rounded-pill buttons' aria-label="Enviar plantilla por correo electrónico"
+                disabled={isDisabledSendEmail} onClick={sendEmailTemplateDB} autoFocus />
         </div>
     );
 

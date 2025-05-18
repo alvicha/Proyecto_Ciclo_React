@@ -275,7 +275,9 @@ const DropdownTemplate = ({
                                 options={listLanguages}
                                 optionLabel="value"
                                 placeholder="Idioma"
-                                disabled={listLanguages?.length === 0} />
+                                disabled={listLanguages?.length === 0}
+                                aria-label="Seleccionar idioma"
+                            />
                         </div>
                     </div>
 
@@ -290,6 +292,7 @@ const DropdownTemplate = ({
                                     optionValue="code"
                                     placeholder="Contextos"
                                     disabled={contextsList.length === 0}
+                                    aria-label="Seleccionar contexto"
                                 />
                             </div>
                         </div>
@@ -305,6 +308,7 @@ const DropdownTemplate = ({
                                     optionValue="code"
                                     placeholder="Plantillas"
                                     disabled={templates.length === 0}
+                                    aria-label="Seleccionar plantilla"
                                 />
                             </div>
                         </div>
@@ -320,6 +324,7 @@ const DropdownTemplate = ({
                                     optionValue="dataVariable.code"
                                     placeholder="Variables"
                                     disabled={placeholdersList.length === 0}
+                                    aria-label="Seleccionar variable"
                                 />
                             </div>
                         </div>

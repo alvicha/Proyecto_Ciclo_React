@@ -48,12 +48,13 @@ const FiltersTemplateList = ({ nameTemplateSearch, setNameTemplateSearch, option
                                     optionLabel="code"
                                     placeholder="Seleccionar..."
                                     style={{ width: "100%", marginBottom: '15px', textAlign: "left" }}
+                                    aria-label="Seleccionar contexto"
                                 />
                             </div>
                         )}
                         <div className="col-12 col-md-6 col-lg-6">
                             <p className="text-filter font-weight-bold text-left">Buscar</p>
-                            <InputText value={nameTemplateSearch} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "100%" }} />
+                            <InputText value={nameTemplateSearch} placeholder="Nombre" onChange={(e) => setNameTemplateSearch(e.target.value)} style={{ width: "100%" }} aria-label="Buscar por nombre de plantilla" />
                         </div>
                     </div>
                     <div className="text-left mt-2">

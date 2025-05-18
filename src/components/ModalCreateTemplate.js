@@ -103,7 +103,8 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setVisibleModalCreate
 
     const footerContent = (
         <div>
-            <Button label="Añadir" icon="pi pi-plus" className='rounded-pill buttons mt-3' disabled={isDisabledAddTemplate} onClick={createTemplateDB} autoFocus />
+            <Button label="Añadir" icon="pi pi-plus" className='rounded-pill buttons mt-3' aria-label="Crear plantilla"
+                disabled={isDisabledAddTemplate} onClick={createTemplateDB} autoFocus />
         </div>
     );
 
