@@ -84,8 +84,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
         setCurrentPage(newPage);
     };
 
-    //const templatesToDisplay = filteredTemplates.length > 0 ? filteredTemplates : templates;
-
     return (
         <div className="card mb-3 ml-1">
             <div className="d-flex justify-content-between align-items-center text-left bg-white border p-2">

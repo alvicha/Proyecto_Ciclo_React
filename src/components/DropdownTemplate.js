@@ -170,7 +170,7 @@ const DropdownTemplate = ({
 
             if (selectedTemplate) {
                 setLoadingEditor(true);
-                const response = await listTemplateById(selectedTemplate.id);
+                const response = await listTemplateById(selectedTemplate.id, setAlert, setVisibleAlert);
 
                 if (isTemplateModified()) {
                     setWarningMessage("¿Estás seguro de que deseas cambiar de idioma? Se perderán los cambios.");
@@ -226,7 +226,7 @@ const DropdownTemplate = ({
             setShowVariables(true);
             setLoadingEditor(true);
 
-            const response = await listTemplateById(templateSelected.id);
+            const response = await listTemplateById(templateSelected.id, setAlert, setVisibleAlert);
 
             if (isTemplateModified()) {
                 setWarningMessage("¿Estás seguro de que quieres cambiar de plantilla? Se perderán los cambios.");
