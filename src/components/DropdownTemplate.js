@@ -259,7 +259,6 @@ const DropdownTemplate = ({
 
     const handleConfirmDelete = () => {
         $(editorSummernote.current).summernote("code", "");
-        setSelectedTemplateContent("");
         setVisible(false);
     };
 

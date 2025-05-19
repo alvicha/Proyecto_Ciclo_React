@@ -121,7 +121,7 @@ export const renderTemplatesFinal = async (idTemplate, idUser, idGuest, codeLang
       templateId: idTemplate,
       idUser: idUser,
       idHotel: 2,
-      idBooking: 2,
+      idBooking: 3,
       guestId: idGuest,
       languageCode: codeLanguage,
       idIncident: idIncident

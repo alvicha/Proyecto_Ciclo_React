@@ -268,7 +268,7 @@ const EditTemplate = () => {
         const currentContentSummernote = $(editorRef.current).summernote('code');
         const cleanedInitial = cleanHtml(selectedTemplateContent);
         const cleanedCurrent = cleanHtml(currentContentSummernote);
-
+        
         return (
             cleanedInitial !== cleanedCurrent ||
             (subjectTemplate ?? "").trim() !== (originalSubjectTemplate ?? "").trim()
@@ -397,7 +397,7 @@ const EditTemplate = () => {
                         </div>
 
                         <div className="text-right mt-4 mb-3">
-                            <Button label="Previsualizacion final" icon="pi pi-eye" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
+                            <Button label="Previsualización final" icon="pi pi-eye" aria-label="vista_previa" className="rounded-pill buttons" onClick={() => viewTemplateVariables(selectedTemplate.id)} disabled={!visibleButtonPreviewTemplate} />
                         </div>
 
                         <div className="d-flex justify-content-center border border-success mt-2 p-2 rounded">
