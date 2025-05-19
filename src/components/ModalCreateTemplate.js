@@ -130,6 +130,7 @@ const ModalCreateTemplate = ({ visibleModalCreateTemplate, setVisibleModalCreate
                         optionLabel="code"
                         placeholder="Contextos"
                         disabled={contextsList.length === 0}
+                        aria-label="Seleccionar contexto"
                     />
                 </div>
             </Dialog>
