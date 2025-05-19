@@ -268,7 +268,7 @@ const EditTemplate = () => {
         const currentContentSummernote = $(editorRef.current).summernote('code');
         const cleanedInitial = cleanHtml(selectedTemplateContent);
         const cleanedCurrent = cleanHtml(currentContentSummernote);
-        
+
         return (
             cleanedInitial !== cleanedCurrent ||
             (subjectTemplate ?? "").trim() !== (originalSubjectTemplate ?? "").trim()
