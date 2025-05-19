@@ -62,7 +62,7 @@ const ModalSendEmailTemplate = ({ toast, previewFinalTemplate, visibleModalSendE
     return (
         <div className="card flex justify-content-center">
             <Dialog
-                header="Prueba Envio de correo"
+                header="Prueba Envio Correo"
                 footer={footerContent}
                 visible={visibleModalSendEmail}
                 style={{ width: '90vw', maxWidth: '800px' }}
