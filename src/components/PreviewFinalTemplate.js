@@ -17,8 +17,10 @@ const PreviewFinalTemplate = ({ setvisiblePreviewFinalTemplate }) => {
         <div className="container-fluid">
             <Toast ref={toast} />
             <div className="d-flex justify-content-between mt-2">
-                <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons mt-4" onClick={() => setvisiblePreviewFinalTemplate(false)} />
-                <Button icon="pi pi-envelope" label="Prueba Envio" className="rounded-pill buttons mt-4" onClick={sendEmail} />
+                <Button icon="pi pi-arrow-left" label="Volver" className="rounded-pill buttons mt-4" aria-label="Volver"
+                    onClick={() => setvisiblePreviewFinalTemplate(false)} />
+                <Button icon="pi pi-envelope" label="Prueba Envio" className="rounded-pill buttons mt-4" aria-label="Prueba email"
+                    onClick={sendEmail} />
             </div>
             <div className="row my-4">
                 <div className="col-12 d-flex align-items-center justify-content-center">
