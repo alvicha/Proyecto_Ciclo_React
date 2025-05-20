@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById, renderTemplatesFinal } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById, renderTemplatesFinal, uploadImageTemplateDB } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
@@ -71,6 +71,11 @@ const EditTemplate = () => {
                 onFocus() {
                     const range = $(editorRef.current).summernote('createRange');
                     setSaveRangeEditor(range);
+                },
+                onImageUpload: function (files) {
+                    if (files.length > 0) {
+                        uploadImage(files[0]);
+                    }
                 }
             }
         }).summernote("code", selectedTemplateContent);
@@ -79,6 +84,17 @@ const EditTemplate = () => {
             $(editorRef.current).summernote("disable");
         }
     }, [selectedTemplateContent, fieldsDisabled]);
+
+    const uploadImage = async (file) => {
+        try {
+            const response = await uploadImageTemplateDB(file, setAlert, setVisibleAlert);
+            $(editorRef.current).summernote('insertImage', `http://localhost:8000${response.url}`);
+        } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
+            console.log(error);
+        }
+    }
 
     /**
      * Función para que me devuelva la lista de idiomas que hay en la base de datos
@@ -268,7 +284,7 @@ const EditTemplate = () => {
         const currentContentSummernote = $(editorRef.current).summernote('code');
         const cleanedInitial = cleanHtml(selectedTemplateContent);
         const cleanedCurrent = cleanHtml(currentContentSummernote);
-        
+
         return (
             cleanedInitial !== cleanedCurrent ||
             (subjectTemplate ?? "").trim() !== (originalSubjectTemplate ?? "").trim()

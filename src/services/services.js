@@ -10,6 +10,7 @@ const endPointFilterInfoTemplates = process.env.REACT_APP_FILTER_TEMPLATE;
 const endPointGetAllTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointRenderTemplate = process.env.REACT_APP_RENDER_TEMPLATE;
 const endPointSendEmailTemplate = process.env.REACT_APP_SEND_EMAIL_TEMPLATE;
+const endPointUploadImageTemplate = process.env.REACT_APP_UPLOAD_IMAGE;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -114,6 +115,24 @@ export const filterInfoTemplate = async (setAlert, setVisibleAlert, data) => {
   }
 };
 
+export const uploadImageTemplateDB = async (file, setAlert, setVisibleAlert) => {
+  try {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(`${endPointUploadImageTemplate}`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (response.ok) return await response.json();
+  } catch (error) {
+    setAlert("Error al subir la imagen: " + error.message);
+    setVisibleAlert(true);
+    console.error("Error al subir imagen:", error);
+  }
+};
+
 export const renderTemplatesFinal = async (idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert) => {
   try {
     const payload =
@@ -148,7 +167,7 @@ export const sendEmailTemplates = async (payload, setAlert, setVisibleAlert) => 
   try {
     if (endPointSendEmailTemplate) {
       console.log(payload);
-      
+
       const response = await fetch(`${endPointSendEmailTemplate}`, {
         method: 'POST',
         headers: {
