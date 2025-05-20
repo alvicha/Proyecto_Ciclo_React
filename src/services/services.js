@@ -11,6 +11,7 @@ const endPointGetAllTemplates = process.env.REACT_APP_TEMPLATES;
 const endPointRenderTemplate = process.env.REACT_APP_RENDER_TEMPLATE;
 const endPointSendEmailTemplate = process.env.REACT_APP_SEND_EMAIL_TEMPLATE;
 const endPointUploadImageTemplate = process.env.REACT_APP_UPLOAD_IMAGE;
+const endPointGetUserPermissions = process.env.REACT_APP_USER_PERMISSIONS;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -124,7 +125,7 @@ export const uploadImageTemplateDB = async (file, setAlert, setVisibleAlert) => 
       method: 'POST',
       body: formData,
     });
-    
+
     if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Error al subir la imagen: " + error.message);
@@ -140,7 +141,7 @@ export const renderTemplatesFinal = async (idTemplate, idUser, idGuest, codeLang
       templateId: idTemplate,
       idUser: idUser,
       idHotel: 2,
-      idBooking: 3,
+      idBooking: 6,
       guestId: idGuest,
       languageCode: codeLanguage,
       idIncident: idIncident
@@ -207,8 +208,6 @@ export const createTemplate = async (body, setAlert, setVisibleAlert) => {
       body: JSON.stringify(body),
     });
 
-    console.log(body);
-
     if (response.ok) return await response.json();
   } catch (error) {
     setAlert("Ha habido un error al crear la plantilla: " + error.message);
@@ -251,5 +250,18 @@ export const deleteTemplateDB = async (idTemplate, setAlert, setVisibleAlert) =>
     setAlert("Error al eliminar la plantilla: " + error.message);
     setVisibleAlert(true);
     console.error('Ha habido un problema para eliminar:', error);
+  }
+};
+
+export const getUserPermissionsDB = async (idUser, setAlert, setVisibleAlert) => {
+  try {
+    if (endPointGetUserPermissions) {
+      const response = await fetch(`${endPointGetUserPermissions}/${idUser}`);
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al realizar la petición: " + error.message);
+    setVisibleAlert(true);
+    return console.log(error);
   }
 };

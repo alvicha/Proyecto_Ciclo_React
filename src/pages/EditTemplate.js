@@ -86,15 +86,21 @@ const EditTemplate = () => {
     }, [selectedTemplateContent, fieldsDisabled]);
 
     const uploadImage = async (file) => {
+        setLoadingEditor(true);
         try {
             const response = await uploadImageTemplateDB(file, setAlert, setVisibleAlert);
-            $(editorRef.current).summernote('insertImage', `http://localhost:8000${response.url}`);
+            $(editorRef.current).summernote('insertImage', `http://localhost:8000${response.urlImagen}`);
+            setLoadingEditor(false);
         } catch (error) {
             setAlert("Ha ocurrido un error: " + error.message);
             setVisibleAlert(true);
             console.log(error);
         }
     }
+
+    useEffect(() => {
+        setSaveRangeEditor(null); // Invalida el rango si se cambia el contenido cargado
+    }, [selectedTemplateContent]);
 
     /**
      * Función para que me devuelva la lista de idiomas que hay en la base de datos

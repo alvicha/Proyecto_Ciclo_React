@@ -7,11 +7,12 @@ import "./summernote.css";
 import FiltersTemplateList from '../components/FiltersTemplateList';
 import TableTemplatesList from '../components/TableTemplatesList';
 import { useContext, useEffect, useState } from 'react';
-import { filterInfoTemplate, getDataContexts } from '../services/services';
+import { filterInfoTemplate, getDataContexts, getUserPermissionsDB } from '../services/services';
 import ScreensContext from '../screens/ScreensContext';
 
 const TemplatesList = () => {
-    const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert } = useContext(ScreensContext);
+    const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage,
+        setTotalRecordsTemplates, rows, setAlert, setVisibleAlert, setUserPermissions } = useContext(ScreensContext);
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplateSearch, setNameTemplateSearch] = useState("");
 
@@ -64,8 +65,23 @@ const TemplatesList = () => {
         }
     };
 
+    const permissionsUserDB = async () => {
+        const idUser = 5;
+        try {
+            const response = await getUserPermissionsDB(idUser, setAlert, setVisibleAlert);
+            if (response) {
+                setUserPermissions(response.permissions);
+            }
+        } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
+            console.error("Error permissions API:", error);
+        }
+    };
+
     useEffect(() => {
         filterDataTemplates();
+        permissionsUserDB();
     }, [nameTemplateSearch, optionContext, currentPage, rows, selectedColumnTable, selectedSortOrder]);
 
     return (

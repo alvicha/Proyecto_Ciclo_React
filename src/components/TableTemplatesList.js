@@ -14,7 +14,7 @@ import ModalError from "./ModalError";
 const TableTemplatesList = ({ filterDataTemplates }) => {
     const navigate = useNavigate();
     const { totalRecordsTemplates, loading, setLoading, selectedSortOrder, setSelectedSortOrder, selectedColumnTable, setSelectedColumnTable,
-        currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows } = useContext(ScreensContext);
+        currentPage, templates, setAlert, visibleAlert, setVisibleAlert, setCurrentPage, rows, setRows, userPermissions } = useContext(ScreensContext);
     const [showModalDataTemplate, setShowModalDataTemplate] = useState(false);
     const [visibleModalCreateTemplate, setVisibleModalCreateTemplate] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -87,7 +87,10 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     return (
         <div className="card mb-3 ml-1">
             <div className="d-flex justify-content-between align-items-center text-left bg-white border p-2">
-                <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill buttons" onClick={onCreateModalTemplate} />
+
+                {userPermissions.includes('create') && (
+                    <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill buttons" onClick={onCreateModalTemplate} />
+                )}
                 <div className="d-flex justify-content-end align-items-end">
                     <Button icon="pi pi-sync" className="rounded-pill buttons" aria-label="Refrescar" onClick={refreshData} />
                 </div>
@@ -126,9 +129,17 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
                 />
                 <Column header="Acciones" style={{ width: '20%' }} body={(rowData) => (
                     <div className="d-flex w-100 h-25">
-                        <Button icon="pi pi-eye" className="rounded-pill mr-1" outlined severity="help" aria-label="Visualización" onClick={() => onShowDataTemplate(rowData)} />
-                        <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => navigate(`/template/${rowData.id}`)} />
-                        <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={() => onDeleteTemplate(rowData.id)} />
+                        {userPermissions.includes('view') && (
+                            <Button icon="pi pi-eye" className="rounded-pill mr-1" outlined severity="help" aria-label="Visualización" onClick={() => onShowDataTemplate(rowData)} />
+                        )}
+
+                        {userPermissions.includes('edit') && (
+                            <Button icon="pi pi-pen-to-square" className="rounded-pill mr-1" outlined severity="info" aria-label="Edicion" onClick={() => navigate(`/template/${rowData.id}`)} />
+                        )}
+
+                        {userPermissions.includes('delete') && (
+                            <Button icon="pi pi-trash" className="rounded-pill mr-1" outlined severity="danger" aria-label="Eliminacion" onClick={() => onDeleteTemplate(rowData.id)} />
+                        )}
                     </div>
                 )} />
             </DataTable>
