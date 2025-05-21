@@ -12,6 +12,7 @@ const endPointRenderTemplate = process.env.REACT_APP_RENDER_TEMPLATE;
 const endPointSendEmailTemplate = process.env.REACT_APP_SEND_EMAIL_TEMPLATE;
 const endPointUploadImageTemplate = process.env.REACT_APP_UPLOAD_IMAGE;
 const endPointGetUserPermissions = process.env.REACT_APP_USER_PERMISSIONS;
+const endPointGetFonts = process.env.REACT_APP_FONTS;
 
 export const getDataApi = async (setAlert, setVisibleAlert) => {
   try {
@@ -141,7 +142,7 @@ export const renderTemplatesFinal = async (idTemplate, idUser, idGuest, codeLang
       templateId: idTemplate,
       idUser: idUser,
       idHotel: 2,
-      idBooking: 6,
+      idBooking: 3,
       guestId: idGuest,
       languageCode: codeLanguage,
       idIncident: idIncident
@@ -257,6 +258,19 @@ export const getUserPermissionsDB = async (idUser, setAlert, setVisibleAlert) =>
   try {
     if (endPointGetUserPermissions) {
       const response = await fetch(`${endPointGetUserPermissions}/${idUser}`);
+      if (response.ok) return await response.json();
+    }
+  } catch (error) {
+    setAlert("Error al realizar la petición: " + error.message);
+    setVisibleAlert(true);
+    return console.log(error);
+  }
+};
+
+export const getAllFontsDB = async (setAlert, setVisibleAlert) => {
+  try {
+    if (endPointGetFonts) {
+      const response = await fetch(`${endPointGetFonts}`);
       if (response.ok) return await response.json();
     }
   } catch (error) {

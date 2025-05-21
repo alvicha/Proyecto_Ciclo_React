@@ -87,7 +87,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
     return (
         <div className="card mb-3 ml-1">
             <div className="d-flex justify-content-between align-items-center text-left bg-white border p-2">
-
                 {userPermissions.includes('create') && (
                     <Button label="Crear" icon="pi pi-plus" aria-label="Crear" className="rounded-pill buttons" onClick={onCreateModalTemplate} />
                 )}

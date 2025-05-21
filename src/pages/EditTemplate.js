@@ -6,7 +6,7 @@ import 'summernote/dist/summernote-bs4.css';
 import 'summernote/dist/summernote-bs4.min.js';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
-import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById, renderTemplatesFinal, uploadImageTemplateDB } from '../services/services';
+import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById, renderTemplatesFinal, uploadImageTemplateDB, getAllFontsDB } from '../services/services';
 import DropDownTemplate from '../components/DropdownTemplate';
 import ScreensContext from '../screens/ScreensContext';
 import ModalError from '../components/ModalError';
@@ -28,6 +28,10 @@ const EditTemplate = () => {
     const [selectedLanguageDropdown, setSelectedLanguageDropdown] = useState("");
     const [originalSubjectTemplate, setOriginalSubjectTemplate] = useState("");
     const [visiblePreviewFinalTemplate, setvisiblePreviewFinalTemplate] = useState(false);
+    const [fontsNames, setFontsNames] = useState([]);
+    const [infoFonts, setInfoFonts] = useState([]);
+    const [allFontsList, setAllFontsList] = useState([]);
+    const [fontsLoaded, setFontsLoaded] = useState(false); // Control para saber si las fuentes están listas
     const toast = useRef(null);
     const idTemplateParams = useParams();
 
@@ -40,14 +44,16 @@ const EditTemplate = () => {
     /**
     * Esta función sirve para cargar el menu del editor con las opciones deseadas
     */
-    const changeSummernoteLanguage = useCallback((lang) => {
+    const changeSummernoteLanguage = useCallback(() => {
+        const defaultsFonts = ['Sans Serif', 'Serif', 'Monospace'];
+        const allFonts = [...defaultsFonts, ...fontsNames];
+        setAllFontsList(allFonts);
         editorSummernote.current = editorRef.current;
 
         $(editorRef.current).summernote("destroy");
         $(editorRef.current).summernote({
             placeholder: "Introduce una descripción",
             height: 400,
-            lang: lang,
             toolbar: [
                 ["style", ["bold", "italic", "underline", "clear"]],
                 ["font", ["strikethrough", "superscript", "subscript"]],
@@ -58,8 +64,8 @@ const EditTemplate = () => {
                 ['insert', ['picture']],
                 ['view', ['codeview']]
             ],
-            fontNames: ['Sans Serif', 'Serif', 'Monospace'],
-            fontNamesIgnoreCheck: ['Sans Serif', 'Serif', 'Monospace'],
+            fontNames: allFonts,
+            fontNamesIgnoreCheck: allFonts,
             addDefaultFonts: false,
             callbacks: {
                 onInit: function () {
@@ -83,7 +89,7 @@ const EditTemplate = () => {
         if (fieldsDisabled) {
             $(editorRef.current).summernote("disable");
         }
-    }, [selectedTemplateContent, fieldsDisabled]);
+    }, [selectedTemplateContent, fieldsDisabled, fontsNames]);
 
     const uploadImage = async (file) => {
         setLoadingEditor(true);
@@ -146,6 +152,26 @@ const EditTemplate = () => {
         }
     }
 
+    const getAllFonts = async () => {
+        try {
+            const response = await getAllFontsDB(setAlert, setVisibleAlert);
+            if (response) {
+                const fonts = response.map(font => font.name);
+                setFontsNames(fonts);
+                setInfoFonts(response);
+            } else {
+                setFontsNames([]);
+                setInfoFonts([]);
+            }
+            setFontsLoaded(true);
+        } catch (error) {
+            setAlert("Ha ocurrido un error: " + error.message);
+            setVisibleAlert(true);
+            setFontsLoaded(true);
+            console.log(error);
+        }
+    };
+
     /**
      * Función para que me devuelva la lista de contextos de la BD
      */
@@ -195,7 +221,6 @@ const EditTemplate = () => {
         }
     }, [selectedTemplate]);
 
-
     const viewTemplateVariables = async (idTemplate) => {
         setLoadingEditor(true);
         const idUser = 1;
@@ -204,7 +229,6 @@ const EditTemplate = () => {
 
         try {
             const response = await renderTemplatesFinal(idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert);
-
             if (response) {
                 setPreviewFinalTemplate(response);
                 setvisiblePreviewFinalTemplate(true);
@@ -323,6 +347,7 @@ const EditTemplate = () => {
     useEffect(() => {
         languagesApi();
         contextsApi();
+        getAllFonts();
     }, []);
 
     useEffect(() => {
@@ -342,16 +367,11 @@ const EditTemplate = () => {
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
      */
     useEffect(() => {
-        if (!visiblePreviewFinalTemplate || selectedTemplateContent) {
-            changeSummernoteLanguage(codeLanguage);
-        }
-    }, [codeLanguage, selectedTemplateContent, visiblePreviewFinalTemplate]);
-
-    useEffect(() => {
-        if (!visiblePreviewFinalTemplate) {
+        if (fontsLoaded && (!visiblePreviewFinalTemplate || selectedTemplateContent)) {
             setSelectedContextDropdown("");
+            changeSummernoteLanguage();
         }
-    }, [visiblePreviewFinalTemplate]);
+    }, [selectedTemplateContent, visiblePreviewFinalTemplate, fontsLoaded]);
 
     useEffect(() => {
         if (isTemplateModified()) {
@@ -360,6 +380,21 @@ const EditTemplate = () => {
             setVisibleActionButton(false);
         }
     }, [selectedTemplateContent, currentContent, subjectTemplate, originalSubjectTemplate]);
+
+    useEffect(() => {
+        if (allFontsList.length > 0 && infoFonts.length > 0) {
+            allFontsList.forEach(fontName => {
+                const font = infoFonts.find(f => f.name.toLowerCase() === fontName.toLowerCase());
+                if (font && !document.getElementById(`font-${font.name}-link`)) {
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = font.url;
+                    link.id = `font-${font.name}-link`;
+                    document.head.appendChild(link);
+                }
+            });
+        }
+    }, [allFontsList, infoFonts]);
 
     return (
         <>
