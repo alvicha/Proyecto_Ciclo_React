@@ -31,7 +31,7 @@ const EditTemplate = () => {
     const [fontsNames, setFontsNames] = useState([]);
     const [infoFonts, setInfoFonts] = useState([]);
     const [allFontsList, setAllFontsList] = useState([]);
-    const [fontsLoaded, setFontsLoaded] = useState(false); // Control para saber si las fuentes están listas
+    const [fontsLoaded, setFontsLoaded] = useState(false);
     const toast = useRef(null);
     const idTemplateParams = useParams();
 

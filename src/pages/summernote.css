@@ -9,6 +9,20 @@ body {
     overflow-x: hidden;
 }
 
+.dark-mode {
+    background-color: black;
+}
+
+.dark-mode .template-container {
+    background-color: #1e1e1e;
+    border-color: white;
+}
+
+.dark-mode .card-body,
+.dark-mode .title-subject {
+    color: white !important;
+}
+
 header {
     border-bottom: 3px solid rgb(1, 149, 186);
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
