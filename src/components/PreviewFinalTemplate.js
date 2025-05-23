@@ -5,8 +5,11 @@ import ModalSendEmailTemplate from "./ModalSendEmailTemplate";
 import { Toast } from "primereact/toast";
 
 const PreviewFinalTemplate = ({ setvisiblePreviewFinalTemplate }) => {
-    const { previewFinalTemplate, iconDark, setIconDark, darkMode, setDarkMode, containerRef } = useContext(ScreensContext);
+    const { previewFinalTemplate, containerRef } = useContext(ScreensContext);
     const [visibleModalSendEmail, setVisibleModalSendEmail] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
+    const [iconDark, setIconDark] = useState("pi pi-moon");
+
     const toast = useRef(null);
 
     const sendEmail = async () => {

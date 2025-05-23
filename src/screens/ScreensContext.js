@@ -25,8 +25,6 @@ export const ScreensProvider = ({ children }) => {
   const [loadingEditor, setLoadingEditor] = useState(false);
   const [saveRangeEditor, setSaveRangeEditor] = useState(null);
   const [userPermissions, setUserPermissions] = useState([]);
-  const [iconDark, setIconDark] = useState("pi pi-moon");
-  const [darkMode, setDarkMode] = useState(false);
   const containerRef = useRef(null);
 
   return (
@@ -37,7 +35,7 @@ export const ScreensProvider = ({ children }) => {
       setLoading, selectedSortOrder, setSelectedSortOrder, currentContent, setCurrentContent,
       fieldsDisabled, setFieldsDisabled, previewFinalTemplate, setPreviewFinalTemplate, visibleButtonPreviewTemplate,
       setVisibleButtonPreviewTemplate, isEditorFocused, setIsEditorFocused, loadingEditor, setLoadingEditor, saveRangeEditor,
-      setSaveRangeEditor, userPermissions, setUserPermissions, iconDark, setIconDark, darkMode, setDarkMode, containerRef
+      setSaveRangeEditor, userPermissions, setUserPermissions, containerRef
     }}>
       {children}
     </ScreensContext.Provider>
