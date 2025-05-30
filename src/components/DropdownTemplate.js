@@ -162,7 +162,6 @@ const DropdownTemplate = ({
         }
     };
 
-
     const handleLanguageChange = async (langDropdown) => {
         try {
             const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);

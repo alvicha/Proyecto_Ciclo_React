@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef, useCallback, useContext } from 'react';
 import $ from 'jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'summernote/dist/summernote-bs4.css';
-import 'summernote/dist/summernote-bs4.min.js';
+import 'summernote/dist/summernote-bs4.min';
 import 'summernote/dist/lang/summernote-es-ES';
 import "./summernote.css";
 import { getDataContexts, getDataApi, getPlaceholdersContexts, updateTemplateApi, listTemplateById, renderTemplatesFinal, uploadImageTemplateDB, getAllFontsDB } from '../services/services';
@@ -34,6 +34,7 @@ const EditTemplate = () => {
     const [fontsLoaded, setFontsLoaded] = useState(false);
     const toast = useRef(null);
     const idTemplateParams = useParams();
+    const hasLoadedTemplate = useRef(false);
 
     const { editorSummernote, currentContent, setCurrentContent, setAlert, setVisibleAlert, visibleAlert, visibleActionButton, setVisibleActionButton, setContextsList, placeholdersList,
         setPlaceholdersList, templates, setTemplates, listLanguages, setListLanguages, fieldsDisabled, loadingEditor, setLoadingEditor,
@@ -127,11 +128,13 @@ const EditTemplate = () => {
     };
 
     const getSelectedTemplateEditor = async () => {
+        setLoadingEditor(true);
         try {
             const selectedLanguage = listLanguages.find(lang => lang.code === codeLanguage);
             const response = await listTemplateById(idTemplateParams.id, setAlert, setVisibleAlert);
 
-            if (codeLanguage) {
+            if (response && codeLanguage) {
+                console.log(2);
                 setSelectedTemplate(response);
                 setNameTemplate(response.code);
                 setSubjectTemplate(response.data[codeLanguage].subject);
@@ -143,7 +146,10 @@ const EditTemplate = () => {
                 }
                 setLoadingEditor(false);
             } else {
+                console.log(3);
                 setCodeLanguage("es");
+                console.log(codeLanguage);
+                setLoadingEditor(false);
             }
         } catch (error) {
             setAlert("Ha ocurrido un error: " + error.message);
@@ -221,6 +227,7 @@ const EditTemplate = () => {
         }
     }, [selectedTemplate]);
 
+
     const viewTemplateVariables = async (idTemplate) => {
         setLoadingEditor(true);
         const idUser = 1;
@@ -229,6 +236,7 @@ const EditTemplate = () => {
 
         try {
             const response = await renderTemplatesFinal(idTemplate, idUser, idGuest, codeLanguage, idIncident, setAlert, setVisibleAlert);
+
             if (response) {
                 setPreviewFinalTemplate(response);
                 setvisiblePreviewFinalTemplate(true);
@@ -257,9 +265,8 @@ const EditTemplate = () => {
         try {
             event.preventDefault();
             const cleanedContent = cleanHtml(currentContent);
-            setSelectedTemplateContent(currentContent);
-            setOriginalSubjectTemplate(subjectTemplate);
 
+            setOriginalSubjectTemplate(subjectTemplate);
             const updatedData = { ...selectedTemplate.data };
 
             updatedData[codeLanguage] = {
@@ -275,9 +282,14 @@ const EditTemplate = () => {
             const response = await updateTemplateApi(selectedTemplate.id, body, setAlert, setVisibleAlert);
 
             if (response) {
-                setLoadingEditor(false);
+                setSelectedTemplate(prev => ({
+                    ...prev,
+                    data: updatedData
+                }));
+                setSelectedTemplateContent(cleanedContent);
                 toast.current.show({ severity: 'success', summary: 'Información', detail: 'Plantilla actualizada con éxito', life: 3000 });
             }
+            setLoadingEditor(false);
         } catch (error) {
             setAlert("Ha ocurrido un error: " + error.message);
             setVisibleAlert(true);
@@ -351,17 +363,22 @@ const EditTemplate = () => {
     }, []);
 
     useEffect(() => {
-        setLoadingEditor(true);
-        if (listLanguages.length > 0) {
-            getSelectedTemplateEditor();
-        }
-    }, [listLanguages]);
+        window.scrollTo(0, 0);
+    }, []);
 
     useEffect(() => {
         if (listLanguages.length > 0 && !codeLanguage) {
             setCodeLanguage("es");
         }
     }, [listLanguages, codeLanguage]);
+
+    useEffect(() => {
+        if (codeLanguage && !hasLoadedTemplate.current) {
+            getSelectedTemplateEditor();
+            hasLoadedTemplate.current = true;
+        }
+    }, [codeLanguage]);
+    
 
     /**
      * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
@@ -373,6 +390,13 @@ const EditTemplate = () => {
         }
     }, [selectedTemplateContent, visiblePreviewFinalTemplate, fontsLoaded]);
 
+
+    useEffect(() => {
+        if (!visiblePreviewFinalTemplate) {
+            setSelectedContextDropdown("");
+        }
+    }, [visiblePreviewFinalTemplate]);
+
     useEffect(() => {
         if (isTemplateModified()) {
             setVisibleActionButton(true);
@@ -381,7 +405,7 @@ const EditTemplate = () => {
         }
     }, [selectedTemplateContent, currentContent, subjectTemplate, originalSubjectTemplate]);
 
-    useEffect(() => {
+     useEffect(() => {
         if (allFontsList.length > 0 && infoFonts.length > 0) {
             allFontsList.forEach(fontName => {
                 const font = infoFonts.find(f => f.name.toLowerCase() === fontName.toLowerCase());
