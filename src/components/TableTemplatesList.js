@@ -103,7 +103,6 @@ const TableTemplatesList = ({ filterDataTemplates }) => {
                 onSort={(e) => {
                     setSelectedColumnTable(e.sortField);
                     setSelectedSortOrder(e.sortOrder);
-                    filterDataTemplates();
                 }}
                 emptyMessage="No se han encontrado registros">
                 <Column field="id" header="Id" sortable style={{ width: '5%' }}></Column>

@@ -11,8 +11,7 @@ import { filterInfoTemplate, getDataContexts, getUserPermissionsDB } from '../se
 import ScreensContext from '../screens/ScreensContext';
 
 const TemplatesList = () => {
-    const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage,
-        setTotalRecordsTemplates, rows, setAlert, setVisibleAlert, setUserPermissions } = useContext(ScreensContext);
+    const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert, setUserPermissions } = useContext(ScreensContext);
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplateSearch, setNameTemplateSearch] = useState("");
 
