@@ -71,9 +71,9 @@ const DropdownTemplate = ({
     };
 
     /**
-     * Se ejecuta cuando el usuario cambia el contexto en el dropdown.
-     * Actualiza el dropdown de contexto, carga las plantillas y los placeholders relacionados.
-     * @param {Object} selectedContext - Objeto con información del contexto seleccionado
+     * Se ejecuta cuando el usuario cambia el contexto en el menu desplegable.
+     * Actualiza el menu desplegable de contexto, carga las plantillas y los placeholders relacionados.
+     * @param {Object} selectedContext - Objeto del contexto seleccionado
     */
     const onClickContextTemplate = (selectedContext) => {
         setContextDropDown(selectedContext.code);

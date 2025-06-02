@@ -237,7 +237,7 @@ const EditTemplate = () => {
 
 
     /**
-     * FUncionalidad para previsualizar la plantilla final con las variables sustituídas por los de la base de datos
+     * Funcionalidad para previsualizar la plantilla final con las variables sustituídas por los de la base de datos
      * @param {*} idTemplate Id de la plantilla seleccionada
      */
     const viewTemplateVariables = async (idTemplate) => {
