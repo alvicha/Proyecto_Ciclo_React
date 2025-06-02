@@ -70,6 +70,11 @@ const DropdownTemplate = ({
         setOriginalSubjectTemplate("");
     };
 
+    /**
+     * Se ejecuta cuando el usuario cambia el contexto en el dropdown.
+     * Actualiza el dropdown de contexto, carga las plantillas y los placeholders relacionados.
+     * @param {Object} selectedContext - Objeto con información del contexto seleccionado
+    */
     const onClickContextTemplate = (selectedContext) => {
         setContextDropDown(selectedContext.code);
         getTemplatesApi(selectedContext.id);
@@ -85,6 +90,10 @@ const DropdownTemplate = ({
         setOriginalSubjectTemplate(templateSelected.data[codeLanguage].subject);
     };
 
+    /**
+     * Función para realizar el cambio de contexto seleccionado.
+     * @param {string} selectedCodeContext - Código del contexto seleccionado
+    */
     const handleContextChange = (selectedCodeContext) => {
         let selectedContext = contextsList.find(context => context.code === selectedCodeContext);
 
@@ -102,10 +111,18 @@ const DropdownTemplate = ({
         }
     };
 
+    /**
+     * Llama a la función que se encargará de insertar una variable de placeholder en el editor o asunto.
+     * @param {string} action - Código de la variable a insertar
+    */
     const handleActionChange = (action) => {
         insertVariablesText(action);
     };
 
+    /**
+     * Función para obtener las plantillas asociadas a un contexto específico
+     * @param {*} idContext Id del contexto seleccionado
+     */
     const getTemplatesApi = async (idContext) => {
         try {
             const response = await getTemplatesContexts(idContext, setAlert, setVisibleAlert);
@@ -118,12 +135,20 @@ const DropdownTemplate = ({
         }
     };
 
+    /**
+     * Inserta el contenido de la plantilla en el editor Summernote una vez que haya información dentro de 'selectedTemplateContent'
+     */
     useEffect(() => {
         if (selectedTemplateContent) {
             $(editorSummernote.current).summernote("code", selectedTemplateContent);
         }
     }, [selectedTemplateContent]);
 
+
+    /**
+        * Inserta el texto del placeholder en la posición actual del cursor en el editor o en el input de asunto.
+        * @param {string} action - Código del placeholder
+    */
     const insertVariablesText = (action) => {
         const placeholderText = `{{${action}}}`;
         if (!selectedTemplateContent && nameTemplate === "") {
@@ -162,6 +187,10 @@ const DropdownTemplate = ({
         }
     };
 
+    /**
+    * Funcionalidad para gestionar el cambio de idioma de la plantilla seleccionada.
+    * @param {string} langDropdown - Valor del idioma seleccionado en el dropdown
+    */
     const handleLanguageChange = async (langDropdown) => {
         try {
             const selectedLanguage = listLanguages.find(lang => lang.value === langDropdown);
@@ -219,6 +248,10 @@ const DropdownTemplate = ({
         setVisibleModalWarning(false);
     };
 
+    /**
+     * Función para manejar el cambio de plantilla elegido.
+     * @param {string} selectedCodeTemplate - Código de la plantilla seleccionada
+    */
     const handleTemplateChange = async (selectedCodeTemplate) => {
         try {
             const templateSelected = templates.find(template => template.code === selectedCodeTemplate);

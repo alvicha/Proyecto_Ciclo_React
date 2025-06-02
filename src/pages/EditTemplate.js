@@ -32,7 +32,7 @@ const EditTemplate = () => {
     const [infoFonts, setInfoFonts] = useState([]);
     const [allFontsList, setAllFontsList] = useState([]);
     const [fontsLoaded, setFontsLoaded] = useState(false);
-    const toast = useRef(null);
+    const toast = useRef(null); // Ref para mostrar mensajes toast
     const idTemplateParams = useParams();
     const hasLoadedTemplate = useRef(false);
 
@@ -43,7 +43,7 @@ const EditTemplate = () => {
     const navigate = useNavigate();
 
     /**
-    * Esta función sirve para cargar el menu del editor con las opciones deseadas
+    * Esta función sirve para inicializar el editor Summernote con las opciones deseadas
     */
     const changeSummernoteLanguage = useCallback(() => {
         const defaultsFonts = ['Sans Serif', 'Serif', 'Monospace'];
@@ -105,8 +105,9 @@ const EditTemplate = () => {
         }
     }
 
+    // Si cambia el contenido seleccionado, invalida el rango guardado
     useEffect(() => {
-        setSaveRangeEditor(null); // Invalida el rango si se cambia el contenido cargado
+        setSaveRangeEditor(null);
     }, [selectedTemplateContent]);
 
     /**
@@ -127,6 +128,9 @@ const EditTemplate = () => {
         }
     };
 
+    /**
+     * Carga la información de la plantilla seleccionada por ID y ajusta estados relacionados
+    */
     const getSelectedTemplateEditor = async () => {
         setLoadingEditor(true);
         try {
@@ -158,6 +162,9 @@ const EditTemplate = () => {
         }
     }
 
+    /**
+    * Obtiene todas las fuentes desde la base de datos para cargarlas en el editor
+    */
     const getAllFonts = async () => {
         try {
             const response = await getAllFontsDB(setAlert, setVisibleAlert);
@@ -180,7 +187,7 @@ const EditTemplate = () => {
 
     /**
      * Función para que me devuelva la lista de contextos de la BD
-     */
+    */
     const contextsApi = async () => {
         try {
             const response = await getDataContexts(setAlert, setVisibleAlert);
@@ -217,6 +224,7 @@ const EditTemplate = () => {
         }
     };
 
+    // Controla si los campos están deshabilitados según si hay plantilla seleccionada o no
     useEffect(() => {
         if (selectedTemplate === "") {
             setFieldsDisabled(true);
@@ -228,6 +236,10 @@ const EditTemplate = () => {
     }, [selectedTemplate]);
 
 
+    /**
+     * FUncionalidad para previsualizar la plantilla final con las variables sustituídas por los de la base de datos
+     * @param {*} idTemplate Id de la plantilla seleccionada
+     */
     const viewTemplateVariables = async (idTemplate) => {
         setLoadingEditor(true);
         const idUser = 1;
@@ -322,6 +334,10 @@ const EditTemplate = () => {
         return $html.html().trim();
     };
 
+    /**
+     * Función para comprobar si la plantilla ha sido modificada
+     * @returns Devuelve true si el contenido de la plantilla ha sido modificado, sino false en caso contrario.
+     */
     const isTemplateModified = () => {
         const currentContentSummernote = $(editorRef.current).summernote('code');
         const cleanedInitial = cleanHtml(selectedTemplateContent);
@@ -333,6 +349,7 @@ const EditTemplate = () => {
         );
     };
 
+    // Cuando se modifica el valor del contexto seleccionado, se limpian los campos de la plantilla
     useEffect(() => {
         if (selectedContextDropdown) {
             setFieldsDisabled(true);
@@ -344,6 +361,7 @@ const EditTemplate = () => {
         }
     }, [selectedContextDropdown]);
 
+    // Si se modifica la variable de estado, se deshabilitará el contenido del editor sino se volverá a activar.
     useEffect(() => {
         if (fieldsDisabled) {
             $(editorRef.current).summernote('disable');
@@ -354,7 +372,7 @@ const EditTemplate = () => {
     }, [fieldsDisabled]);
 
     /**
-     * Llama a las APIs de idiomas y contextos una vez al montar el componente.
+     * Llama a las APIs de idiomas, contextos y fuentes de la BD una vez al montar el componente.
      */
     useEffect(() => {
         languagesApi();
@@ -366,37 +384,49 @@ const EditTemplate = () => {
         window.scrollTo(0, 0);
     }, []);
 
+    /**
+    * Establece el idioma por defecto del código si `listLanguages` tiene elementos y no se ha definido `codeLanguage`.
+    */
     useEffect(() => {
         if (listLanguages.length > 0 && !codeLanguage) {
             setCodeLanguage("es");
         }
     }, [listLanguages, codeLanguage]);
 
+    /**
+    * Carga la plantilla seleccionada en el editor una vez que `codeLanguage` ha sido definido 
+    * y asegura que esta acción solo se ejecute una vez usando `hasLoadedTemplate`.
+    */
     useEffect(() => {
         if (codeLanguage && !hasLoadedTemplate.current) {
             getSelectedTemplateEditor();
             hasLoadedTemplate.current = true;
         }
     }, [codeLanguage]);
-    
 
     /**
-     * Cambia el idioma del editor cuando `codeLanguage` o `actionButtonUpdate` cambian.
-     */
+    * Cuando las fuentes estén cargadas, el contenido de la plantilla ha sido escogido y no estemos en la vista previa, se 
+    * configurará el editor cuando esté todo listo.
+    */
     useEffect(() => {
         if (fontsLoaded && (!visiblePreviewFinalTemplate || selectedTemplateContent)) {
             changeSummernoteLanguage();
         }
     }, [selectedTemplateContent, visiblePreviewFinalTemplate, fontsLoaded]);
-    
 
 
+    /**
+    * Limpia el contexto del dropdown si no es la previsualización final de la plantilla.
+    */
     useEffect(() => {
         if (!visiblePreviewFinalTemplate) {
             setSelectedContextDropdown("");
         }
     }, [visiblePreviewFinalTemplate]);
 
+    /**
+    * Se habilita o deshabilta el botón de actualizar dependiendo de si la plantilla ha sido modificada.
+    */
     useEffect(() => {
         if (isTemplateModified()) {
             setVisibleActionButton(true);
@@ -405,7 +435,10 @@ const EditTemplate = () => {
         }
     }, [selectedTemplateContent, currentContent, subjectTemplate, originalSubjectTemplate]);
 
-     useEffect(() => {
+    /**
+    * Inserta las fuentes por defecto en el editor Summernote con enlaces <link> al <head> de la base de datos
+    */
+    useEffect(() => {
         if (allFontsList.length > 0 && infoFonts.length > 0) {
             allFontsList.forEach(fontName => {
                 const font = infoFonts.find(f => f.name.toLowerCase() === fontName.toLowerCase());

@@ -14,7 +14,11 @@ const TemplatesList = () => {
     const { setContextsList, setLoading, selectedSortOrder, selectedColumnTable, setTemplates, currentPage, setTotalRecordsTemplates, rows, setAlert, setVisibleAlert, setUserPermissions } = useContext(ScreensContext);
     const [optionContext, setOptionContext] = useState(null);
     const [nameTemplateSearch, setNameTemplateSearch] = useState("");
-
+ 
+    /**
+    * Función general para filtrar y cargar las plantillas según el nombre, contexto, paginación y orden.
+    * También actualiza los contextos y maneja el estado de carga y errores.
+    */
     const filterDataTemplates = async () => {
         let data;
         setLoading(true);
