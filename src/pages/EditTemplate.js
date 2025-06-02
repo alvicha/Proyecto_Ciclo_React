@@ -385,10 +385,10 @@ const EditTemplate = () => {
      */
     useEffect(() => {
         if (fontsLoaded && (!visiblePreviewFinalTemplate || selectedTemplateContent)) {
-            setSelectedContextDropdown("");
             changeSummernoteLanguage();
         }
     }, [selectedTemplateContent, visiblePreviewFinalTemplate, fontsLoaded]);
+    
 
 
     useEffect(() => {
