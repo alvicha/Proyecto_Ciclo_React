@@ -9,6 +9,12 @@ body {
     overflow-x: hidden;
 }
 
+header {
+    border-bottom: 3px solid rgb(1, 149, 186);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    width: 100%;
+}
+
 .dark-mode {
     background-color: black;
 }
@@ -21,12 +27,6 @@ body {
 .dark-mode .card-body,
 .dark-mode .title-subject {
     color: white !important;
-}
-
-header {
-    border-bottom: 3px solid rgb(1, 149, 186);
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-    width: 100%;
 }
 
 .navegacion .nav-item {
@@ -199,6 +199,18 @@ p {
     align-items: center
 }
 
+.dropdown-contexts {
+    width: 50%;
+}
+
+.input-template {
+    width: 50%;
+}
+
+.input-email {
+    width: 50%;
+}
+
 @media (max-width:768px) {
     .texto-aplicacion {
         font-size: 25px;
@@ -240,6 +252,20 @@ p {
 
     .nav-link {
         padding: 8px;
+    }
+}
+
+@media (max-width: 420px) {
+    .dropdown-contexts {
+        width: 100%;
+    }
+
+    .input-template {
+        width: 100%;
+    }
+
+    .input-email {
+        width: 100%;
     }
 }
 
